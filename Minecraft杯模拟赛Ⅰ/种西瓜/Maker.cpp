@@ -138,7 +138,7 @@ void run(){
 		cmd="std.exe > melon"+to_string(I)+".out < melon"+to_string(I)+".in";
 		system(cmd.c_str());
 	}*/
-	for(I=0;I<2;I++){
+	for(I=2;I<4;I++){
 		cmd="std.exe > melon_ex"+to_string(I)+".out < melon_ex"+to_string(I)+".in";
 		system(cmd.c_str());
 	}	
