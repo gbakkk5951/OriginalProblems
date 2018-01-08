@@ -100,7 +100,7 @@ int beg = 0
 
 bool check_brute = true;
 bool check_out_pause = true;
-bool loop_check = false;
+bool loop_check = true;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -117,7 +117,7 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream output(outfile.c_str());
-        N = 100000; M = 1000;
+        N = 100; M = 100000;
         output << N << " " << M <<endl;
         for (i = 1; i <= N; i++) {
             output<< lrand(-mod, mod) <<" "<<lrand(-mod, mod)<<endl;
@@ -157,7 +157,8 @@ void run(){
 		
 		if (check_brute) {
     		cmd= bruteName + ".exe > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
-    		a = clock();
+    		cerr<<"Run: "<<cmd<<endl;
+            a = clock();
             system(cmd.c_str());
     		b = clock();
     		if (brute_time_count) {
@@ -177,12 +178,13 @@ void run(){
 		system(cmd.c_str());
 		b = clock();
 		if (time_count) {
-		    cerr<<stdName + " uses "<<b - a<<"ms"<<endl;
+		    cerr<<stdName + " uses "<<b - a<<"ms"<<endl<<endl;
 		}
 		
 		if (check_brute) {	
     		cmd= bruteName + ".exe > brute_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
-    		a = clock();
+    		cerr<<"Run: "<<cmd<<endl;
+            a = clock();
             system(cmd.c_str());
     		b = clock();
     		if (brute_time_count) {
@@ -219,7 +221,8 @@ _Main(){
 	        }
 	        if (run_ans) {
 	            run();
-	        }        
+	            cerr<<endl;
+	        }
 	    }
 	}
 	
