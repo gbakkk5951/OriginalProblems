@@ -1,93 +1,11 @@
 using namespace std;
-int main(){}
-#include<cstdio>
-#include<cstdlib>
-#include<cstring>
-#include<ctime>
-#include<string>
-#include<sstream>
-#include<iostream>
-#include<algorithm>
-#include<fstream>
+#include<bits/stdc++.h>
 
 struct _Main{
-int name[100010];	
-struct Edge{
-	int a,b,c;
-}edge[200010];	
-	
-	int lim,alph;
-template<typename Type>
-	void shuffle(Type *beg,int size){
-		int i;
-		for(i=1;i<size;i++){
-			swap(beg[rand()%(i+1)],beg[i]);
-		}
-	}
-int prime[2000000];
-int primecnt;bool vis[10000005];
-void getprime(){
-	int i,j;
-	for(i=2;i<=10000000;i++){
-		if(!vis[i]){
-			prime[primecnt++]=i;
-		}
-		for(j=0;j<primecnt && i*prime[j] <=10000000;j++){
-			vis[i*prime[j]]=true;
-			if(i%prime[j]==0)break;
-		}
-	}
-	
-}
-	
-int lrand(){
-	return (rand()<<16) | (rand()<<1) ^rand();	
-}
-long long llrand(){
-	return (long long)((long long)lrand()<<32)|((long long )lrand()<<1)^rand();
-}
-string outfile,cmd,infile;
-string to_string(int a){
-	stringstream os;string ans;
-	os<<a;
-	os>>ans;
-	return ans;
-}
-int randsym(){
-	return (rand()&1)?-1:1;
-}
-
-string arr[100010];
-void shuffleedge(Edge *beg,int n,int m){
-	int i;
-	for(i=1;i<=n;i++){
-		name[i]=i;
-	}
-	shuffle(name+1,n);
-	shuffle(beg,m);
-	for(i=0;i<m;i++){
-		if(rand()&1)swap(beg[i].a,beg[i].b);
-		beg[i].a=name[beg[i].a];
-		beg[i].b=name[beg[i].b];
-	}
-}
-void inline add (int a,int b,int c,int &idx){
-	edge[idx].a=a;
-	edge[idx].b=b;
-	edge[idx].c=c;
-	idx++;
-}
-int arr1[400010],arr2[400010];
-char type[4000010];
-int mod=1e5+1;
-
-int lrand(int min, int max) {
-    return llrand() % ((long long)max - min + 1) + min;
-}
 //////////////
 string dataName = "data";
-string stdName = "¾²Ì¬KDTree";
-string bruteName = "brute1";
+string stdName = "nowcoder_9c";
+string bruteName = "brute";
 
 bool make_data = true;
 bool run_ans = true;
@@ -117,14 +35,11 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream output(outfile.c_str());
-        N = 100; M = 100000;
+        N = 50; M = 1000;
         output << N << " " << M <<endl;
-        for (i = 1; i <= N; i++) {
-            output<< lrand(-mod, mod) <<" "<<lrand(-mod, mod)<<endl;
-        }
-        for (i = 1; i <= M; i++) {
-            output<< lrand(-mod, mod) <<" "<<lrand(-mod, mod)<<endl;
-        }
+		for (i = 1; i <= M; i++) {
+			output<< (lrand() % N + 1) << " " << (lrand() % N + 1) <<endl;
+		}
 		EndFor1:
 		output.close();
 	}
@@ -231,4 +146,94 @@ _Main(){
 }	
 	
 	
+int name[100010];	
+struct Edge{
+	int a,b,c;
+}edge[200010];	
+	
+	int lim,alph;
+template<typename Type>
+	void shuffle(Type *beg,int size){
+		int i;
+		for(i=1;i<size;i++){
+			swap(beg[rand()%(i+1)],beg[i]);
+		}
+	}
+int prime[2000000];
+int primecnt;bool vis[10000005];
+void getprime(){
+	int i,j;
+	for(i=2;i<=10000000;i++){
+		if(!vis[i]){
+			prime[primecnt++]=i;
+		}
+		for(j=0;j<primecnt && i*prime[j] <=10000000;j++){
+			vis[i*prime[j]]=true;
+			if(i%prime[j]==0)break;
+		}
+	}
+	
+}
+	
+int lrand(){
+	return (rand()<<16) | (rand()<<1) ^rand();	
+}
+long long llrand(){
+	return (long long)((long long)lrand()<<32)|((long long )lrand()<<1)^rand();
+}
+string outfile,cmd,infile;
+string to_string(int a){
+	stringstream os;string ans;
+	os<<a;
+	os>>ans;
+	return ans;
+}
+int randsym(){
+	return (rand()&1)?-1:1;
+}
+
+string arr[100010];
+void shuffleedge(Edge *beg,int n,int m){
+	int i;
+	for(i=1;i<=n;i++){
+		name[i]=i;
+	}
+	shuffle(name+1,n);
+	shuffle(beg,m);
+	for(i=0;i<m;i++){
+		if(rand()&1)swap(beg[i].a,beg[i].b);
+		beg[i].a=name[beg[i].a];
+		beg[i].b=name[beg[i].b];
+	}
+}
+void inline add (int a,int b,int c,int &idx){
+	edge[idx].a=a;
+	edge[idx].b=b;
+	edge[idx].c=c;
+	idx++;
+}
+int arr1[400010],arr2[400010];
+char type[4000010];
+int mod=1e5+1;
+
+int lrand(int min, int max) {
+    return llrand() % ((long long)max - min + 1) + min;
+}
+	
+	
+	
 }Maker;
+
+/*
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<ctime>
+#include<string>
+#include<sstream>
+#include<iostream>
+#include<algorithm>
+#include<fstream>
+*/
+
+int main(){}
