@@ -3,8 +3,8 @@ using namespace std;
 
 struct _Main{
 //////////////
-string dataName = "data";
-string stdName = "nowcoder_9c";
+string dataName = "warbear";
+string stdName = "std";
 string bruteName = "brute";
 
 bool make_data = true;
@@ -35,11 +35,16 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream output(outfile.c_str());
-        N = 50; M = 1000;
-        output << N << " " << M <<endl;
-		for (i = 1; i <= M; i++) {
-			output<< (lrand() % N + 1) << " " << (lrand() % N + 1) <<endl;
-		}
+        N = 4;
+        M = 4;
+        output<<N<<" "<<M<<endl;
+        for (i = 1; i <= N; i++) {
+            output<<lrand(1, 2)<<" ";
+        }
+        output<<endl;
+        for (i = 1; i <= M; i++) {
+            output<<lrand(1, N)<<endl;
+        }
 		EndFor1:
 		output.close();
 	}
