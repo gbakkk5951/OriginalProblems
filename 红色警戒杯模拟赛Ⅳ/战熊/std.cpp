@@ -66,7 +66,7 @@ long long now_ans;
 struct MinusNode {
     int sig;
     int min_cnt;
-    int max_cnt;
+    int tot_cnt;
     int r, l;
 };
 
@@ -83,12 +83,15 @@ private:
                 node.resize(nd + 1);
             }
             node[nd].l = node[nd].r = minus_pos[nl];
-            node[nd].max_cnt = node[nd].min_cnt = rev_cnt[minus_pos[nl]];
+            node[nd].min_cnt = rev_cnt[minus_pos[nl]];
+            node[nd].tot_cnt = rev_cnt[minus_pos[nl]]?1:0;
             minus_idx[node[nd].r] = nd;
             return;
         }
         build(rson[nd], (nl + nr >> 1) + 1, nr);
         build(lson[nd], nl, nl + nr >> 1);
+        node[nd].l = node[lson[nd]].l;
+        node[nd].r = node[rson[nd]].r;
         update(nd);
     }
     void change(int nd, int left, int nl, int nr);
@@ -101,13 +104,11 @@ public:
         if (sig = node[nd].sig) {
             if (node[lson[nd]].min_cnt) {
                 node[lson[nd]].sig += sig;
-                node[lson[nd]].min_cnt += sig;      
-                node[lson[nd]].max_cnt += sig;                
+                node[lson[nd]].min_cnt += sig;                
             }
             if (node[rson[nd]].min_cnt) {
                 node[rson[nd]].sig += sig;
-                node[rson[nd]].min_cnt += sig;   
-                node[lson[nd]].max_cnt += sig;      
+                node[rson[nd]].min_cnt += sig;      
             }
             node[nd].sig = 0;
         }
@@ -131,15 +132,12 @@ public:
     }
     void update(int nd) {
         int l = node[lson[nd]].min_cnt, r = node[rson[nd]].min_cnt;
-        node[nd].min_cnt = min(l, r);
-        node[nd].max_cnt = max(l, r);
         if (l && r) {
-            node[nd].l = node[lson[nd]].l;
-            node[nd].r = node[rson[nd]].r;
+            node[nd].min_cnt = min(node[lson[nd]].min_cnt, node[rson[nd]].min_cnt);
         } else {
-            node[nd].l =(l?node[lson[nd]].l:0) | (r?node[rson[nd]].l:0);
-            node[nd].r =(l?node[lson[nd]].r:0) | (r?node[rson[nd]].r:0);
+            node[nd].min_cnt = node[lson[nd]].min_cnt | node[rson[nd]].min_cnt;
         }
+        node[nd].tot_cnt = node[lson[nd]].tot_cnt + node[rson[nd]].tot_cnt;
     }
     void change(int left) {
         change(1, left, 1, n);
@@ -162,7 +160,11 @@ private:
     }
     void build(int nd, int nl, int nr) {
         if (nl == nr) {
-            node[nd].min_rank = rank[nl];
+            if (rev_cnt[nl]) {
+                node[nd].min_rank = rank[nl];
+            } else {
+                node[nd].min_rank = INF;
+            }
             node[nd].rev_cnt = rev_cnt[nl];
             zero_idx[nl] = nd;
             return;
@@ -172,7 +174,6 @@ private:
         update(nd);
     }
     void change(int nd, int left, int left_rank, int nl, int nr) {
-//        printf("[Zero]change(%d, %d, %d, %d, %d)\n", nd, left, left_rank, nl, nr);
         if (nr < left || node[nd].rev_cnt == 0
             || node[nd].min_rank > left_rank 
             || (nl > left && node[nd].min_rank == left_rank) ) {
@@ -181,11 +182,14 @@ private:
         if (nl == nr ) {
             MinusTree *tree = &minus_tree[rank[nl]];
             int minus_nd = minus_idx[nl];
+            typename vector<MinusNode>::iterator it;
+            it = tree->node.begin() + minus_nd;
             tree->update_down(minus_nd);
-            now_ans -= tree->node[minus_nd].min_cnt;
-//            printf("[Zero]now_ans -= %d\n", tree->node[minus_nd].min_cnt);
-            tree->node[minus_nd].min_cnt = 0;
+            now_ans -= it->min_cnt;
+            it->min_cnt  = it->tot_cnt = 0;
             tree->update_up(minus_nd);
+            node[nd].rev_cnt = 0;
+            node[nd].min_rank = INF;
             return;
         }
         
@@ -215,30 +219,25 @@ public:
 
 
 void MinusTree::change(int nd, int left, int nl, int nr) {
-//    printf("[Minus]change(%d, %d, %d, %d)\n", nd, left, nl, nr);
-    if (node[nd].r <= left || node[nd].max_cnt == 0) {
+    if (node[nd].r <= left || node[nd].tot_cnt == 0) {
         return;
     }
-//    printf("[%d, %d] min = %d\n", node[nd].l, node[nd].r, node[nd].min_cnt);
     if (node[nd].min_cnt > 1 && node[nd].l > left) {
-        now_ans -= (nr - nl + 1);
-//        printf("[Minus]now_ans -= (%d)\n", nr - nl + 1);
+        now_ans -= node[nd].tot_cnt;
         node[nd].min_cnt--;
         node[nd].sig--;
         return;
     } else if(nl == nr) {
         now_ans--;
-//        printf("[Minus]now_ans -= 1\n");
-        node[nd].min_cnt = 0;
+        node[nd].min_cnt = node[nd].tot_cnt = 0;
         int zero_nd = zero_idx[node[nd].r];
-//        printf("zero_nd(%d) = %d\n", node[nr].r, zero_nd);
         zero_tree->node[zero_nd].rev_cnt = 0;
         zero_tree->node[zero_nd].min_rank = INF;
         zero_tree->update_up(zero_nd);
         return;
     }
     pushSig(nd);
-    change(lson[nd], left, nl + nr >> 1, nr);
+    change(lson[nd], left, nl, nl + nr >> 1);
     change(rson[nd], left, (nl + nr >> 1) + 1, nr);            
     update(nd);
 }    
