@@ -1,8 +1,8 @@
-using namespace std;
 #include<fstream>
 #include<cstdlib>
 #define ac 0
 #define wa 1
+using namespace std;
 int n;
 bool vis[400010];
 long long ans,tot;
