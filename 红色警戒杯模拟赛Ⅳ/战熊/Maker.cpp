@@ -7,18 +7,18 @@ string dataName = "warbear";
 string stdName = "std";
 string bruteName = "brute";
 
-bool make_data = true;
+bool make_data = false;
 bool run_ans = true;
 
 int beg = 0
-,   end = 1
+,   end = 5
 ,   exbeg = 0
 ,   exend = 0
 ;
 
-bool check_brute = true;
+bool check_brute = false;
 bool check_out_pause = true;
-bool loop_check = true;
+bool loop_check = false;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -35,16 +35,74 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream output(outfile.c_str());
-        N = 4;
-        M = 4;
+        N = 100000;
+        M = 100000;
         output<<N<<" "<<M<<endl;
-        for (i = 1; i <= N; i++) {
-            output<<lrand(1, 2)<<" ";
+        
+        if (I <= 1 ) {
+            for (i = 1; i <= N; i++) {
+                output<<lrand(-1e9, 1e9)<<" ";
+            }
+            output<<endl;
+            for (i = 1; i <= M; i++) {
+                if (rand() & 1) {
+                    output<<lrand(1, N)<<endl;
+                } else {
+                    output<<lrand(-1e9, -1)<<endl;
+                }
+            }            
         }
-        output<<endl;
-        for (i = 1; i <= M; i++) {
-            output<<lrand(1, N)<<endl;
+        if (I ==2) {
+            for (i = 1; i <= N; i++) {
+                output<<lrand(1, 10)<<" ";
+            }
+            output<<endl;
+            for (i = 1; i <= M; i++) {
+                if (rand() & 1) {
+                    output<<lrand(1, N)<<endl;
+                } else {
+                    output<<lrand(-1e9, -1)<<endl;
+                }
+            }                        
         }
+        if (I == 3) {
+            for (i = 1; i <= N; i++) {
+                if (i & 1) {
+                    output<<lrand(1000000, 1000001)<<" ";
+                } else {
+                    output<<lrand(-10000000, 100000)<<" ";
+                }
+            }
+            output<<endl;
+            for (i = 1; i <= M; i++) {
+                if (i & 1) {
+                    output<<i<<endl;
+                } else {
+                    output<<lrand(-1e9, -1)<<endl;
+                }
+            }                             
+            
+            
+        }
+        if (I == 4) {
+            for (i = 1; i <= N; i++) {
+                if (i & 1) {
+                    output<<1000000<<" ";
+                } else {
+                    output<<0<<" ";
+                }
+            }
+            output<<endl;
+            for (i = 1; i <= M; i++) {
+                if (!(i&1) && rand() % 5 == 0) {
+                    output<<lrand(-1e9,-1)<<endl;
+                } else {
+                    output<<i<<endl;
+                }
+                
+            }                     
+        }
+
 		EndFor1:
 		output.close();
 	}
