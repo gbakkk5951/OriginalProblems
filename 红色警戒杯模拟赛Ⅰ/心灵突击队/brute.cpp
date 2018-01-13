@@ -5,62 +5,98 @@ int main() {}
 #include <vector>
 namespace Protector {
 const int INF = 0x3f3f3f3f;
-struct Point {
-    int x[2];
-    int& operator [] (int a) {
-        return x[a];
+class SegmentTree {
+private:
+    vector<int>node;
+    int base;
+    int n;
+public:
+    int setSize(int new_size) {
+        n = new_size;
     }
-};
-
-struct KDNode{
-    int son[2];
-    int dim;
-    int val, sig;
-    KDNode(){
-        
+    void build() {
+        for (base = 1; base < n + 2; base <<= 1);
+        node.resize((base << 1) + 2);
     }
-    KDNode(int lson, int rson, int new_dim) {
-        dim = new_dim;
-        son[0] = lson;
-        son[1] = rson;
-    }    
+    int getMax(int s, int t) {
+        int lans = -INF, rans = -INF;
+        for (s += base - 1, t += base + 1; s ^ t ^ 1; s >>= 1, t >>= 1) {
+            lans +=node[s]; rans+=node[t];
+            if (~s & 1) {
+                lans = max(lans, node[s ^ 1]);
+            }
+            if ( t & 1) {
+                rans = max(rans, node[t ^ 1]);
+            }
+        }
+        lans = max(lans + node[s], rans + node[t]);
+        for (s >>= 1; s; s >>= 1) {
+            lans += node[s];
+        }
+        return lans;
+    }
+    void change(int s, int t, int val) {
+        int a;
+        for (s += base - 1, t += base + 1; s ^ t ^ 1; s >>= 1, t >>= 1) {
+            if (~s & 1) {
+                node[s ^ 1] += val;
+            }
+            if ( t & 1) {
+                node[t ^ 1] += val;
+            }
+            a = max(node[s], node[s ^ 1]);
+            if (a) {
+                node[s] -= a; node[s ^ 1] -=a; node[s >> 1] += a; 
+            }
+            a = max(node[t], node[t ^ 1]);
+            if (a) {
+                node[t] -= a; node[t ^ 1] -=a; node[t >> 1] += a;   
+            }   
+        }
+        for ( ; s > 1; s >>= 1) {
+            a = max(node[s], node[s ^ 1]);
+            if (a) {
+                node[s] -= a; node[s ^ 1] -=a; node[s >> 1] += a;
+            }      
+        }
+    }
     
 };
     
 class Solver{
-    
-    typedef KDNode Node;
 private:
     int n, m; 
-    int node_idx;
-    int root;
-    vector<Node> node;
-    int build(int nd, Point xi, Point xj) {
-        int mxdim;
-        node.push_back(Node());
-        nd = node_idx++;
-        if (xj == xi && yj == yi) {
-            return nd;
-        }
-        node.push
-        node.push_back(Node(build())); 
-    }
-    
+    SegmentTree tree[2005];   
 public:      
     void setSize(int new_n, int new_m) {
         n = new_n;
         m = new_m;
     }
     void build() {
-        root = build(1, 1, 1, n, m);
-        
+        int i;
+        for (i = 1; i <= n; i++) {
+            tree[i].setSize(m);
+            tree[i].build();
+        }
     }
     void change(int xi, int yi, int xj, int yj, int val) {
-        
-        
+        if (xi > n || xj < 1 || yi > m || yj < 1) {
+            return;
+        }
+        xi = max(xi, 1); yi = max(yi, 1);
+        xj = min(xj, n); yj = min(yj, m);
+        int i;
+        for (i = xi; i <= xj; i++) {
+            tree[i].change(yi, yj, val);
+        }
     }
     int query(int xi, int yi, int xj, int yj) {
-        
+        int ans = -INF;
+        int i;
+        for (i = xi; i <= xj; i++) {
+            ans = max(ans, tree[i].getMax(yi, yj));  
+        }
+        return ans;
     }
 }solver;
 
@@ -82,10 +118,14 @@ template<typename Type>
         }
         a *= f;
     }
+    char swp_sig = 0;
     int x_base, y_base;
     
     void read(int &x, int &y) {
         read(x); read(y);
+        if (swp_sig) {
+            swap(x, y);
+        }
         x -= x_base; y -= y_base;
     }
     _Main (){
@@ -104,6 +144,11 @@ template<typename Type>
         read(x); read(y);
         x = x - x_base;
         y = y - y_base;
+        if (x > y) {
+            swp_sig = 1;
+            swap(x, y);
+            swap(x_base, y_base);
+        }
         solver.setSize(x, y);
         solver.build();
         for (Q = 1; Q <= Qn; Q++) {
@@ -150,7 +195,7 @@ template<typename Type>
     
     
         
-}std;
+}brute;
 
 
 
