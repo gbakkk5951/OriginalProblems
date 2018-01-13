@@ -5,8 +5,34 @@ int main() {}
 #include <vector>
 namespace Protector {
 const int INF = 0x3f3f3f3f;
-
-
+class SegmentTree {
+private:
+    vector<int>node;
+    int base;
+    int n;
+public:
+    int setSize(int new_size) {
+        n = new_size;
+    }
+    void build() {
+        node.resize(n + 2);
+    }
+    int getMax(int s, int t) {
+        int i;
+        int ans = -INF;
+        for (i = s; i <= t; i++) {
+            ans = max(ans, node[i]);
+        }
+        return ans;
+    }
+    void change(int s, int t, int val) {
+        int i;
+        for (i = s; i <= t; i++) {
+            node[i] += val;
+        }
+    }
+    
+};
     
 class Solver{
 private:
@@ -18,14 +44,31 @@ public:
         m = new_m;
     }
     void build() {
-
+        int i;
+        for (i = 1; i <= n; i++) {
+            tree[i].setSize(m);
+            tree[i].build();
+        }
     }
     void change(int xi, int yi, int xj, int yj, int val) {
-
-
+        if (xi > n || xj < 1 || yi > m || yj < 1) {
+            return;
+        }
+        xi = max(xi, 1); yi = max(yi, 1);
+        xj = min(xj, n); yj = min(yj, m);
+        int i;
+        for (i = xi; i <= xj; i++) {
+            tree[i].change(yi, yj, val);
+        }
     }
     int query(int xi, int yi, int xj, int yj) {
-        
+        int ans = -INF;
+        int i;
+        for (i = xi; i <= xj; i++) {
+            ans = max(ans, tree[i].getMax(yi, yj));  
+        }
+
+        return ans;
     }
 }solver;
 
@@ -47,10 +90,14 @@ template<typename Type>
         }
         a *= f;
     }
+    char swp_sig = 0;
     int x_base, y_base;
     
     void read(int &x, int &y) {
         read(x); read(y);
+        if (swp_sig) {
+            swap(x, y);
+        }
         x -= x_base; y -= y_base;
     }
     _Main (){
@@ -69,6 +116,11 @@ template<typename Type>
         read(x); read(y);
         x = x - x_base;
         y = y - y_base;
+        if (x > y) {
+            swp_sig = 1;
+            swap(x, y);
+            swap(x_base, y_base);
+        }
         solver.setSize(x, y);
         solver.build();
         for (Q = 1; Q <= Qn; Q++) {
@@ -115,7 +167,7 @@ template<typename Type>
     
     
         
-}std;
+}brute_of_brute;
 
 
 
