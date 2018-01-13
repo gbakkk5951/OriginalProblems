@@ -5,24 +5,59 @@ int main() {}
 #include <vector>
 namespace Protector {
 const int INF = 0x3f3f3f3f;
+struct Point {
+    int x[2];
+    int& operator [] (int a) {
+        return x[a];
+    }
+};
 
-
+struct KDNode{
+    int son[2];
+    int dim;
+    int val, sig;
+    KDNode(){
+        
+    }
+    KDNode(int lson, int rson, int new_dim) {
+        dim = new_dim;
+        son[0] = lson;
+        son[1] = rson;
+    }    
+    
+};
     
 class Solver{
+    
+    typedef KDNode Node;
 private:
     int n, m; 
-    SegmentTree tree[2005];   
+    int node_idx;
+    int root;
+    vector<Node> node;
+    int build(int nd, Point xi, Point xj) {
+        int mxdim;
+        node.push_back(Node());
+        nd = node_idx++;
+        if (xj == xi && yj == yi) {
+            return nd;
+        }
+        node.push
+        node.push_back(Node(build())); 
+    }
+    
 public:      
     void setSize(int new_n, int new_m) {
         n = new_n;
         m = new_m;
     }
     void build() {
-
+        root = build(1, 1, 1, n, m);
+        
     }
     void change(int xi, int yi, int xj, int yj, int val) {
-
-
+        
+        
     }
     int query(int xi, int yi, int xj, int yj) {
         
