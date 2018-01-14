@@ -1,166 +1,199 @@
 using namespace std;
-int main() {}
-#include <cstdio>
-#include <cctype>
-#include <vector>
-namespace Protector {
-const int INF = 0x3f3f3f3f;
-struct Point {
-    int x[2];
-    int& operator [] (int a) {
-        return x[a];
-    }
-};
+int main(){}
+#include<cstdio>
+#include<cctype>
+#include<cmath>
+#include<cstdlib>
+#include<algorithm>
+int sq;int base;
+int l[2055],r[2055];
+int xmin,ymin,xmax,ymax;
 
-struct KDNode{
-    int son[2];
-    int dim;
-    int val, sig;
-    KDNode(){
-        
-    }
-    KDNode(int lson, int rson, int new_dim) {
-        dim = new_dim;
-        son[0] = lson;
-        son[1] = rson;
-    }    
-    
-};
-    
-class Solver{
-    
-    typedef KDNode Node;
-private:
-    int n, m; 
-    int node_idx;
-    int root;
-    vector<Node> node;
-    int build(int nd, Point xi, Point xj) {
-        int mxdim;
-        node.push_back(Node());
-        nd = node_idx++;
-        if (xj == xi && yj == yi) {
-            return nd;
-        }
-        node.push
-        node.push_back(Node(build())); 
-    }
-    
-public:      
-    void setSize(int new_n, int new_m) {
-        n = new_n;
-        m = new_m;
-    }
-    void build() {
-        root = build(1, 1, 1, n, m);
-        
-    }
-    void change(int xi, int yi, int xj, int yj, int val) {
-        
-        
-    }
-    int query(int xi, int yi, int xj, int yj) {
-        
-    }
-}solver;
+struct LeftSon{
+	int inline  operator [](const int &a){
+		return a<<1;
+	}
+}lson;
+struct Right{
+	int inline  operator [](const int &a){
+		return a<<1|1;
+	}
+}rson;
 
-    
-    
-struct _Main {
-template<typename Type>
-    void read(Type &a) {
-        char t, f = 1;
-        while (!isdigit(t = getchar())) {
-            if (t == '-') {
-                f = -1;
-            }
-        }
-        a = t - '0';
-        while ( isdigit(t = getchar())) {
-            a *= 10;
-            a += t - '0';
-        }
-        a *= f;
-    }
-    int x_base, y_base;
-    
-    void read(int &x, int &y) {
-        read(x); read(y);
-        x -= x_base; y -= y_base;
-    }
-    _Main (){
-        
-        int i, j, k;
-        int x, y;
-        
-        int Q, Qn;
-        int a, b;
-        int Qtype;
-        int xi, yi, xj, yj, ri, pi;
-        
-        read(Qn);
-        read(x_base); read(y_base);
-        x_base--; y_base--;
-        read(x); read(y);
-        x = x - x_base;
-        y = y - y_base;
-        solver.setSize(x, y);
-        solver.build();
-        for (Q = 1; Q <= Qn; Q++) {
-            read(Qtype);
-            switch (Qtype) {
-                case 0: {
-                    read(xi, yi); read(xj, yj);
-                    printf("%d\n", max(solver.query(xi, yi, xj, yj), 0));
-                	break;
-                }
-                
-                case 1: {
-                    read(xi, yi);
-                    read(ri); read(pi);
-                    ri--;
-                    if (ri == 0) {
-                        solver.change(xi, yi, xi, yi, pi);
-                    } else {
-                        xj = xi + ri; yj = xi + ri;
-                        xi = xi - ri; yi = xi - ri;
-                        solver.change(xi, yi, xj, yj, pi);
-                        solver.change(xi, yi - 1, xj, yi - 1, pi >> 2);//ио
-                        solver.change(xi, yj + 1, xj, yj + 1, pi >> 2);//об 
-                        solver.change(xi - 1, yi, xi - 1, yj, pi >> 2);//вС 
-                        solver.change(xj + 1, yi, xj + 1, yj, pi >> 2);//ср 
-                    }
-                	break;
-                }
-                
-                case 2:{
-                    read(xi, yi); read(xj, yj);
-                    read(pi);
-                    solver.change(xi, yi, xj, yj, -pi);
-                	break;
-                }
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    
-    
-        
-}std;
-
-
-
-
-
-
-
-
-
-
-
-
+struct Dis{
+	int inline operator () (const int &a,const int &b){
+		return abs(a-b)+1;
+	}
+}dis;
+void build(int nd=1,int s=0,int t=base-1){
+	l[nd]=s;r[nd]=t;
+	if(s!=t){
+		build(lson[nd],s,(s+t)>>1);
+		build(rson[nd],((s+t)>>1)+1,t);
+	}
 }
+struct Size{
+	int inline  operator [](const int &a){
+		return dis(r[a],l[a]);
+	}
+}size;
+
+
+
+struct SumTree{
+long long sig[2055];
+long long val[2055];
+void inline pushsig(int nd){
+	if(sig[nd]){
+		sig[lson[nd]]+=sig[nd];
+		sig[rson[nd]]+=sig[nd];
+		val[lson[nd]]+=sig[nd]*size[lson[nd]];
+		val[rson[nd]]+=sig[nd]*size[rson[nd]];		
+		sig[nd]=0;
+	}
+}
+	
+long long query(int ql,int qr,int nd=1)	{
+
+	if(l[nd]>qr || r[nd]<ql)return 0;
+	if(ql<=l[nd] && r[nd]<=qr)return val[nd];
+	pushsig(nd);
+	return query(ql,qr,lson[nd])+query(ql,qr,rson[nd]);
+}
+void change(int ql,int qr,long long add,int nd=1){
+	if(l[nd]>qr || r[nd]<ql)return;
+	if(ql<=l[nd] && r[nd]<=qr){
+		val[nd]+=add*(size[nd]);
+		sig[nd]+=add;
+	}else{
+		pushsig(nd);
+		change(ql,qr,add,lson[nd]);
+		change(ql,qr,add,rson[nd]);
+		val[nd]=val[lson[nd]]+val[rson[nd]];
+	}
+}
+
+}tree;
+
+
+
+struct Map{
+SumTree sqtree[35];
+SumTree rowtree[1005];
+SumTree sigtree[35];
+
+long long query(int x1,int x2,int y1,int y2){
+	x1-=xmin;x2-=xmin;y1-=ymin;y2-=ymin;
+	x1=max(0,x1);x2=min(dis(xmin,xmax),x2);
+	y1=max(0,y1);y2=min(dis(ymin,ymax),y2);		
+	long long ans=0;int pos=y1/sq;
+	int i;
+	if(y1%sq){
+		for(i=y1;i<(pos+1)*sq && i<=y2;i++){
+			ans+=rowtree[i].query(x1,x2);
+		}
+		ans+=sigtree[pos].query(x1,x2)*min((pos+1)*sq-y1,dis(y1,y2));
+		pos++;
+	}
+	while((pos+1)*sq<=y2+1){
+		ans+=sqtree[pos].query(x1,x2);
+		ans+=sigtree[pos].query(x1,x2)*sq;
+		pos++;
+	}
+	if(pos*sq<=y2){
+		for(i=pos*sq;i<=y2;i++){
+			ans+=rowtree[i].query(x1,x2);
+		}
+		ans+=sigtree[pos].query(x1,x2)*dis(y2,pos*sq);
+	}
+	return ans;
+}		
+	
+void change(int x1,int x2,int y1,int y2,long long val){
+	x1-=xmin;x2-=xmin;y1-=ymin;y2-=ymin;
+	x1=max(0,x1);x2=min(dis(xmin,xmax),x2);
+	y1=max(0,y1);y2=min(dis(ymin,ymax),y2);	
+	if(x1>x2 || y1>y2)return;
+	int pos=y1/sq;
+	int i;
+	if(y1%sq){
+		for(i=y1;i<(pos+1)*sq && i<=y2;i++){
+			rowtree[i].change(x1,x2,val);
+		}
+		sqtree[pos].change(x1,x2,val*min((pos+1)*sq-y1,dis(y1,y2)));
+		pos++;
+	}
+	while((pos+1)*sq<=y2+1){
+		sigtree[pos].change(x1,x2,val);
+		pos++;
+	}
+	if(pos*sq<=y2){
+		for(i=pos*sq;i<=y2;i++){
+			rowtree[i].change(x1,x2,val);
+		}
+		sqtree[pos].change(x1,x2,val*dis(y2,pos*sq));
+	}
+	
+}	
+	
+	
+}map;
+
+
+
+
+
+
+struct _Main{
+template<typename Type>
+	void read(Type &a){
+		char t,f=1;
+		while(!isdigit(t=getchar())){
+			if(t=='-')f=-1;
+		}
+		a=t-'0';
+		while( isdigit(t=getchar())){
+			a*=10;a+=t-'0';
+		}
+		a*=f;
+	}
+
+_Main(){
+	int n,T;
+	read(T);
+	
+	read(xmin);read(ymin);read(xmax);read(ymax);
+	n=max(dis(xmin,xmax),dis(ymin,ymax));
+	int i;
+	for(i=0;(1<<i)<(n+3);i++);
+	base=(1<<i);sq=sqrt(base);
+	int a,b,c,d,e;int op;
+	build();
+	while(T--){
+		read(op);
+		if(op==0){
+			read(a);read(b);read(c);read(d);
+			printf("%lld\n",map.query(a,c,b,d));
+		}else if(op==1){
+			read(a);read(b);read(c);read(d);
+			if(c==1)map.change(a,a,b,b,d);
+			else{
+				map.change(a-c+1,a+c-1,b-c+1,b+c-1,d);
+				map.change(a-c+2,a+c-2,b+c,b+c,(d+3)/4);
+				map.change(a-c+2,a+c-2,b-c,b-c,(d+3)/4);
+				map.change(a-c,a-c,b-c+2,b+c-2,(d+3)/4);
+				map.change(a+c,a+c,b-c+2,b+c-2,(d+3)/4);				
+			}
+		}else{
+			read(a);read(b);read(c);read(d);read(e);
+			map.change(a,c,b,d,-e);
+		}
+	}
+	
+	
+	
+}	
+	
+	
+}block;
+

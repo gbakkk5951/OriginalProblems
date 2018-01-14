@@ -51,11 +51,11 @@ public:
         }
     }
     void change(int xi, int yi, int xj, int yj, int val) {
+        xi = max(xi, 1); yi = max(yi, 1);
+        xj = min(xj, n); yj = min(yj, m);
         if (xi > n || xj < 1 || yi > m || yj < 1) {
             return;
         }
-        xi = max(xi, 1); yi = max(yi, 1);
-        xj = min(xj, n); yj = min(yj, m);
         int i;
         for (i = xi; i <= xj; i++) {
             tree[i].change(yi, yj, val);
@@ -67,7 +67,6 @@ public:
         for (i = xi; i <= xj; i++) {
             ans = max(ans, tree[i].getMax(yi, yj));  
         }
-
         return ans;
     }
 }solver;
@@ -139,8 +138,8 @@ template<typename Type>
                     if (ri == 0) {
                         solver.change(xi, yi, xi, yi, pi);
                     } else {
-                        xj = xi + ri; yj = xi + ri;
-                        xi = xi - ri; yi = xi - ri;
+                        xj = xi + ri; yj = yi + ri;
+                        xi = xi - ri; yi = yi - ri;
                         solver.change(xi, yi, xj, yj, pi);
                         solver.change(xi, yi - 1, xj, yi - 1, pi >> 2);//ио
                         solver.change(xi, yj + 1, xj, yj + 1, pi >> 2);//об 
