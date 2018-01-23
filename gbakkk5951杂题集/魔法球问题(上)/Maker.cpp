@@ -3,7 +3,7 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "数据";
+string dataName = "mogic_1s";
 string stdName = "std";
 string bruteName = "brute_EK";
 
@@ -11,12 +11,12 @@ bool make_data = true;
 bool run_ans = true;
 
 int beg = 0
-,   end = 0
+,   end = 1
 ,   exbeg = 0
-,   exend = 4
+,   exend = 0
 ;
 
-bool check_brute = true;
+bool check_brute = false;
 bool check_out_pause = true;
 bool loop_check = false;
 bool loop_count = true;
@@ -39,139 +39,13 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream output(outfile.c_str());
-        
-        eidx = 0;
-        if (I >> 1 == 0) {
-            base = 55;
-            N = (2 * 27 + 1) * 10;
-            for (i = 0; i <= 9; i++) {
-                for (j = 1; j <= 27; j++) {
-                    edge[eidx++] = (Edge){i * base + j, i * base + 1 + j, -( (1 << j) - 1)};
-                    edge[eidx++] = (Edge){i * base + 28 + j, i * base + 1 + j, -(1 << j)};
-                    edge[eidx++] = (Edge){i * base + j, i * base + 28 + j, 0};
-                }
-            }
-        } else if (I >> 1 == 1) {
-            N = 0;
-            for (i = 1; i <= 10; i++) {
-                for (j = 1; j <= 100; j++) {
-                    id[i][j] = ++N;
-                }
-            }
-            for (i = 1; i <= 10; i++) {
-                for (j = 1; j <= 100; j++) {
-                    if (j - 1 > 0) {
-                        add(id[i][j], id[i][j - 1], lrand(10, 30000));
-                    }
-                    if (j + 1 <= 100) {
-                        add(id[i][j], id[i][j + 1], lrand(10, 30000));
-                    }
-                    if (i - 1 > 0) {
-                        add(id[i][j], id[i - 1][j], lrand(10, 30000));
-                    }
-                    if (i + 1 <= 100) {
-                        add(id[i][j], id[i + 1][j], lrand(10, 30000));
-                    }
-                }
-            }
-        } else if (I >> 1 == 2) {
-            N = 1000, M = 5000;
-            for (i = 1; i <= M; i++) {
-                add(lrand(1, N), lrand(1, N), bit_rand(0,1e9));
-            }
-        } else if (I >> 1 == 3) {
-            N = 1000, M = 5000;
-            for (i = 1; i <= M; i++) {
-                add(lrand(1, N), lrand(1, N), lrand(0,1e9));
-            }            
-        } else if(I >> 1 == 4) {
-            N = 1000, M = 5000;
-            for (i = 1; i <= M; i++) {
-                add(lrand(1, N), lrand(1, N), llrand(-1e9,1e9));
-            }          
-        } else if (I >> 1 == 5) {
-            N = 1000, M = 5000;
-            for (i = 1; i <= M; i++) {
-                if (rand() %80 == 1) {
-                    add(lrand(1, N), lrand(1, N), lrand(-50,0));
-                } else {
-                    add(lrand(1, N), lrand(1, N), bit_rand(0,1e9));
-                }
-            }
-        } else if (I >> 1 == 6) {
-            N = 1000, M = 5000;
-            for (i = 1; i <= M; i++) {
-                if (rand() %50 == 1) {
-                    add(lrand(1, N), lrand(1, N), llrand(-5000,0));
-                } else {
-                    add(lrand(1, N), lrand(1, N), llrand(0,1e9));
-                }
-            }            
-        } else if (I >> 1 == 7) {
-            N = 1000;
-            for (i = 1; i <= N; i++) {
-                add(1, i, (N - i + 1) * 2 + 1);
-                add(i, i - 1, 1);
-            }
-        } else if (I >> 1 == 8) {
-            N = 1000;
-            base = 0;
-            while (base < N) {
-                if (N - base < 10) {
-                    bloc = N - base; 
-                } else {
-                    bloc = lrand(10, min(N - base, 50));
-                }
-                M = bloc * 5;
-                for (i = 1; i <= M; i++) {
-                    if (rand() % 150 == 1) {
-                        add(base + lrand(1, bloc), base + lrand(1, bloc), lrand(-10, 1));
-                    } else {
-                        add(base + lrand(1, bloc), base + lrand(1, bloc), 
-                        rand() & 1 ? bit_rand(0, 1e9) : lrand(0, 10000));
-                    }
-                }
-                base += bloc;          
-            }
-        } else if (I >> 1 == 9) {
-            N = 70;
-            for (i = 1; i <= N; i++) {
-                for (j = 1; j <= N; j++) {
-                    if (i != j) {
-                        add(i, j, bit_rand(0, 1e9));
-                    }
-                }
-            }
-        }
-        
-        
-        M = eidx;
-        output << N <<" " << M <<endl;
-        if (I & 1) {
-            shuffleedge(edge, N, M, true);
-        }
-        
-        for (i = 0; i < M; i++) {
-            output<<edge[i].a << " " << edge[i].b << " " << edge[i].c << endl;
-        }
-        //目的地数目 外出数量 消费次数 容纳量 消费水平 
-        for (i = 1; i <= N; i++) {
-            if (I & 1) {
-                output << lrand(1, 10) << " " 
-                       << lrand(0, 1e9) << " " 
-                       << lrand(0, 30) << " " 
-                       << lrand(0, 1e9) << " " 
-                       << lrand(0, 30) <<endl;
-            } else {
-                output << 10 << " " 
-                       << bit_rand(1, 1e9) << " " 
-                       << lrand(1, 30) << " " 
-                       << bit_rand(1, 1e9) << " " 
-                       << lrand(1, 30) <<endl;
-            }
-        }
-        
-        
+        if (I < 10) {
+            N = bit_rand(1, 1000);
+        } else {
+            N = (I - 10 + 1) * 100 + lrand(0, 1000 - (I - 10 + 1) * 100);
+        }        
+   
+        output << N ;
 		EndFor1:
 		output.close();
 	}
