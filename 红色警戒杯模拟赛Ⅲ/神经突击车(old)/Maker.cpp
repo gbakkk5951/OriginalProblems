@@ -257,7 +257,7 @@ _Main(){
 
 	srand(time(0));
 	getprime();	
-//	make();
+	make();
 	run();
 }	
 	
