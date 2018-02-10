@@ -158,7 +158,7 @@ _Main(){
 		}
 		matcher.add(idxa,idxb);
 	}
-	cout<<n - matcher.Edmonds()<<endl;
+	cout<<matcher.Edmonds()*2<<endl;
 }	
 	
 	
