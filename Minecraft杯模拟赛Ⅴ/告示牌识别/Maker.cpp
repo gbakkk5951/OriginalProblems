@@ -1,4 +1,4 @@
-using namespace std;
+ using namespace std;
 #include<bits/stdc++.h>
 typedef long long lld;
 struct _Main{
@@ -6,13 +6,14 @@ struct _Main{
 string dataName = "recognize";
 string stdName = "std";
 string bruteName = "brute";
+
 bool make_data = true;
 bool run_ans = true;
 
 int beg = 0
-,   end = 0
+,   end = 5
 ,   exbeg = 0
-,   exend = 4
+,   exend = 2
 ;
 
 bool check_brute = false;
@@ -307,9 +308,8 @@ int arr1[400010],arr2[400010];
 char type[4000010];
 int mod=1e5+1;
 
-
 lld lrand(lld min, lld max) {
-    return llrand(min, max);
+    return llrand() % ((long long)max - min + 1) + min;
 }
 lld llrand(lld min, lld max) {
     return llrand() % (max - min + 1) + min;

@@ -1,18 +1,33 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+ using namespace std;
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
 using namespace std;
+=======
+ using namespace std;
+>>>>>>> cbc867c48460d8e655aec99718509fe543452d4c
+<<<<<<< HEAD
+>>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
+=======
+>>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
 #include<bits/stdc++.h>
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "recognize";
+string dataName = "vx";
 string stdName = "std";
 string bruteName = "brute";
+
 bool make_data = true;
 bool run_ans = true;
 
 int beg = 0
-,   end = 0
+,   end = 5
 ,   exbeg = 0
-,   exend = 4
+,   exend = 1
 ;
 
 bool check_brute = false;
@@ -34,45 +49,49 @@ void make(){
 	lld mx_val;
 	int base;
 	int bloc;
-	
 	for(I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-        int n = 5, Q = 5;
-        int len[10];
-        int mxlen = 0;
-        cout << 5 <<" " << Q << endl;
-        if (I != 4) {
-            for (i = 1; i <= n; i++) {
-                len[i] = bit_rand(1, 5e4);
-                mxlen = max(mxlen, len[i]);
+        int len = 1e5, Q = 500;
+        cout <<len <<" " << Q << endl;
+        if (I == 0) { 
+            for (i = 1; i <= len; i++) {
+                cout << randchar();
+            }
+        } 
+        if (I == 1) {
+            for (i = 1; i <= len; i++) {
+                cout << randchar(1, 50);
             }            
-        } else {
-            for (i = 1; i <= n; i++) {
-                len[i] = 5e4;
-                mxlen = max(mxlen, len[i]);
-            }                        
         }
-        for (i = 1; i <= n; i++) {
-            for (j = 1; j <= len[i]; j++) {
-                cout << randchar(ALPHA);   
-            }
-            cout << endl;
-        }
+        if (I == 2) {
+            for (i = 1; i <= len; i++) {
+                cout << randchar(1, 10);
+            }            
+        }        
+        if (I == 3) {
+            for (i = 1; i <= len; i++) {
+                cout << randchar(1, 3);
+            }            
+        }     
+        if (I == 4) {
+            for (i = 1; i <= len; i++) {
+                cout << randchar(1, 2);
+            }            
+        }           
+        cout << endl;
         for (i = 1; i <= Q; i++) {
-            int l, r;
-            if (i == 5 && I == 2) {
-                l = 2; r = max(mxlen - 15, l);  
-            } else if (i == 5 && I == 1) {
-                l = 1; r = 15;  
-            } else if (i & 1) {
-                randRange(1, mxlen, l, r);
+            if (i == 1) {
+                cout << 0;
+            } else if (i == 2) {
+                cout << (int)1e9 + 7;  
             } else {
-                bit_randRange(1, mxlen, l, r);
+                cout << bit_rand(1, 1e18);
             }
-            cout << l << " " << r << endl;
+            cout<<endl;
         }
+        
 		EndFor1:
 		cout.close();
 	}
@@ -82,57 +101,30 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-        int n = 5, Q = 5;
-        int mxlen = 0;
-        cout <<n <<" " << Q << endl;        
-        
+        int len = 1e5, Q = 500;
+        cout <<len <<" " << Q << endl;        
         if (I == 0) {
-            int len = 1;
-            for (i = 1; i <= n; i++) {
-                cout <<(char)('a' + i) << endl;
-            }
-            for (i = 1; i <= Q; i++) {
-                if (i == 1) {
-                    cout << 1 << " " << 2147483648LL << endl;
-                } else if (i == 2) {
-                    cout << 1 << " " << 4500000000LL << endl;
-                } else if (i == 3) {
-                    cout << 2 << " " << 2 << endl;
-                } else if (i == 4) {
-                    cout << 1 << " " << 1 << endl;
-                } else {
-                    int l, r;
-                    randRange(1, 1e10, l, r);
-                    cout << l << " " << r << endl;
-                }
-                
-            }
-        } else if (I == 1) {
-            int len = 50000;
-            for (i = 1; i <= n; i++) {
-                for (j = 1; j <= len; j++) {
-                    cout <<'a';
-                }
-                cout << endl;
-            }
-            for (i = 1; i <= Q; i++) {
-                if (i == 1) {
-                    cout<<"1 2147483648\n";
-                } else if (i == 2) {
-                    cout<<"1 4500000000\n";
-                } else if (i == 3){
-                    cout <<"2 49900"<<endl;
-                } else if (i == 4) {
-                    cout <<"1 49999" << endl;  
-                } else {
-                    cout <<"2 50" << endl;
-                }
+            for (i = 1; i <= len; i++) {
+                cout <<'a';
             }
         }
         
-        
-        
-        
+        cout << endl;
+        for (i = 1; i <= Q; i++) {
+            if (i == 1) {
+                cout << 0;
+            } else if (i == 2) {
+                cout << (int)1e9 + 7;  
+            } else if (i == 3) {
+                cout << 285700001 << endl;
+            
+            } else if (i == 4) {
+                cout << (int)1e9 + 7 - 1 << endl;
+            } else {
+                cout << lrand(1, 1e18);
+            }
+            cout<<endl;
+        }		
 		EndFor2:
 		cout.close();
 	}	
@@ -307,9 +299,22 @@ int arr1[400010],arr2[400010];
 char type[4000010];
 int mod=1e5+1;
 
-
+<<<<<<< HEAD
+<<<<<<< HEAD
 lld lrand(lld min, lld max) {
-    return llrand(min, max);
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
+int lrand(int min, int max) {
+=======
+lld lrand(lld min, lld max) {
+>>>>>>> cbc867c48460d8e655aec99718509fe543452d4c
+<<<<<<< HEAD
+>>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
+=======
+>>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
+    return llrand() % ((long long)max - min + 1) + min;
 }
 lld llrand(lld min, lld max) {
     return llrand() % (max - min + 1) + min;
@@ -323,53 +328,10 @@ lld bit_rand(lld min, lld max) {
 	
 string charset = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+\"`-={}|[]\\:;¡¯<>?,./ ";	
 
-char randchar(int l, int r) {
+char randchar(int l = 0, int r = 32 + 26 * 2 + 10 - 1) {
     return charset[lrand(l, r)];
 }
-char randchar() {
-    return randchar(0, 32 + 26 * 2 + 10 - 1);
-}
-int judge_type(char a) {
-    if (isdigit(a)) {
-        return DIGIT;
-    }
-    if (islower(a)){
-        return LOWER;
-    }
-    if (isupper(a)){
-        return UPPER;
-    }    
-    return SYMBOL;
-}
-char randchar(int type) {
-    char t;
-    do {
-        t = randchar();
-    } while((judge_type(t) & type) == 0);
-    return t;
-}
-
-void randRange(int beg, int end, int &l_, int &r_) {
-    l_ = lrand() % (end - beg + 1);
-    r_ = lrand() % (end - beg + 1 - l_);
-    l_ += beg;
-    r_ += l_;
-}
-
-void bit_randRange(int beg, int end, int &l_, int &r_) {
-    l_ = bit_rand() % (end - beg + 1);
-    r_ = bit_rand() % (end - beg + 1 - l_);
-    l_ += beg;
-    r_ += l_;
-}
-const int 
-    LOWER = 1,
-    UPPER = 2,
-    ALPHA = 3,
-    DIGIT = 4,
-    SYMBOL = 8,
-    ALL = 15
-;
+	
 }Maker;
 
 /*
