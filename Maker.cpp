@@ -1,9 +1,18 @@
 using namespace std;
-#include<bits/stdc++.h>
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<ctime>
+#include<string>
+#include<sstream>
+#include<iostream>
+#include<algorithm>
+#include<fstream>
+
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "recognize";
+string dataName = "data";
 string stdName = "std";
 string bruteName = "brute";
 bool make_data = true;
@@ -39,40 +48,9 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-        int n = 5, Q = 5;
-        int len[10];
-        int mxlen = 0;
-        cout << 5 <<" " << Q << endl;
-        if (I != 4) {
-            for (i = 1; i <= n; i++) {
-                len[i] = bit_rand(1, 5e4);
-                mxlen = max(mxlen, len[i]);
-            }            
-        } else {
-            for (i = 1; i <= n; i++) {
-                len[i] = 5e4;
-                mxlen = max(mxlen, len[i]);
-            }                        
-        }
-        for (i = 1; i <= n; i++) {
-            for (j = 1; j <= len[i]; j++) {
-                cout << randchar(ALPHA);   
-            }
-            cout << endl;
-        }
-        for (i = 1; i <= Q; i++) {
-            int l, r;
-            if (i == 5 && I == 2) {
-                l = 2; r = max(mxlen - 15, l);  
-            } else if (i == 5 && I == 1) {
-                l = 1; r = 15;  
-            } else if (i & 1) {
-                randRange(1, mxlen, l, r);
-            } else {
-                bit_randRange(1, mxlen, l, r);
-            }
-            cout << l << " " << r << endl;
-        }
+
+
+
 		EndFor1:
 		cout.close();
 	}
@@ -82,56 +60,7 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-        int n = 5, Q = 5;
-        int mxlen = 0;
-        cout <<n <<" " << Q << endl;        
-        
-        if (I == 0) {
-            int len = 1;
-            for (i = 1; i <= n; i++) {
-                cout <<(char)('a' + i) << endl;
-            }
-            for (i = 1; i <= Q; i++) {
-                if (i == 1) {
-                    cout << 1 << " " << 2147483648LL << endl;
-                } else if (i == 2) {
-                    cout << 1 << " " << 4500000000LL << endl;
-                } else if (i == 3) {
-                    cout << 2 << " " << 2 << endl;
-                } else if (i == 4) {
-                    cout << 1 << " " << 1 << endl;
-                } else {
-                    int l, r;
-                    randRange(1, 1e10, l, r);
-                    cout << l << " " << r << endl;
-                }
-                
-            }
-        } else if (I == 1) {
-            int len = 50000;
-            for (i = 1; i <= n; i++) {
-                for (j = 1; j <= len; j++) {
-                    cout <<'a';
-                }
-                cout << endl;
-            }
-            for (i = 1; i <= Q; i++) {
-                if (i == 1) {
-                    cout<<"1 2147483648\n";
-                } else if (i == 2) {
-                    cout<<"1 4500000000\n";
-                } else if (i == 3){
-                    cout <<"2 49900"<<endl;
-                } else if (i == 4) {
-                    cout <<"1 49999" << endl;  
-                } else {
-                    cout <<"2 50" << endl;
-                }
-            }
-        }
-        
-        
-        
+
         
 		EndFor2:
 		cout.close();
@@ -373,15 +302,7 @@ const int
 }Maker;
 
 /*
-#include<cstdio>
-#include<cstdlib>
-#include<cstring>
-#include<ctime>
-#include<string>
-#include<sstream>
-#include<iostream>
-#include<algorithm>
-#include<fstream>
+//#include<bits/stdc++.h>
 */
 
 int main(){}

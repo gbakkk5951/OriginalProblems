@@ -367,6 +367,7 @@ template <typename Type>
         size = node_idx;
         cost_flow.run();
         printf("%lld", cost_flow.tot_cost);
+        printf("\n base = %lld", (lld)cost_flow.base);
     }
     
     

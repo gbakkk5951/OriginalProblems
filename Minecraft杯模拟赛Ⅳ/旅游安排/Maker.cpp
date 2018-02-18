@@ -11,12 +11,12 @@ bool make_data = true;
 bool run_ans = true;
 
 int beg = 0
-,   end = 0
+,   end = 20
 ,   exbeg = 0
-,   exend = 4
+,   exend = 0
 ;
 
-bool check_brute = true;
+bool check_brute = false;
 bool check_out_pause = true;
 bool loop_check = false;
 bool loop_count = true;
