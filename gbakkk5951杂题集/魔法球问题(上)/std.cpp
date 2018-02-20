@@ -1,20 +1,9 @@
 using namespace std;
 int main() {}
 #include <cstdio>
-#include <cctype>
 #include <algorithm>
 
 struct _Main {
-template <typename Type>
-    void read(Type &a) {
-        char t;
-        while (!isdigit(t = getchar()));
-        a = t - '0'; 
-        while ( isdigit(t = getchar())) {
-            a *= 10;
-            a += t - '0';
-        }
-    }
     int ans[1005][1005];
     int inline pf(int a) {
         return a * a;
