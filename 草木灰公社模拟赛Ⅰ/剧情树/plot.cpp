@@ -19,7 +19,7 @@ int lrand() {
 struct Node {
 	Node *f, *s[2];
 	lf m[2], v;
-	int val, idx, rand, cnt;
+	int val, idx, rand;
 	Node *tf;
 	void mark(lf l, lf r) {
 		m[0] = l; m[1] = r; v = (l + r) / 2.0;
@@ -49,14 +49,14 @@ public:
 		null.mark(0, 2);
 		root = &null;
 	}
-	inline int cmp(int val, Node *tf, Node *nd) {
+	inline int cmp(int val, int idx, Node *tf, Node *nd) {
 		if (val != nd->val) {
 			return val > nd->val;
 		}
-		if (eq(tf->v, nd->tf->v)) {
-			return -1;
+		if (!eq(tf->v, nd->tf->v)) {
+			return tf->v > nd->tf->v;
 		}
-		return tf->v > nd->tf->v;
+		return idx > nd->idx;
 	}
 	void rotate(Node *nd) {
 		Node *f = nd->f, *gf = f->f, *s;
@@ -76,11 +76,7 @@ public:
 	Node* insert(int val, int idx, Node *tf, bool mark = true) {
 		Node *nd = root;
 		while (1) {
-			int pos = cmp(val, tf, nd);
-			if (pos == -1) {
-				nd->cnt++;
-				return nd;
-			}
+			int pos = cmp(val, idx, tf, nd);
 			if (nd->s[pos]) {
 				nd = nd->s[pos];
 			} else {
@@ -121,44 +117,32 @@ public:
 		}
 		Node *f = nd->f;
 		while (f && nd != f->s[pos ^ 1]) {
-			nd = nd->f;
+			nd = f;
+			f = nd->f;
 		}
 		return f == root ? 0 : f;
 	}
 	void erase(Node *nd) {
-		nd->cnt--;
-		if (nd->cnt == 0) {
-			Node *s, *f;
-			int pos;
-			while(1) {
-				pos = nd->s[1] == 0;
-				if (pos || nd->s[0] == 0) {
-					f = nd->f;
-					s = nd->s[pos ^ 1];
-					f->s[nd == f->s[1]] = s;
-					if (s) {
-						s->f = f;
-						break;
-					}
+		Node *s, *f;
+		int pos;
+		while(1) {
+			pos = nd->s[1] == 0;
+			if (pos || nd->s[0] == 0) {
+				f = nd->f;
+				s = nd->s[pos ^ 1];
+				f->s[nd == f->s[1]] = s;
+				if (s) {
+					s->f = f;
 				}
-				s = nd->s[nd->s[1]->rand < nd->s[0]->rand];
-				rotate(s);
+				break;
 			}
+			s = nd->s[nd->s[1]->rand < nd->s[0]->rand];
+			rotate(s);
 		}
 	}
 }tree[2];
 
 llu mul(lld a, lld b, lld mod) {
-	/*llu ret = 0;
-	while(b2) {
-		if (b2 & 1) {
-			ret += b1;
-		}
-		b2 >>= 1;
-		b1 = (b1 << 1) % mod;
-	}
-	return ret % mod;
-	*/
 	lld ret = (a * b - (lld)((lf)a / mod * b) * mod) % mod;
 	if (ret < 0) {
 		return ret += mod;
@@ -235,11 +219,20 @@ void insert(int _f, int s, int v) {
 		hash[s][i] <<= i - 1;
 		hash[s][i] += hash[s][i - 1];
 	}
+	printf("stp 1\n");
 	if (++out[_f] == 1) {
 		tree[LEA].erase(ptr[LEA][_f]);
 	}
+	printf("stp 2\n");
 	ptr[TOT][s] = tree[TOT].insert(v, s, ptr[TOT][_f]);
 	ptr[LEA][s] = tree[LEA].insert(v, s, ptr[TOT][_f]);
+}
+void insert_root() {
+	hash[0][0] += 0;
+	h[0] = 1;
+	for (int i = 0; i < 2; i++) {
+		ptr[i][0] = tree[i].insert(0, 0, tree[TOT].root, i == TOT);
+	}
 }
 
 void del(int nd) {
@@ -269,7 +262,7 @@ void only_del(int nd) {
 }
 
 int getlcp(int a, int b) {
-	int i, j, k;
+	int i;
 	int ret = 0;
 	int deep = min(h[a], h[b]);
 	for (i = mx_bit; i >= 0; i--) {
@@ -284,11 +277,8 @@ int getlcp(int a, int b) {
 	return ret;
 }
 int ask(int nd) {
-	if (ptr[LEA][nd]->cnt > 1) {
-		return 0;
-	}
 	int lcp = 0;
-	Node *near;
+	Node *near = 0;
 	for (int i = 0; i < 2; i++) {
 		near = tree[LEA].near(ptr[LEA][nd], i);
 		if (near) {
@@ -311,7 +301,7 @@ template <typename Type>
 	}
 
 _Main() {
-	int i, j, k;
+	int i, j;
 	int Q, Qn;
 	int oper, a, b, c;
 	read(Qn);
@@ -322,14 +312,7 @@ _Main() {
 			pow[i][j] = mul(pow[i][j - 1], pow[i][j - 1], MOD[i]);
 		}
 	}
-	for (i = 0; i < 2; i++) {
-		ptr[i][0] = tree[i].root;
-	}
- 	insert(0, 0, 0); 
-	/*h[0] = 1;
-	for (i = 0; i < 2; i++) {
-		ptr[i][0] = tree[i].insert(0, 0, 0, i == TOT);
-	}*/
+	insert_root();
 	for (Q = 1; Q <= Qn; Q++) {
 		read(oper); read(a);
 		switch (oper) {
@@ -357,4 +340,5 @@ _Main() {
 
 }
 
-
+//注意流控语句
+//注意初始节点插入 
