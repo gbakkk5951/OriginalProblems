@@ -148,16 +148,22 @@ public:
 	}
 }tree[2];
 
-llu mul(llu b1, llu b2, llu mod) {
-	llu ret = 0;
+llu mul(lld a, lld b, lld mod) {
+	/*llu ret = 0;
 	while(b2) {
 		if (b2 & 1) {
 			ret += b1;
 		}
 		b2 >>= 1;
 		b1 = (b1 << 1) % mod;
-	}	
+	}
 	return ret % mod;
+	*/
+	lld ret = (a * b - (lld)((lf)a / mod * b) * mod) % mod;
+	if (ret < 0) {
+		return ret += mod;
+	}
+	return ret;
 }
 
 const int HASH_CNT = 3;
@@ -232,8 +238,8 @@ void insert(int _f, int s, int v) {
 	if (++out[_f] == 1) {
 		tree[LEA].erase(ptr[LEA][_f]);
 	}
-	tree[TOT].insert(v, s, ptr[TOT][_f]);
-	tree[LEA].insert(v, s, ptr[TOT][_f]);
+	ptr[TOT][s] = tree[TOT].insert(v, s, ptr[TOT][_f]);
+	ptr[LEA][s] = tree[LEA].insert(v, s, ptr[TOT][_f]);
 }
 
 void del(int nd) {
@@ -309,14 +315,17 @@ _Main() {
 	int Q, Qn;
 	int oper, a, b, c;
 	read(Qn);
-	for (mx_bit = 0; 1 << mx_bit + 1 <= Qn; mx_bit++);
+	for (mx_bit = 0; (1 << mx_bit + 1) <= Qn; mx_bit++);
 	for (i = 0; i < HASH_CNT; i++) {
 		pow[i][0] = BASE[i];
 		for (j = 1; j <= mx_bit; j++) {
 			pow[i][j] = mul(pow[i][j - 1], pow[i][j - 1], MOD[i]);
 		}
 	}
-	insert(0, 0, 0);
+	for (i = 0; i < 2; i++) {
+		ptr[i][0] = tree[i].root;
+	}
+ 	insert(0, 0, 0); 
 	/*h[0] = 1;
 	for (i = 0; i < 2; i++) {
 		ptr[i][0] = tree[i].insert(0, 0, 0, i == TOT);
@@ -327,12 +336,15 @@ _Main() {
 			case 1: {
 				read(b); read(c);	
 				insert(a, b, c);	
+				break;
 			}
 			case 2: {
 				del(a);
+				break;
 			}
 			case 3: {
-				ask(a);
+				printf("ans: %d\n", ask(a));
+				break;
 			}
 		}
 	}
