@@ -351,7 +351,7 @@ template <typename Type>
 	}
 
 _Main() {
-//	freopen("data0.in", "r", stdin);
+//	freopen("data_ex1.in", "r", stdin);
 	int i, j;
 	int Q, Qn;
 	int oper, a, b, c;
@@ -365,7 +365,7 @@ _Main() {
 	}
 	insert_root();
 	for (Q = 1; Q <= Qn; Q++) {
-//		cerr<<"Q = "<< Q<< endl;
+		//if (Q > 89990)cerr<<"Q = "<< Q<< endl;
 		//printf("[%d] f = %lld, s = %lld, %lld\n", -1, -1LL, 
 		//									max(tree[LEA].null.s[0] - tree[LEA].pool, -1LL), 
 		//									max(tree[LEA].null.s[1] - tree[LEA].pool, -1LL));
@@ -379,7 +379,7 @@ _Main() {
 												max(tree[LEA].pool[i].s[1] - tree[LEA].pool, -1LL));
 		}		*/
 		read(oper); read(a);
-		//printf("Q = %d, oper = %d, a = %d\n", Q, oper, a);
+//		if (Q > 89990)printf("Q = %d, oper = %d, a = %d\n", Q, oper, a);
 		switch (oper) {
 			case 1: {
 				read(b); read(c);	
@@ -392,6 +392,7 @@ _Main() {
 				break;
 			}
 			case 3: {
+//				ask(a);
 				printf("%d\n", ask(a));
 				break;
 			}

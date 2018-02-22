@@ -20,15 +20,15 @@ bool run_ans = true;
 
 lld srand_seed = 0/*1519217859*/;
 
-int beg = 0
+int beg = 10
 ,   end = 10
-,   exbeg = 0
-,   exend = 0
+,   exbeg = 3
+,   exend = 6
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -90,7 +90,6 @@ void make(){
 						Q--;
 						continue;
 					}
-//					cerr <<"A" << endl;
 					del(t, cout);
 				} else {
 					t = leaf.getRand();
@@ -98,11 +97,9 @@ void make(){
 						Q--;
 						continue;
 					}
-//					cerr <<"B" << endl;
 					del(t, cout);
 				}
 			} else if (rand() % 3 < 2){
-//				cerr <<"C" << endl;
 				if (void_id.size() == 0) {
 					Q--;
 					continue;
@@ -129,6 +126,14 @@ void make(){
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
 		int m = 100000, mxid = 100000, mxv = 25000;
+		leaf.clear();
+		id.clear();
+		void_id.clear();
+		eidx = 0;
+		memset(head, 0, sizeof(head));
+		memset(out, 0, sizeof(head));
+		leaf.insert(0);
+		id.insert(0);
 		for (i = 1; i <= mxid; i++) {
 			void_id.insert(i);
 		}
@@ -145,7 +150,7 @@ void make(){
         		randOper(mxv, cout);
         	}
         } else if (I == 1) { // 4.5w 菊花 + 4.5w Q + 1w rand
-			for (i = 1; i < 45000; i++) {
+			for (i = 1; i <= 45000; i++) {
         		ins(0, i, lrand(0, mxv), cout);
         	}
         	for (i = 1; i <= 45000; i++) {
@@ -166,11 +171,11 @@ void make(){
         		}
         	}
         	for (i = 1; i <= 20000; i++) {
-        		randoper(min(100000, mxv + 3));
+        		randOper(min(100000, mxv + 3), cout);
         	}
-        } else if (I == 3) { //3W第一排 1~ 3W， 3w第二排 0， 3WQ, 3Wrand 
+        } else if (I == 3) { //3W第一排 1~ 3W， 3w第二排 0， 3WQ, 1W rand 
         	for (i = 0; i <= 29999; i++) {
-        		ins(0, i + 1, i, cout)
+        		ins(0, i + 1, i, cout);
         	} 
         	for (i = 1; i <= 30000; i++) {
         		ins(i, 30000 + i, 0, cout);
@@ -179,9 +184,41 @@ void make(){
         		ask(i + 30000, cout);
         	}
         	for (i = 1; i <= 10000; i++) {
-        		randOper(2);
+        		randOper(2, cout);
         	}
-        }
+        } else if (I == 4) {// 4 * 10000 链 （1/2概率问）+ 2W 随机插入 + 剩下随机 
+			Qcnt = 0;
+			mxv = 2;
+			int t[4] = {0,0,0,0}, idx = 1; 
+			for (i = 1; i <= 10000; i++) {
+				for (j = 0; j < 4; j++) {
+					ins(t[j], ++idx, lrand(0, mxv), cout);
+					t[j] = idx;
+					if (rand() & 1) {
+						ask(idx, cout);
+					}
+				}
+			}
+			for (i = 1; i <= 20000; i++) {
+				ins(id.getRand(), void_id.getRand(), lrand(0, 20), cout);
+			}
+			for (i = Qcnt + 1; i <= m; i++) {
+				randOper(mxv, cout);
+			}
+		} else if (I == 5) { //1W链 + 4W（插入、删除） + 1W随机 
+			mxv = 2;
+			for (i = 1; i <= 10000; i++) {
+				ins(i - 1, i, lrand(0, mxv), cout);
+			} 
+			for (i = 1; i <= 40000; i++) {
+				int t = lrand(10001, 100000);
+				ins(10000, t, lrand(0, mxv), cout);
+				del(t, cout);
+			}
+			for (i = 1; i <= 10000; i++) {
+				randOper(5, cout);
+			}
+		}
         
 		EndFor2:
 		cout.close();
@@ -189,7 +226,7 @@ void make(){
 	
 	
 }
-
+int Qcnt;
 	void randOper(int mxv, ostream &cout) {
 		FuncBeg:
 		if (rand() % 5 == 1) {
@@ -205,7 +242,6 @@ void make(){
 				if (t == 0) {
 					goto FuncBeg;
 				}
-//					cerr <<"B" << endl;
 				del(t, cout);
 			}
 		} else if (rand() % 2 < 1){
@@ -235,12 +271,11 @@ void inline add(int f, int _s) {
 	head[f] = eidx;
 }
 void del(int nd, ostream &cout) {
-//	cerr << "del\n";
+	Qcnt++;
 	cout << 2 << " " << nd << endl;	
 	int f = this->f[nd];
 	only_del(nd);
 	if (out[f] == 0) {
-//		printf("Xleaf + %d\n", f);
 		leaf.insert(f);
 	}
 } 
@@ -255,43 +290,30 @@ void only_del(int nd) {
 	}
 	--out[f[nd]];
 	if (scnt == 0) {
-//		printf("Zleaf - %d\n", nd);
 		leaf.erase(nd);
 	}
-//	printf("Zid - %d\n", nd);
 	id.erase(nd);
-//	printf("Zvoid_id + %d\n", nd);
 	void_id.insert(nd);
-//	printf("--\n");
 	head[nd] = 0;
 	f[nd] = -1;
 }
 void ins(int f, int s, int v, ostream &cout) {
-//	cerr << "ins\n";
+	Qcnt++;
 	cout << "1 "<< f<<" "<<s<<" "<< v << endl;
 	add(f, s);
-//	if (this->f[f] == -1) {
-//		cerr<<"WAAAAAAAAAAAAAA" << endl;
-//		
-//	}
 	this->f[s] = f;
 	if (++out[f] == 1) {
-//		printf("leaf - %d\n", f);
 		leaf.erase(f);
 	}
-//	printf("leaf + %d\n", s);
 	leaf.insert(s);
-//	printf("id + %d\n", s);
 	id.insert(s);
-//	printf("void_id - %d\n", s);
 	void_id.erase(s);
 }
 void ask(int nd, ostream &cout) {
-//	cerr << "ask\n";
+	Qcnt++;
 	cout <<"3 "<< nd << endl;
 }
 
-//int id[12][105];
 
 void run(){
 	int I;
