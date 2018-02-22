@@ -1,28 +1,37 @@
-using namespace std;
+#include <cstdio>
 #include <cstdlib>
+struct Node;
+
 struct Node {
 	Node *f, *s[2];
 	int size, val;
 };
 template <int pool_size>
-class {
+class Splay {
 private:
-	Node pool[pool_size];
+	Node *pool;
 	Node *root;
 	int pidx;
 	int size_;
+
 	Node *new_node(int val, Node *f = 0) {
 		Node* nd = &pool[pidx++];
 		nd->s[0] = nd->s[1] = 0;
 		nd->f = f;
 		nd->val = val;
-		nd->size = 0;
+		nd->size = 1;
+		return nd;
 	}
 	
 	void splay(Node *nd, Node *root = 0) {
 		Node *f, *gf;
 		while (1) {
+
 			f = nd->f;
+			/*
+			if (nd->val == 37710) {
+				printf("f = %lld\n", f);
+			}		*/
 			if (f != root) {
 				gf = f->f;
 				if (gf != root && (nd == f->s[1]) == (f == gf->s[1])) {
@@ -34,19 +43,20 @@ private:
 			}
 		}
 		if (nd->f == 0) {
-			root = nd;
-		}
+			this->root = nd;
+		} 
 	}
 	void update(Node *nd) {
-		for (int i = 0, nd->sum = 1; i < 2; i++) {
+		nd->size = 1;
+		for (int i = 0; i < 2; i++) {
 			if (nd->s[i]) {
-				nd->sum += nd->s[i]->sum;
+				nd->size += nd->s[i]->size;
 			}
 		}
 	}
 	
 	void rotate(Node *nd) {
-		Node *f = nd->f, Node *gf = f->f, *s;
+		Node *f = nd->f, *gf = f->f, *s;
 		nd->f = gf;
 		if (gf) {
 			gf->s[f == gf->s[1]] = nd;
@@ -68,8 +78,8 @@ private:
 		Node *nd = root;
 		int l;
 		while (1) {
-			l = nd->s[0] ? nd->s[0]->sum : 0;
-			if (l <= rk) {
+			l = nd->s[0] ? nd->s[0]->size : 0;
+			if (l >= rk) {
 				nd = nd->s[0];	
 			} else if(l + 1 == rk) {
 				return nd->val;
@@ -80,6 +90,13 @@ private:
 		}
 	}
 public:
+	~Splay() {
+		free(pool);
+	}
+	Splay() {
+		clear();
+		pool = (Node*)calloc(pool_size, sizeof(Node));
+	}
 	int size() {
 		return size_;
 	}
@@ -91,20 +108,37 @@ public:
 	}
 	void insert(int val) {
 		size_++;
+//		printf("ins");
+//		printf("size_ += %d", size_);
 		Node *nd = root;
 		if (nd == 0) {
+
 			root = new_node(val);
 			return;
 		}
 		while (1) {
+			/*if (val == 37710) {
+				printf("nd = %lld\n", (nd - pool) / sizeof(Node));
+			}*/
 			int pos = nd->val < val;
+			/*if (val == 37710) {
+				printf("chose %d\n", pos);
+			}
+			*/
 			if (nd->s[pos]) {
 				nd = nd->s[pos];
 			} else {
 				nd = nd->s[pos] = new_node(val, nd);
+				/*if (val == 37710) {
+					printf("new\n");
+				}*/
 				break;
 			}
 		}
+		/*
+		if (val == 37710) {
+			printf("nd = %lld val = %d\n", nd, nd->val);
+		}		*/
 		splay(nd);
 	}
 	void erase(int val) {

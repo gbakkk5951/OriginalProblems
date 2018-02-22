@@ -34,7 +34,7 @@ struct _Main {
 	}
 	int getlcp(int a, int b) {
 		int ret = 0;
-		while (h[a] && h[b] && val[a] == val[b]) {
+		while (a && b && val[a] == val[b]) {
 			ret++;
 			a = f[a];
 			b = f[b];
@@ -51,7 +51,7 @@ struct _Main {
 	int ask(int nd) {
 		int lcp = 0;
 		for (int i = 0; i <= mx; i++) {
-			if (out[i] == 0 && i != nd) {
+			if (out[i] == 0 && i != nd && h[i] != 0) {
 				lcp = max(lcp, getlcp(i, nd));
 			}
 		}
@@ -62,6 +62,7 @@ struct _Main {
 			return;
 		}
 		int t;
+		h[nd] = 0;
 		for (int i = head[nd]; i; i = s[nd][NXT]) {
 			if (f[(t = s[nd][DST])] == nd) {
 				del(t);
@@ -71,12 +72,14 @@ struct _Main {
 	}
 	int mx;
 	_Main() {
+		freopen("data0.in", "r", stdin);
 		int i, j, k;
 		int Q, Qn;
 		int oper, a, b, c;
 		read(Qn);
 		insert(0, 0, 0);
 		for (Q = 1; Q <= Qn; Q++) {
+		
 			read(oper); read(a);
 			mx = max(mx, a);
 			switch (oper) {
@@ -91,7 +94,7 @@ struct _Main {
 					break;
 				}
 				case 3: {
-					printf("ans:%d\n", ask(a));
+					printf("%d\n", ask(a));
 					break;
 				}
 			}

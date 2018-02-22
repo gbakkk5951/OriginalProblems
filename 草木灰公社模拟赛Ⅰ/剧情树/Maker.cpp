@@ -8,7 +8,7 @@ using namespace std;
 #include<iostream>
 #include<algorithm>
 #include<fstream>
-
+#include "splay.hpp"
 typedef long long lld;
 struct _Main{
 //////////////
@@ -18,8 +18,10 @@ string bruteName = "brute_tot";
 bool make_data = true;
 bool run_ans = true;
 
+lld srand_seed = 1519217859;
+
 int beg = 0
-,   end = 1
+,   end = 5
 ,   exbeg = 0
 ,   exend = 0
 ;
@@ -33,6 +35,7 @@ bool brute_time_count = true;
 
 //////////////
 
+Splay<400005>leaf, id, void_id;
 void make(){
 	int I;
 	int i,j,k;
@@ -40,49 +43,78 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		
 		int m;
-		int mxv;
-		m = 100000;
+		int mxv, mxid = 100000;
+		m = 100;
 		if (I == 0) {
 			mxv = 0;
+			mxid = 1000;
 		} else if(I == 1) {
 			mxv = 1;
+			mxid = 50000;
 		} else if (I == 2) {
 			mxv = 26;
+			mxid = 10000;
 		} else if (I == 3) {
 			mxv = 500;
 		} else if (I == 4) {
 			mxv = 100000;
 		}
-		int Q, mx = 0;
+		int Q;
 		leaf.clear();
 		id.clear();
 		void_id.clear();
+		eidx = 0;
+		memset(head, 0, sizeof(head));
+		memset(out, 0, sizeof(head));
+//		printf("leaf + 0\nid + 0\n");
 		leaf.insert(0);
 		id.insert(0);
-		for (i = 1; i <= m; i++) {
-			void_id.insert()
+		for (i = 1; i <= mxid; i++) {
+			void_id.insert(i);
 		}
+		cout << m << endl;
 		for (Q = 1; Q <= m; Q++) {
+//			cerr<< "Q = "<< Q<< endl;
 			if (Q == m) {
 				cout << "2 0" << endl;
 				continue;
 			}
 			if (I != 4 && rand() % 4 == 1) {
-				if (rand() % 10 == 1) {
-					del(id.getRand());
-				} else {
-					del(leaf.getRand());
-				}
-			} else if (rand() & 1){
 				int t;
-				ins(id.getRand(), t = void_id.getRand(), bit_rand(0, mxv));
+				if (rand() % 10 == 1) {
+					
+					t = id.getRand();
+					if (t == 0) {
+						Q--;
+						continue;
+					}
+//					cerr <<"A" << endl;
+					del(t, cout);
+				} else {
+					t = leaf.getRand();
+					if (t == 0) {
+						Q--;
+						continue;
+					}
+//					cerr <<"B" << endl;
+					del(t, cout);
+				}
+			} else if (rand() % 3 < 2){
+//				cerr <<"C" << endl;
+				if (void_id.size() == 0) {
+					Q--;
+					continue;
+				}
+				int t;
+				ins(id.getRand(), t = void_id.getRand(), bit_rand(0, mxv), cout);
 				if (rand() & 1) {
 					Q++;
-					ask(t);
+					ask(t, cout);
 				}
 			} else {
-				ask(leaf.getRand());
+				ask(leaf.getRand(), cout);
 			}
 		}
 		
@@ -103,7 +135,80 @@ void make(){
 	
 	
 }
-int id[12][105];
+
+const int 
+	NXT = 1, 
+	DST = 0
+;
+int out[100010];
+int f[100010];
+int s[100010][2];
+int head[100010];
+int eidx;
+void inline add(int f, int _s) {
+	eidx++;
+	s[eidx][DST] = _s;
+	s[eidx][NXT] = head[f];
+	head[f] = eidx;
+}
+void del(int nd, ostream &cout) {
+//	cerr << "del\n";
+	cout << 2 << " " << nd << endl;	
+	int f = this->f[nd];
+	only_del(nd);
+	if (out[f] == 0) {
+//		printf("Xleaf + %d\n", f);
+		leaf.insert(f);
+	}
+} 
+void only_del(int nd) {
+	int scnt = 0;
+	for (int i = head[nd]; i; i = s[i][NXT]) {
+		int t;
+		if (f[t = s[i][DST]] == nd) {
+			only_del(t);
+			scnt++;
+		}
+	}
+	--out[f[nd]];
+	if (scnt == 0) {
+//		printf("Zleaf - %d\n", nd);
+		leaf.erase(nd);
+	}
+//	printf("Zid - %d\n", nd);
+	id.erase(nd);
+//	printf("Zvoid_id + %d\n", nd);
+	void_id.insert(nd);
+//	printf("--\n");
+	head[nd] = 0;
+	f[nd] = -1;
+}
+void ins(int f, int s, int v, ostream &cout) {
+//	cerr << "ins\n";
+	cout << "1 "<< f<<" "<<s<<" "<< v << endl;
+	add(f, s);
+//	if (this->f[f] == -1) {
+//		cerr<<"WAAAAAAAAAAAAAA" << endl;
+//		
+//	}
+	this->f[s] = f;
+	if (++out[f] == 1) {
+//		printf("leaf - %d\n", f);
+		leaf.erase(f);
+	}
+//	printf("leaf + %d\n", s);
+	leaf.insert(s);
+//	printf("id + %d\n", s);
+	id.insert(s);
+//	printf("void_id - %d\n", s);
+	void_id.erase(s);
+}
+void ask(int nd, ostream &cout) {
+//	cerr << "ask\n";
+	cout <<"3 "<< nd << endl;
+}
+
+//int id[12][105];
 
 void run(){
 	int I;
@@ -165,7 +270,12 @@ void run(){
 _Main(){
     int loopCnt = 0;
 	getprime();
-	srand(time(0));
+	lld seed = 0;
+	if (srand_seed == 0) {
+		srand_seed = time(0);
+	}
+	cerr<<"seed = "<<srand_seed << endl;
+	srand(srand_seed);
 	if (!loop_check){
     	if (make_data) {
     	    make();
@@ -198,12 +308,12 @@ int name[100010];
 struct Edge{
 	int a,b,c;
 }edge[200010];	
-
+/*
 int eidx;
 void add(int a, int b, int c) {
     edge[eidx++] = (Edge) {a, b, c};
 }
-
+*/
 	int lim,alph;
 template<typename Type>
 	void shuffle(Type *beg,int size){

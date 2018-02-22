@@ -5,6 +5,7 @@ int main() {}
 #include <cstring>
 #include <algorithm>
 #include <cstdlib>
+#include <queue>
 namespace OI {
 typedef long long lld;
 typedef unsigned long long llu;
@@ -30,12 +31,20 @@ bool eq(lf a, lf b) {
 }
 class SuffixTreap { // 小根堆 
 public:
+	queue<Node *>q;
 	Node null;
 	Node *root;
 	Node pool[MAXN];
 	int pidx;
 	Node *new_node(int val, int idx, Node *tf, Node *f) {
-		Node *nd = &pool[pidx++];
+		Node *nd;
+		if (q.empty()) {
+			nd = &pool[pidx++];
+		} else {
+			nd = q.front();
+			nd->s[0] = nd->s[1] = 0;
+			q.pop();
+		}
 		nd->val = val;
 		nd->idx = idx;
 		nd->tf = tf;
@@ -75,12 +84,17 @@ public:
 	
 	Node* insert(int val, int idx, Node *tf, bool mark = true) {
 		Node *nd = root;
+//		printf("ins\n");
 		while (1) {
+//			printf("nd = %d\n", nd->idx);
 			int pos = cmp(val, idx, tf, nd);
+//			printf("chose %d\n", pos);
 			if (nd->s[pos]) {
 				nd = nd->s[pos];
 			} else {
+//				printf("%d -> s[%d] = new\n", nd-pool, pos);
 				nd = nd->s[pos] = new_node(val, idx, tf, nd);
+//				printf("new %d\n", nd - pool);
 				break;	
 			}
 		}
@@ -130,6 +144,7 @@ public:
 			if (pos || nd->s[0] == 0) {
 				f = nd->f;
 				s = nd->s[pos ^ 1];
+//				printf("s = %lld\n", s - pool);
 				f->s[nd == f->s[1]] = s;
 				if (s) {
 					s->f = f;
@@ -139,6 +154,7 @@ public:
 			s = nd->s[nd->s[1]->rand < nd->s[0]->rand];
 			rotate(s);
 		}
+		q.push(nd);
 	}
 }tree[2];
 
@@ -195,7 +211,7 @@ int f[MAXN][MAX_POW];
 int out[MAXN];
 int head[MAXN];
 int val[MAXN];
-int son[MAXN][2];
+int s[MAXN][2];
 int h[MAXN];
 int eidx;
 
@@ -203,8 +219,8 @@ Hash hash[MAXN][MAX_POW];
 
 void add(int f, int s) {
 	eidx++;
-	son[eidx][NXT] = head[f];
-	son[eidx][DST] = s;
+	this->s[eidx][NXT] = head[f];
+	this->s[eidx][DST] = s;
 	head[f] = eidx;
 }
 void insert(int _f, int s, int v) {
@@ -219,13 +235,13 @@ void insert(int _f, int s, int v) {
 		hash[s][i] <<= i - 1;
 		hash[s][i] += hash[s][i - 1];
 	}
-	printf("stp 1\n");
+	
 	if (++out[_f] == 1) {
 		tree[LEA].erase(ptr[LEA][_f]);
 	}
-	printf("stp 2\n");
+	
 	ptr[TOT][s] = tree[TOT].insert(v, s, ptr[TOT][_f]);
-	ptr[LEA][s] = tree[LEA].insert(v, s, ptr[TOT][_f]);
+	ptr[LEA][s] = tree[LEA].insert(v, s, ptr[TOT][_f], false);
 }
 void insert_root() {
 	hash[0][0] += 0;
@@ -239,16 +255,16 @@ void del(int nd) {
 	if (nd == 0) {
 		return;
 	}
-	if (--out[f[nd][0]] == 0) {
-		int f = this->f[nd][0];
-		tree[LEA].insert(val[f], f, ptr[TOT][this->f[f][0]], false);
+	int f;
+	if (--out[f = this->f[nd][0]] == 0) {
+		ptr[LEA][f] = tree[LEA].insert(val[f], f, ptr[TOT][this->f[f][0]], false);
 	}
 	only_del(nd);	
 }
 void only_del(int nd) {
 	int t;
-	for (int i = head[nd]; i; i = son[i][NXT]) {
-		if (f[t = son[i][DST]][0] == nd) {
+	for (int i = head[nd]; i; i = s[i][NXT]) {
+		if (f[t = s[i][DST]][0] == nd) {
 			only_del(t);
 		} 
 	}
@@ -301,6 +317,7 @@ template <typename Type>
 	}
 
 _Main() {
+	freopen("data0.in", "r", stdin);
 	int i, j;
 	int Q, Qn;
 	int oper, a, b, c;
@@ -314,10 +331,18 @@ _Main() {
 	}
 	insert_root();
 	for (Q = 1; Q <= Qn; Q++) {
+		/*for (i = 0; i < tree[LEA].pidx; i++) {
+			printf("%d f = %d, s = %d, %d\n", i, tree[LEA].pool[i].f - tree[LEA].pool, 
+												tree[LEA].pool[i].s[0] - tree[LEA].pool, 
+												tree[LEA].pool[i].s[1] - tree[LEA].pool);
+		}*/
+		
 		read(oper); read(a);
+		//printf("Q = %d, oper = %d, a = %d\n", Q, oper, a);
 		switch (oper) {
 			case 1: {
 				read(b); read(c);	
+		//		printf("b = %d, c = %d\n", b, c);
 				insert(a, b, c);	
 				break;
 			}
@@ -326,7 +351,7 @@ _Main() {
 				break;
 			}
 			case 3: {
-				printf("ans: %d\n", ask(a));
+				printf("%d\n", ask(a));
 				break;
 			}
 		}
@@ -342,3 +367,4 @@ _Main() {
 
 //注意流控语句
 //注意初始节点插入 
+//O（n） ！= n 有些可以达到2n 需要加倍空间或垃圾回收 
