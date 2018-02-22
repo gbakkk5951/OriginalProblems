@@ -26,8 +26,6 @@ struct Node {
 	void mark(lf l, lf r) {
 		m[0] = l; m[1] = r; v = (l + r) / 2.0;
 	}
-	
-	char del;//DEBUG
 };
 bool eq(lf a, lf b) {
 	return a + EPS > b && a - EPS < b;
@@ -53,7 +51,6 @@ public:
 		nd->tf = tf;
 		nd->f = f;
 		nd->rand = lrand();
-		nd->del = 0; // DEBUG
 		return nd;
 	}
 	SuffixTreap() {
@@ -88,19 +85,12 @@ public:
 	
 	Node* insert(int val, int idx, Node *tf, bool mark = true) {
 		Node *nd = root;
-//		printf("ins\n");
 		while (1) {
-			
-//			printf("nd = %d\n", nd->idx);
 			int pos = cmp(val, idx, tf, nd);
-//			printf("%d(%d) = %d(%d)->s[%d]\n", idx, val, nd->idx, nd->val, pos);
-//			printf("chose %d\n", pos);
 			if (nd->s[pos]) {
 				nd = nd->s[pos];
 			} else {
-//				printf("%d -> s[%d] = new\n", nd-pool, pos);
 				nd = nd->s[pos] = new_node(val, idx, tf, nd);
-//				printf("new %d\n", nd - pool);
 				break;	
 			}
 		}
@@ -142,9 +132,7 @@ public:
 		}
 		return f == root ? 0 : f;
 	}
-	void erase(Node *nd, bool out = false) {
-/*		if (out)
-		printf("erase %lld\n", nd - pool);*/
+	void erase(Node *nd) {
 		Node *s, *f;
 		int pos;
 		while(1) {
@@ -152,10 +140,6 @@ public:
 			if (pos || nd->s[0] == 0) {
 				f = nd->f;
 				s = nd->s[pos ^ 1];
-//				printf("%lld -> s[%d] = %lld\n", nd - pool, pos ^ 1, s - pool);
-//				printf("s = %lld\n", s - pool);
-//				if (f == &null)
-//				printf("nd = %lld, f->s[%d] = %lld\n", nd - pool, nd == f->s[1], s - pool);
 				f->s[nd == f->s[1]] = s;
 				if (s) {
 					s->f = f;
@@ -166,7 +150,6 @@ public:
 			rotate(s);
 		}
 		q.push(nd);
-		nd->del = 1;//DEBUG
 	}
 }tree[2];
 
@@ -250,7 +233,7 @@ void insert(int _f, int s, int v) {
 	}
 	
 	if (++out[_f] == 1) {
-		tree[LEA].erase(ptr[LEA][_f], 1);
+		tree[LEA].erase(ptr[LEA][_f]);
 		ptr[LEA][_f] = 0;
 	}
 	
@@ -271,18 +254,6 @@ void del(int nd) {
 	}
 	int f = this->f[nd][0];
 	only_del(nd);	
-	/*
-		printf("[%d] f = %lld, s = %lld, %lld\n", -1, -1LL, 
-											max(tree[LEA].null.s[0] - tree[LEA].pool, -1LL), 
-											max(tree[LEA].null.s[1] - tree[LEA].pool, -1LL));
-		for (int i = 0; i < tree[LEA].pidx; i++) {
-			if (tree[LEA].pool[i].del) continue;
-			lld t = max(tree[LEA].pool[i].f - tree[LEA].pool, -1LL);
-			if (t > 100000) t = -1;
-			printf("[%d] f = %lld, s = %lld, %lld\n", i, t, 
-												max(tree[LEA].pool[i].s[0] - tree[LEA].pool, -1LL), 
-												max(tree[LEA].pool[i].s[1] - tree[LEA].pool, -1LL));
-		}		*/
 	if (--out[f] == 0) {
 		if (f != 0) {
 			ptr[LEA][f] = tree[LEA].insert(val[f], f, ptr[TOT][this->f[f][0]], false);	
@@ -301,8 +272,7 @@ void only_del(int nd) {
 	}
 	for (int i = 0; i < 2; i++) {
 		if (ptr[i][nd]) {
-//			printf("tree[%d] -> erase %d\n", i, nd);
-			tree[i].erase(ptr[i][nd], i == LEA);
+			tree[i].erase(ptr[i][nd]);
 			ptr[i][nd] = 0;
 		}
 	}
@@ -331,7 +301,6 @@ int ask(int nd) {
 	for (int i = 0; i < 2; i++) {
 		near = tree[LEA].near(ptr[LEA][nd], i);
 		if (near) {
-//			printf("%d near %d\n", nd, near->idx);
 			lcp = max(lcp, getlcp(nd, near->idx));
 		}
 	}	
@@ -351,7 +320,6 @@ template <typename Type>
 	}
 
 _Main() {
-//	freopen("data0.in", "r", stdin);
 	int i, j;
 	int Q, Qn;
 	int oper, a, b, c;
@@ -365,25 +333,10 @@ _Main() {
 	}
 	insert_root();
 	for (Q = 1; Q <= Qn; Q++) {
-//		cerr<<"Q = "<< Q<< endl;
-		//printf("[%d] f = %lld, s = %lld, %lld\n", -1, -1LL, 
-		//									max(tree[LEA].null.s[0] - tree[LEA].pool, -1LL), 
-		//									max(tree[LEA].null.s[1] - tree[LEA].pool, -1LL));
-		/*for (int i = 0; i < tree[LEA].pidx; i++) {
-			if (tree[LEA].pool[i].del) continue;
-			lld t = max(tree[LEA].pool[i].f - tree[LEA].pool, -1LL);
-			if (t > 100000) t = -1;
-//			printf("tree got %d, fv = %lf\n", tree[LEA].pool[i].idx, tree[LEA].pool[i].tf->v);
-			printf("[%d]{%d} f = %lld, s = %lld, %lld\n", i, tree[LEA].pool[i].idx, t, 
-												max(tree[LEA].pool[i].s[0] - tree[LEA].pool, -1LL), 
-												max(tree[LEA].pool[i].s[1] - tree[LEA].pool, -1LL));
-		}		*/
 		read(oper); read(a);
-		//printf("Q = %d, oper = %d, a = %d\n", Q, oper, a);
 		switch (oper) {
 			case 1: {
 				read(b); read(c);	
-		//		printf("b = %d, c = %d\n", b, c);
 				insert(a, b, c);	
 				break;
 			}

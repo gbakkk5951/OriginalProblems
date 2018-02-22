@@ -39,6 +39,9 @@ struct _Main {
 			a = f[a];
 			b = f[b];
 		}
+		if (val[a] == val[b]) {
+			ret++;
+		}
 		return ret;
 	}
 	void insert(int _f, int s, int v) {
@@ -53,6 +56,9 @@ struct _Main {
 		for (int i = 0; i <= mx; i++) {
 			if (out[i] == 0 && i != nd && h[i] != 0) {
 				lcp = max(lcp, getlcp(i, nd));
+				/*if (lcp == 3) {
+					printf("i = %d\n", i);
+				}*/
 			}
 		}
 		return h[nd] - lcp;
@@ -61,18 +67,20 @@ struct _Main {
 		if (nd == 0) {
 			return;
 		}
+//		printf("del %d\n", del);
 		int t;
 		h[nd] = 0;
-		for (int i = head[nd]; i; i = s[nd][NXT]) {
-			if (f[(t = s[nd][DST])] == nd) {
+		for (int i = head[nd]; i; i = s[i][NXT]) {
+			if (f[(t = s[i][DST])] == nd) {
 				del(t);
 			}
 		}
 		out[f[nd]]--;
+		f[nd] = -1;
 	}
 	int mx;
 	_Main() {
-		freopen("data0.in", "r", stdin);
+//		freopen("data0.in", "r", stdin);
 		int i, j, k;
 		int Q, Qn;
 		int oper, a, b, c;

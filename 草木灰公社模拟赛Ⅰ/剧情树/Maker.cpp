@@ -18,10 +18,10 @@ string bruteName = "brute_tot";
 bool make_data = true;
 bool run_ans = true;
 
-lld srand_seed = 1519217859;
+lld srand_seed = 0/*1519217859*/;
 
 int beg = 0
-,   end = 5
+,   end = 10
 ,   exbeg = 0
 ,   exend = 0
 ;
@@ -46,19 +46,19 @@ void make(){
 		
 		int m;
 		int mxv, mxid = 100000;
-		m = 100;
-		if (I == 0) {
+		m = 100000;
+		if (I >> 1 == 0) {
 			mxv = 0;
 			mxid = 1000;
-		} else if(I == 1) {
+		} else if(I >> 1 == 1) {
 			mxv = 1;
 			mxid = 50000;
-		} else if (I == 2) {
+		} else if (I >> 1 == 2) {
 			mxv = 26;
 			mxid = 10000;
-		} else if (I == 3) {
+		} else if (I >> 1 == 3) {
 			mxv = 500;
-		} else if (I == 4) {
+		} else if (I >> 1 == 4) {
 			mxv = 100000;
 		}
 		int Q;
@@ -81,9 +81,9 @@ void make(){
 				cout << "2 0" << endl;
 				continue;
 			}
-			if (I != 4 && rand() % 4 == 1) {
+			if (I != 4 && ((I & 1) ? (rand() % 5 == 1) : (rand() % 3 == 1) )) {
 				int t;
-				if (rand() % 10 == 1) {
+				if ((I & 1) ? (rand() % 50 == 1) : (rand() % 10 == 1)) {
 					
 					t = id.getRand();
 					if (t == 0) {
@@ -122,12 +122,66 @@ void make(){
 		cout.close();
 	}
 	
+
 	
 	for(I=exbeg;I<exend;I++){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
+		int m = 100000, mxid = 100000, mxv = 25000;
+		for (i = 1; i <= mxid; i++) {
+			void_id.insert(i);
+		}
+		cout << m << endl;
+        if (I == 0) { // 3W Q+菊花 + 2W Q, + 2w rand; 
+        	for (i = 1; i <= 30000; i++) {
+        		ins(0, i, lrand(0, mxv), cout);
+        		ask(i, cout);
+        	}
+        	for (i = 1; i <= 20000; i++) {
+        		ask(leaf.getRand(), cout);
+        	}
+        	for (i = 1; i <= 20000; i++) {
+        		randOper(mxv, cout);
+        	}
+        } else if (I == 1) { // 4.5w 菊花 + 4.5w Q + 1w rand
+			for (i = 1; i < 45000; i++) {
+        		ins(0, i, lrand(0, mxv), cout);
+        	}
+        	for (i = 1; i <= 45000; i++) {
+        		ask(i, cout);
+        	}        	
+        	for (i = 1; i <= 10000; i++) {
+        		randOper(mxv, cout);
+        	}
+        } else if (I == 2) { // 2 * 20000链 + Q，2W rand  
+        	mxv = 1;
+        	int a[2] = {0, 0};
+        	int idx = 0;
+        	for (i = 1; i <= 20000; i++) {
+	        	for (j = 0; j < 2; j++) {
+					ins(a[j], ++idx, lrand(0, mxv), cout);
+	        		ask(idx, cout);
+	        		a[j] = idx;
+        		}
+        	}
+        	for (i = 1; i <= 20000; i++) {
+        		randoper(min(100000, mxv + 3));
+        	}
+        } else if (I == 3) { //3W第一排 1~ 3W， 3w第二排 0， 3WQ, 3Wrand 
+        	for (i = 0; i <= 29999; i++) {
+        		ins(0, i + 1, i, cout)
+        	} 
+        	for (i = 1; i <= 30000; i++) {
+        		ins(i, 30000 + i, 0, cout);
+        	}
+        	for (i = 1; i <= 30000; i++) {
+        		ask(i + 30000, cout);
+        	}
+        	for (i = 1; i <= 10000; i++) {
+        		randOper(2);
+        	}
+        }
         
 		EndFor2:
 		cout.close();
@@ -135,6 +189,35 @@ void make(){
 	
 	
 }
+
+	void randOper(int mxv, ostream &cout) {
+		FuncBeg:
+		if (rand() % 5 == 1) {
+			int t;
+			if (rand() % 10 == 1) {
+				t = id.getRand();
+				if (t == 0) {
+					goto FuncBeg;
+				}
+				del(t, cout);
+			} else {
+				t = leaf.getRand();
+				if (t == 0) {
+					goto FuncBeg;
+				}
+//					cerr <<"B" << endl;
+				del(t, cout);
+			}
+		} else if (rand() % 2 < 1){
+			if (void_id.size() == 0) {
+				goto FuncBeg;
+			}
+			int t;
+			ins(id.getRand(), t = void_id.getRand(), bit_rand(0, mxv), cout);
+		} else {
+			ask(leaf.getRand(), cout);
+		}		
+	}
 
 const int 
 	NXT = 1, 
@@ -270,7 +353,6 @@ void run(){
 _Main(){
     int loopCnt = 0;
 	getprime();
-	lld seed = 0;
 	if (srand_seed == 0) {
 		srand_seed = time(0);
 	}
