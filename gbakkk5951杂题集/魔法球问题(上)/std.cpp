@@ -42,52 +42,19 @@ struct _Main {
         int i, j, k;
         if (n & 1) {
             odd_way(1, 1, n);
-            if (n <= 100) {
-                for (i = n; i >= 1; i--) {
-                    for (j = 1; ans[j][i]; j++) {
-                        printf("%d ", ans[j][i]);
-                    }
-                    printf("\n");
-                }                
-            } else {
-                for (i = n; i >= n - 50 + 1; i--) {
-                    for (j = 1; ans[j][i]; j++) {
-                        printf("%d ", ans[j][i]);
-                    }
-                    printf("\n");                    
+            for (i = n; i >= 1; i--) {
+                for (j = 1; ans[j][i]; j++) {
+                    printf("%d ", ans[j][i]);
                 }
-                
-                for (i = 50; i >= 1; i--) {
-                    for (j = 1; ans[j][i]; j++) {
-                        printf("%d ", ans[j][i]);
-                    }
-                    printf("\n");                    
-                }                
-            }
-
-            
+                printf("\n");
+            }                
         } else {
             even_way(1, 1, n);
-            if (n <= 100) {
-                for (i = 1; i <= n; i++) {
-                    for (j = 1; ans[j][i]; j++) {
-                        printf("%d ", ans[j][i]);
-                    }
-                    printf("\n");
+            for (i = 1; i <= n; i++) {
+                for (j = 1; ans[j][i]; j++) {
+                    printf("%d ", ans[j][i]);
                 }
-            } else {
-                for (i = 1; i <= 50; i++) {
-                    for (j = 1; ans[j][i]; j++) {
-                        printf("%d ", ans[j][i]);
-                    }
-                    printf("\n");
-                }                
-                for (i = n - 50 + 1; i <= n; i++) {
-                    for (j = 1; ans[j][i]; j++) {
-                        printf("%d ", ans[j][i]);
-                    }
-                    printf("\n");
-                }                      
+                printf("\n");
             }
         }
         

@@ -11,7 +11,7 @@ bool make_data = true;
 bool run_ans = true;
 
 int beg = 0
-,   end = 1
+,   end = 20
 ,   exbeg = 0
 ,   exend = 0
 ;

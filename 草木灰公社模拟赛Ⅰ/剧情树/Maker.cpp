@@ -12,7 +12,7 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
+string dataName = "plot";
 string stdName = "plot";
 string bruteName = "brute_tot";
 bool make_data = true;
@@ -20,9 +20,9 @@ bool run_ans = true;
 
 lld srand_seed = 0/*1519217859*/;
 
-int beg = 10
+int beg = 0
 ,   end = 10
-,   exbeg = 3
+,   exbeg = 0
 ,   exend = 6
 ;
 
