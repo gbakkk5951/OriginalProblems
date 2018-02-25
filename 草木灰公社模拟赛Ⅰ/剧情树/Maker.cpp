@@ -18,12 +18,12 @@ string bruteName = "brute_tot";
 bool make_data = true;
 bool run_ans = true;
 
-lld srand_seed = 0/*1519217859*/;
+lld srand_seed = 1519358316;
 
-int beg = 0
+int beg = 10
 ,   end = 10
-,   exbeg = 0
-,   exend = 6
+,   exbeg = 6
+,   exend = 8
 ;
 
 bool check_brute = 0;
@@ -134,6 +134,8 @@ void make(){
 		memset(out, 0, sizeof(head));
 		leaf.insert(0);
 		id.insert(0);
+		Qcnt = 0;
+		
 		for (i = 1; i <= mxid; i++) {
 			void_id.insert(i);
 		}
@@ -187,7 +189,7 @@ void make(){
         		randOper(2, cout);
         	}
         } else if (I == 4) {// 4 * 10000 链 （1/2概率问）+ 2W 随机插入 + 剩下随机 
-			Qcnt = 0;
+			
 			mxv = 2;
 			int t[4] = {0,0,0,0}, idx = 1; 
 			for (i = 1; i <= 10000; i++) {
@@ -218,6 +220,49 @@ void make(){
 			for (i = 1; i <= 10000; i++) {
 				randOper(5, cout);
 			}
+		} else if (I == 6) { //卡单倍+无回收+暴力删除  A
+			mxv = 9;
+			for (i = 1; i <= 4; i++) {
+				int core = 0, t;
+				core = 1;
+				ins(0, 1, lrand(0, mxv), cout);
+				for (j = 2; j <= 19999; j++) {
+					if (j % 3 == 1) {
+						ask(leaf.getRand(), cout);
+					} else if (j % 3 == 2){
+						ins(core, void_id.getRand(), lrand(0, mxv), cout);
+					} else {
+						t = void_id.getRand();
+						ins(core, t, lrand(0, mxv), cout);
+						core = t;						
+					}
+				}
+				del(1, cout);
+			}
+			for (i = Qcnt + 1; i <= m; i++) {
+				randOper(mxv, cout);
+			}
+		} else if (I == 7) {//卡单倍+无回收+暴力删除 B
+			mxv = 9;
+			for (i = 1; i <= 4; i++) {
+				int core = 0, t;
+				core = 1;
+				ins(0, 1, lrand(0, mxv), cout);
+				for (j = 2; j <= 19998; j++) {
+					if (j % 2 == 1){
+						ins(core, void_id.getRand(), lrand(0, mxv), cout);
+					} else {
+						t = void_id.getRand();
+						ins(core, t, lrand(0, mxv), cout);
+						core = t;						
+					}
+				}
+				ask(core, cout);
+				del(1, cout);
+			}
+			for (i = Qcnt + 1; i <= m; i++) {
+				randOper(mxv, cout);
+			}			
 		}
         
 		EndFor2:
