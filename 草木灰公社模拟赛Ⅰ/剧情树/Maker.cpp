@@ -14,21 +14,21 @@ struct _Main{
 //////////////
 string dataName = "plot";
 string stdName = "plot";
-string bruteName = "brute_tot";
-bool make_data = true;
+string bruteName = "test";
+bool make_data = 0;
 bool run_ans = true;
 
-lld srand_seed = 1519358316;
+lld srand_seed = 0;
 
-int beg = 10
+int beg = 0
 ,   end = 12
-,   exbeg = 8
+,   exbeg = 0
 ,   exend = 10
 ;
 
-bool check_brute = 0;
+bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = 0;
+bool loop_check = 1;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -83,9 +83,9 @@ void make(){
 				cout << "2 0" << endl;
 				continue;
 			}
-			if (I != 4 && ((I & 1) ? (rand() % 5 == 1) : (rand() % 3 == 1) )) {
+			if (rand() & 1/*I != 4 && ((I & 1) ? (rand() % 5 == 1) : (rand() % 3 == 1) )*/) {
 				int t;
-				if ((I & 1) ? (rand() % 50 == 1) : (rand() % 10 == 1)) {
+				if (/*(I & 1) ? (rand() % 50 == 1) : (rand() % 10 == 1)*/ rand() & 1) {
 					
 					t = id.getRand();
 					if (t == 0) {
