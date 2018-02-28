@@ -21,9 +21,9 @@ bool run_ans = true;
 lld srand_seed = 1519358316;
 
 int beg = 10
-,   end = 10
-,   exbeg = 6
-,   exend = 8
+,   end = 12
+,   exbeg = 8
+,   exend = 10
 ;
 
 bool check_brute = 0;
@@ -59,6 +59,8 @@ void make(){
 		} else if (I >> 1 == 3) {
 			mxv = 500;
 		} else if (I >> 1 == 4) {
+			mxv = 100000;
+		} else if (I >> 1 == 5) {
 			mxv = 100000;
 		}
 		int Q;
@@ -263,6 +265,20 @@ void make(){
 			for (i = Qcnt + 1; i <= m; i++) {
 				randOper(mxv, cout);
 			}			
+		} else if (I == 8) {//¿¨µ¥baseÐ¡ 
+			ins(0, 1, 1, cout);
+			for (int i = 0; i < 49999; i++) {
+				ins(0, 100000 - i, 100000 - i, cout);
+				ask(100000 - i, cout);
+			}
+			del(0, cout);
+		} else if (I == 9) {
+			ins(0, 1, 1, cout);
+			for (int i = 0; i < 49999; i++) {
+				ins(0, 50001 - i, 50001 - i, cout);
+				ask(50001 - i, cout);
+			}
+			del(0, cout);			
 		}
         
 		EndFor2:
