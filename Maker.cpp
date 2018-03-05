@@ -8,53 +8,48 @@ using namespace std;
 #include<iostream>
 #include<algorithm>
 #include<fstream>
-
+#include "splay.hpp"
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
-string stdName = "std";
-string bruteName = "brute";
-bool make_data = true;
+string dataName = "plot";
+string stdName = "plot";
+string bruteName = "test";
+bool make_data = 0;
 bool run_ans = true;
 
+lld srand_seed = 0;
+
 int beg = 0
-,   end = 0
+,   end = 12
 ,   exbeg = 0
-,   exend = 4
+,   exend = 10
 ;
 
-bool check_brute = false;
+bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = false;
+bool loop_check = 1;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
 
 //////////////
 
+Splay<400005>leaf, id, void_id;
 void make(){
 	int I;
 	int i,j,k;
-	int A,B,C;
-	int N,M,Q,K;
-	int t;
-	lld mod;
-	lld mx_val;
-	int base;
-	int bloc;
-	
 	for(I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
-
-
+	
+		
 		EndFor1:
 		cout.close();
 	}
 	
+
 	
 	for(I=exbeg;I<exend;I++){
 		outfile=dataName+"_ex"+to_string(I)+".in";
@@ -68,7 +63,15 @@ void make(){
 	
 	
 }
-int id[12][105];
+int Qcnt;
+
+
+const int 
+	NXT = 1, 
+	DST = 0
+;
+
+
 
 void run(){
 	int I;
@@ -130,7 +133,11 @@ void run(){
 _Main(){
     int loopCnt = 0;
 	getprime();
-	srand(time(0));
+	if (srand_seed == 0) {
+		srand_seed = time(0);
+	}
+	cerr<<"seed = "<<srand_seed << endl;
+	srand(srand_seed);
 	if (!loop_check){
     	if (make_data) {
     	    make();
@@ -163,12 +170,12 @@ int name[100010];
 struct Edge{
 	int a,b,c;
 }edge[200010];	
-
+/*
 int eidx;
 void add(int a, int b, int c) {
     edge[eidx++] = (Edge) {a, b, c};
 }
-
+*/
 	int lim,alph;
 template<typename Type>
 	void shuffle(Type *beg,int size){
