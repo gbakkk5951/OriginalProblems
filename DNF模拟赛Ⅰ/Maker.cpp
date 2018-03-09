@@ -12,23 +12,22 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "plot";
-string stdName = "plot";
-string bruteName = "test";
-bool make_data = 0;
+string dataName = "list";
+string stdName = "list";
+string bruteName = "brute";
+bool make_data = 1;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 12
+,   end = 5
 ,   exbeg = 0
-,   exend = 10
+,   exend = 4
 ;
-
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -43,8 +42,33 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-	
-		
+		int n, m, K;
+		int mn = 1, mx = 10000;
+		if (I == 0) {
+			n = 100; m = 1e5; K = 5e3;
+		} else if(I < 3) {
+			n = 5e5; m = 1e5; K = 1e4;
+		} else {
+			n = 5e5; m = 1e5; K = 5e5;
+		}
+		cout << n << sp << K << sp << m << endl;
+		for (int i = 1; i <= n; i++) {
+			cout << lrand(1, K) << sp;
+		}
+		cout << endl;
+		for (int i = 1; i <= K; i++) {
+			cout << lrand(mn, mx) << sp;
+		}
+		cout << endl;
+		for (int i = 1; i <= m; i++) {
+			if (rand() % 3 < 2) {
+				int l, r;
+				randRange(1, n, l, r);
+				cout << 0 << sp << l << sp << r << sp << lrand(1, K) << endl;
+			} else {
+				cout << 1 << sp << lrand(1, K) << sp << lrand(mn, mx) << endl;
+			}
+		}
 		EndFor1:
 		cout.close();
 	}
@@ -55,8 +79,93 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
-        
+		int n, m, K;
+		if (I == 0) {
+			n = 1; m = 1e5; K = 5e3;
+		} else {
+			n = 5e5; m = 1e5; K = 5e5;
+		}
+		cout << n << sp << K << sp << m << endl;
+		
+        if (I == 0) {
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, K) << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= K; i++) {
+				cout << lrand(1, 10000) << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				if (rand() % 3 < 2) {
+					int l, r;
+					randRange(1, n, l, r);
+					cout << 0 << sp << l << sp << r << sp << lrand(1, K) << endl;
+				} else {
+					cout << 1 << sp << lrand(1, K) << sp << lrand(1, 10000) << endl;
+				}
+			}        	
+        } else if (I == 1) {
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, K - 1) << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= K - 1; i++) {
+				cout << lrand(1, 10) << sp;
+			}
+			cout << 10000;
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				if (i == 1) {
+					cout << 0 << sp << 1 << sp << n << sp << K << endl;	
+				} else if (rand() % 3 < 2) {
+					int l, r;
+					randRange(1, n, l, r);
+					cout << 0 << sp << l << sp << r << sp << lrand(1, K) << endl;
+				} else {
+					cout << 1 << sp << lrand(1, K) << sp << lrand(1, 10000) << endl;
+				}
+			}         
+        } else if (I == 2){
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, K - 1) << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= K - 1; i++) {
+				cout << lrand(1, 10) << sp;
+			}
+			cout << 10000;
+			cout << endl;
+			int lst = K;
+			for (int i = 1; i <= m; i++) {
+				if (i == 1) {
+					cout << 0 << sp << 1 << sp << n << sp << K << endl;	
+				} else if (i == 2) {
+					cout << 1 << sp << K << endl;
+				} else if (rand() & 1) {
+					int l, r;
+					randRange(1, n, l, r);
+					cout << 0 << sp << l << sp << r << sp << (lst = lrand(1, K)) << endl;
+				} else {
+					cout << 1 << sp << (rand() & 1 ? lrand(1, K) : lst) << sp << lrand(1, 10000) << endl;
+				}
+			}              	
+        	
+        } else {
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, K) << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= K; i++) {
+				cout << lrand(1, 10000) << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				int l, r;
+				randRange(1, n, l, r);
+				cout << 0 << sp << l << sp << r << sp << lrand(1, K) << endl;
+			}
+        }
 		EndFor2:
 		cout.close();
 	}	
@@ -103,7 +212,7 @@ void run(){
 	}
 	
 	for(I=exbeg;I<exend;I++){
-		cmd= stdName + ".exe > "+dataName+"_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
+		cmd= stdName + ".exe > "+dataName+"_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";	
 		cerr<<"Run: "<<cmd<<endl;
 		a = clock();
 		system(cmd.c_str());
