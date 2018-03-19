@@ -6,6 +6,7 @@ int main() {}
 #include <cstdio>
 #include <cctype>
 #include <cmath>
+
 namespace OI {
 typedef long long lld;
 const int MXN = 500050;
@@ -40,6 +41,7 @@ struct Block {
 		}
 	}
 	void build(int id) {
+		
 		memcpy(srt + st[id], org + st[id], (ed[id] - st[id] + 1) * sizeof(int));
 		sort(srt + st[id], srt + ed[id] + 1); 
 		sum[st[id]] = srt[st[id]];
@@ -258,6 +260,7 @@ void change(int op, int a, int b, int c) {
 				printf("%lld\n", ask(op, a, b, c));
 			}
 		}
+
 	}
 template <typename Type>
 	void read(Type &a) {

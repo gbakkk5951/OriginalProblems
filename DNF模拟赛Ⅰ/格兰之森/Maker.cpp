@@ -15,19 +15,19 @@ struct _Main{
 //////////////
 string dataName = "data";
 string stdName = "forest";
-string bruteName = "brute(¾²Ì¬¿ª¿é)";
+string bruteName = "brute_¾²Ì¬¿ª¿é";
 bool make_data = 1;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 0
+int beg = 10
 ,   end = 12
-,   exbeg = 0
+,   exbeg = 3
 ,   exend = 3
 ;
 
-bool check_brute = 0;
+bool check_brute = 1;
 bool check_out_pause = true;
 bool loop_check = 0;
 bool loop_count = true;
@@ -39,7 +39,7 @@ bool brute_time_count = true;
 //Splay<400005>leaf, id, void_id;
 vector <int> id[500050];
 int mksq(int root, int l, int r, ostream &cout) {
-	if (r - l + 1 < 2 * 200000 + 10) {
+	if (r - l + 1 < 200000 * 2 + 10) {
 		mchain(root, l, r, cout);
 		return r;
 	}
@@ -184,21 +184,27 @@ void make(){
 				cout << lrand(mn, mx) << sp;
 			}
 			cout << endl;	
-			add(1, 2, cout);
-			add(1, n >> 1, cout);
-			IA = mksq(2, 3, (n >> 1) - 1, cout);
-			IB = mksq((n >> 1), (n >> 1) + 1, n, cout);
+			int mid = 1 + n >> 1;
+			int ls = 2 + 700 - 1, rs = mid + 700 - 1;
+			mchain(1, 2, ls, cout);
+			mchain(1, mid, rs, cout);
+			IA = mksq(ls, ls + 1, mid - 1, cout);
+			IB = mksq(rs, rs + 1, n, cout);
 		}
 		if (I & 1) {
 			mn = mmn = 0;
 		}
 		for (int Q = 1; Q <= Qn; Q++) {
 			int op = lrand(1, 4);
+			if (!(I & 1) && rand()%10 < 9 ) {
+				op = 2;
+			}		
 			if ((I & 1) && op == 2) op = 1;
 			int a = lrand(1, n);
 			int b = getpair(a);
-			if (I >= 10 && rand() % 10 < 7) {
-				a = IA, b = IB;
+
+			if (I >= 10 && rand() % 10 < 9) {
+				a = IA - 1, b = IB - 1;
 			}
 			if (op <= 2) {
 				cout << op << sp << a << sp << b << sp << lrand(mn, mx) << endl;

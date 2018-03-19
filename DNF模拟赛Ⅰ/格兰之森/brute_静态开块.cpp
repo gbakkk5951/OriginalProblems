@@ -12,7 +12,6 @@ typedef long long lld;
 const int MXN = 500050;
 const int INF = 0x3f3f3f3f;
 const int DST = 1, NXT = 0;
-
 struct Block {
 	lld sum[MXN];
 	int org[MXN], srt[MXN];
@@ -233,6 +232,7 @@ void change(int op, int a, int b, int c) {
 
 
 	_Main() {
+		
 //		freopen("data_ex0.in", "r", stdin);
 		int n, en, Qn;
 		int a, b, c;
