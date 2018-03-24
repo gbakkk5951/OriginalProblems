@@ -14,22 +14,22 @@ typedef long long lld;
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "std";
-string bruteName = "brute";
+string stdName = "passwd";
+string bruteName = "passwd_trybug_";
 bool make_data = 1;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 25
 ,   exbeg = 0
-,   exend = 0
+,   exend = 1
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -45,7 +45,44 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
+		lld n, g, k, b;
+		n = 5000;
+		if (I < 3) {
+			g = 1 + I * 5000; k = 3; b = 1;
+		} else if (I < 5) {
+			g = 1 + I * 20000; k = 3; b = 1;
+		} else if (I < 8) {
+			g = 1 + I * 5000; k = 3; b = 2;	
+		} else if (I < 10) {
+			g = 1 + I * 20000; k = 3; b = 2;
+		} else if (I == 10) {
+			g = 1; k = 1; b = 0;
+		} else if (I == 11) {
+			g = 100000; k = 1; b = 0;
+		} else if (I == 12) {
+			g = 1e5; k = 3; b = 7;
+		} else if (I == 13) {
+			g = 1e5; k = 999999929; b = 8;
+		} else if (I < 18) {
+			g = lrand(1, 1e5); k = lrand(1, 1e9); b = lrand(1, 1e9);
+		} else if (I == 18) {
+			g = 1e5; k = 999999929; b = 999999937;
+		} else if (I == 19) {
+			g = 1e5; k = 319849879; b = 133333347;
+		} else if (I < 25) {
+			g = lrand(1, 1e5); k = lrand(1, 1e9); b = lrand(1, 1e9);
+		} else {
+			g = lrand(1, 1e5); 
+//			k = lrand(1, 1e7); b = 9;
+			k =	lrand(1, 1e9);
+//			b = 7;
+//			k = lrand(1, 1e9);
+			b = lrand(0, 2);
+		}
+//		n = 1e5;
+		cout << n << sp << g << sp << k << sp << b;
+//		cout << lrand(1, 5e3) << sp << lrand(1, 1) << sp << lrand(343, 343) << sp << lrand(0, 0);
+//		cout << lrand(1, 1e9) << sp << lrand(0, 1e14) << sp << lrand(0, 1e5) << sp << lrand(1, 5e3);
 		EndFor1:
 		cout.close();
 	}
@@ -56,8 +93,12 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-	
-        
+		lld n, g, k, b;
+		n = 5000;		
+		if (I == 0) {
+			g = 1; k = 20820; b = 7;
+		}
+        cout << n << sp << g << sp << k << sp << b;
 		EndFor2:
 		cout.close();
 	}	

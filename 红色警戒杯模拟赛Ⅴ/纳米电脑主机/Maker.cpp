@@ -14,22 +14,22 @@ typedef long long lld;
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "std";
+string stdName = "nano";
 string bruteName = "brute";
 bool make_data = 1;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 0
-,   end = 1
+int beg = 10
+,   end = 10
 ,   exbeg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -45,7 +45,95 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
+		int n, Qn;
+		if (I < 4) {
+			n = 50; Qn = 100000;
+		} else {
+			n = 1e5; Qn = 1e5;
+		}
+		n = 10; Qn = 10;
+		
+		cout << n << sp << Qn << endl;
+		
+		if (I != 10) if (I & 1) {
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(0, 65536) << sp;
+			}
+		} else {
+			for (int i = 1; i <= n; i++) {
+				cout << bit_rand(0, 65536) << sp;
+			}
+		}
+		if (I == 10) for (int i = 1; i <= n; i++) {
+			cout << lrand(0, 10) << sp;
+		}
+		cout << endl;
+		if (I == 7) {//ÐÞ¸Ä 
+			for (int Q = 1; Q <= Qn; Q++) {
+				int op, a, b;
+				if (rand() % 11) {
+					op = 2;
+				} else {
+					op = 1;
+				}
+				if (op == 1) {
+					randRange(1, n, a, b);
+				} else {
+					a = lrand(1, n);
+					b = lrand(0, 65536);
+				}
+				cout << op << sp << a << sp << b << endl;			
+			}
+			goto EndFor1; 			
+		}
+		if (I == 8) {//Ñ¯ÎÊ 
+			for (int Q = 1; Q <= Qn; Q++) {
+				int op, a, b;
+				if (rand() % 11) {
+					op = 1;
+				} else {
+					op = 2;
+				}			
+				if (op == 1) {
+					randRange(1, n, a, b);
+				} else {
+					a = lrand(1, n);
+					b = lrand(0, 65536);
+				}
+				cout << op << sp << a << sp << b << endl;			
+			}
+			goto EndFor1; 			
+		}
+		if (I == 9) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				int op, a, b;
+				if (rand() % 2) {
+					op = 1;
+				} else {
+					op = 2;
+				}			
+				if (op == 1) {
+					a = lrand(1, 500); b = lrand(n - 500, n);
+				} else {
+					a = lrand(1, n);
+					b = lrand(0, 65536);
+				}
+				cout << op << sp << a << sp << b << endl;
+			}
+			goto EndFor1; 				
+		}
+		for (int Q = 1; Q <= Qn; Q++) {
+			int op, a, b;
+			op = lrand(1, 2);
+			if (op == 1) {
+				randRange(1, n, a, b);
+			} else {
+				a = lrand(1, n);
+				b = lrand(0, 65536);
+				if (I == 10) b = lrand(0, 10);
+			}
+			cout << op << sp << a << sp << b << endl;
+		}
 		EndFor1:
 		cout.close();
 	}
