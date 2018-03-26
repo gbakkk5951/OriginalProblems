@@ -176,9 +176,9 @@ _Main(){
 			fa[a]=b;
 		}
 	}
-	printf("%lld", ans);
-//	dfs();
-//	printf("1");
+//	printf("%lld", ans);
+	dfs();
+	printf("1");
 }
 void dfs(int nd=1,int from=0){
 	printf("%d ",nd);

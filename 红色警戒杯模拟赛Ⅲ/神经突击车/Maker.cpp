@@ -247,7 +247,7 @@ void make(){
 	
 void run(){
 	int I;
-	for(I=0;I<20;I++){
+	for(I=0;I<21;I++){
 		cmd="std.exe > chaosdrone"+to_string(I)+".out < chaosdrone"+to_string(I)+".in";
 		system(cmd.c_str());
 	}

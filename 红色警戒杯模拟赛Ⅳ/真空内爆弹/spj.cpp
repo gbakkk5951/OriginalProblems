@@ -25,19 +25,6 @@ int main(int argc, char *args[])
         if (!equal(std_ans, u_ans)) {
             return WA;
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-	    
-=======
->>>>>>> cbc867c48460d8e655aec99718509fe543452d4c
->>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
-=======
-	    
-=======
->>>>>>> cbc867c48460d8e655aec99718509fe543452d4c
->>>>>>> 92143feda58d333f56964ba6bd00b96a52cdfa69
 	}
     return AC;  
 }  
