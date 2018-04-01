@@ -9,7 +9,7 @@ using namespace std;
 #include<algorithm>
 #include<fstream>
 #include <vector>
-#include "splay.hpp"
+//#include "splay.hpp"
 typedef long long lld;
 struct _Main{
 //////////////

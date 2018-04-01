@@ -8,15 +8,15 @@ int main() {}
 #include <vector>
 namespace OI {
 typedef long long lld;
-const int POWN = 4100;
-const int MXN = 2005;
+const int POWN = 2055;
+const int MXN = 1005;
 
 namespace NTTsp {
 	const lld MOD = 479 << 21 | 1;
 	const lld PHI = MOD - 1;
 	const lld G = 3;
-	lld *zheng[13];
-	lld *fu[13];
+	lld zheng[12][POWN >> 1];
+	lld fu[12][POWN >> 1];
 	lld *wn;
 	int len;
 	int swp[POWN];
@@ -39,7 +39,7 @@ namespace NTTsp {
 		lld w;
 		for (int POW = 1; POW >= -1; POW -= 2) {
 			for (int I = 1; 1 << I <= len; I++) {
-				wn = (POW == 1 ? zheng[I] : fu[I]) = (lld *)calloc(1 << I - 1, sizeof(lld));
+				wn = (POW == 1 ? zheng[I] : fu[I]);
 				wn[0] = 1;
 				w = fastpower(G, POW * (PHI >> I));
 				for (int i = 1; i < 1 << I - 1; i++) {
@@ -102,12 +102,11 @@ namespace NTTsp {
 }
 
 int mxpow;
-/*int pre_xishu[MXN][MXN << 1];*/ //前缀为i(1开始), 偏移为j(0开始);
+int pre_xishu[MXN][MXN << 1]; //前缀为i(1开始), 偏移为j(0开始);
 int a[MXN];
 lld ans[POWN];
 lld suf[POWN], xishu[POWN];
 int tar[MXN];
-short q[30005][2];
 struct _Main {
 int mxpow;
 int n, m, pn, Qn;
@@ -115,24 +114,14 @@ void solve() {
 	using NTTsp::NTT;
 	using NTTsp::MOD;
 	NTTsp::prepro(mxpow);
-	int flag1, flag2, t;
+	int flag1, flag2;
 	for (int I = 1; I <= n; I++) {//枚举后缀开头
 		memset(suf, 0, mxpow * sizeof(lld));
 		memset(xishu, 0, mxpow * sizeof(lld));
 		flag1 = flag2 = 0;
-		for (int Q = 1; Q <= Qn; Q++) {
-			if (q[Q][0] == I) {
-				for (int j = 1; j <= pn; j++) {
-					xishu[tar[j] - 1]++;
-					flag1 = 1;
-				}
-			} else if (q[Q][1] + 1 == I) {
-				for (int j = 1; j <= pn; j++) {
-					if ((t = tar[j] + q[Q][1] - q[Q][0]) >= m) continue;
-					xishu[t]--;
-					flag1 = 1;
-				}
-			}
+		for (int j = 0; j < m; j++) {
+			xishu[j] = pre_xishu[I][j];
+			flag1 |= xishu[j];
 		}
 		for (int j = 0; I + j <= n; j++) {
 			suf[j] = a[I + j];
@@ -158,9 +147,12 @@ void prepro() {
 	for (int j = 1; j <= pn; j++)  {
 		read(tar[j]); 
 	}
-	sort(tar + 1, tar + pn + 1);
 	for (int Q = 1; Q <= Qn; Q++) {
-		read(q[Q][0]); read(q[Q][1]);
+		read(l); read(r);
+		for (int j = 1; j <= pn; j++) {
+			pre_xishu[l][tar[j] - 1]++; 
+			pre_xishu[r + 1][tar[j] + r - l + 1 - 1]--;
+		}
 	}
 }
 void print() {

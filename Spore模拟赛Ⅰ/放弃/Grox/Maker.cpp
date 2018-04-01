@@ -14,7 +14,7 @@ typedef long long lld;
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "century";
+string stdName = "std";
 string bruteName = "brute";
 bool make_data = 1;
 bool run_ans = true;
@@ -22,14 +22,14 @@ bool run_ans = true;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 7
+,   end = 1
 ,   exbeg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 0;
+bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = 0;
+bool loop_check = 1;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -37,7 +37,7 @@ bool brute_time_count = true;
 //////////////
 
 //Splay<400005>leaf, id, void_id;
-int tag[2005];
+
 void make(){
 	int I;
 	int i,j,k;
@@ -45,89 +45,7 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n, m, Qn, pn, l, r;
-		if (I < 2) {
-			n = 100; m = 100; pn = lrand(0, m); Qn = 300;
-		} else if (I < 4) {
-			n = 2000; m = 2000; pn = lrand(0, m); Qn = 30000;
-		} else if (I == 4) {
-			n = 2000; m = 2000; pn = lrand(m - 20, m); Qn = 30000;
-		} else if (I == 5) {
-			n = 2000; m = 2000; pn = m; Qn = 30000;
-		} else if (I == 6) {
-			n = 2000; m = 2000; pn = m; Qn = 30000;
-		}
-		cout << n << sp << m << sp << pn << sp << Qn << endl;
-		if (I == 4) {
-			for (int i = 1; i <= n; i++) {
-				cout << lrand(0, 9) << sp;
-			}			
-			cout << endl;
-			memset(tag, 0, sizeof(tag));
-			for (int i = 1; i <= pn; i++) {
-				tag[i] = 1;
-			}
-			shuffle(tag + 1, m);
-			for (int i = 1; i <= m; i++) {
-				if (tag[i]) {
-					cout << i << sp;
-				}
-			}
-			cout << endl;
-			for (int Q = 1; Q <= Qn; Q++) {
-				if ( rand() % 10) {
-					l = lrand(1, 10); r = lrand(n - 10, n);
-				} else {
-					randRange(1, n, l, r);
-				}
-				cout << l << sp << r << endl;
-			}			
-			goto EndFor1;
-		} else if (I == 5) {
-			for (int i = 1; i <= n; i++) {
-				cout << 9 << sp;
-			}			
-			cout << endl;
-			memset(tag, 0, sizeof(tag));
-			for (int i = 1; i <= pn; i++) {
-				tag[i] = 1;
-			}
-			shuffle(tag + 1, m);
-			for (int i = 1; i <= m; i++) {
-				if (tag[i]) {
-					cout << i << sp;
-				}
-			}
-			cout << endl;
-			for (int Q = 1; Q <= Qn; Q++) {
-				l = 1, r = n;
-				cout << l << sp << r << endl;
-			}			
-			goto EndFor1;			
-		}
-		
-		for (int i = 1; i <= n; i++) {
-			cout << lrand(0, 9) << sp;
-		}
-		cout << endl;
-		memset(tag, 0, sizeof(tag));
-		for (int i = 1; i <= pn; i++) {
-			tag[i] = 1;
-		}
-		shuffle(tag + 1, m);
-		for (int i = m; i >= 1; i--) {
-			if (tag[i]) {
-				cout << i << sp;
-			}
-		}
-		cout << endl;
-		for (int Q = 1; Q <= Qn; Q++) {
-			randRange(1, n, l, r);
-			if (I == 6) {
-				l = 1; r = n;
-			}
-			cout << l << sp << r << endl;
-		}
+
 		EndFor1:
 		cout.close();
 	}
