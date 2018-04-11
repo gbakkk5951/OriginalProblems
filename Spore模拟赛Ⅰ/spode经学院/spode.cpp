@@ -49,7 +49,7 @@ struct Flow {
 				}
 			}
 		}
-		return 1;
+		return 0; //Ğ´³É1ÁË 
 	}
 	void getvis(int nd, int id) {
 		lstvis[nd] = id;
