@@ -6,9 +6,12 @@ int main() {}
 #include <cctype>
 #include <cstdio>
 namespace OI {
+typedef long long lld;
 const int MXN = 500015;
 const int MXP = 19;
 const int DST = 0, NXT = 1;
+const lld MOD[2] = {(lld)1e8 + 7, (lld)1e9 + 9};
+
 struct LS {
 	int operator [] (int a) {
 		return a << 1;
@@ -19,10 +22,10 @@ struct RS {
 		return a << 1 | 1;
 	}
 }rs;
-
+template <int mxsize>
 struct ArrayTree {
 	int n;
-	int node[MXN << 1];
+	int node[mxsize];
 	int query(int nd) {
 		int ret = 0;
 		for (; nd; nd -= nd & (-nd)) {
@@ -35,8 +38,9 @@ struct ArrayTree {
 			node[nd] += val;
 		}
 	}
-}dfstree;
-
+};
+ArrayTree<MXN << 1>dfstree;
+ArrayTree<MXN> cantortree;
 struct SegTree {
 	int n;
 	int node[1050000];
@@ -105,6 +109,7 @@ struct _Main {
 		head[a] = eidx;
 	}
 	int root;
+	lld fac[MXN][2];
 	void prepro() {
 		read(n); read(root);
 		for (int i = 1; i <= n - 1; i++) {
@@ -116,6 +121,13 @@ struct _Main {
 		r[0] = n;
 		dfstree.n = n << 1;
 		occupytree.n = n;
+		cantortree.n = n;
+		for(int I = 0; I < 2; I++) {
+			fac[0][I] = 1;
+			for (int i = 1; i <= n; i++) {
+				fac[i][I] = fac[i - 1][I] * i % MOD[I];
+			}
+		}
 	}
 	int gettop(int nd) {//第一个小于的数
 		int a = nd;
@@ -129,9 +141,14 @@ struct _Main {
 	void getans(int nd) {
 		size[nd] += dfstree.query(in[nd]);
 		size[nd] -= dfstree.query(out[nd]);
-		dfstree.add(1, -size[nd]);
-		dfstree.add(in[nd], size[nd]);
+		
 		int top = gettop(nd);
+		
+		if (top != f[nd][0]) {
+			dfstree.add(in[top] + 1, -size[nd]);
+			dfstree.add(in[nd], size[nd]);	
+		} 
+		
 		l[nd] = occupytree.query(1, 1, n, l[top] + 1, r[top]) - size[nd];
 		occupytree.occupy(l[nd]);
 		r[nd] = l[nd] + size[nd] - 1; //不用考虑原size 因为被剪掉的部分的节点不会来找nd
@@ -139,7 +156,17 @@ struct _Main {
 	void solve() {
 		for (int i = 1; i <= n; i++) {
 			getans(i);
-			printf("%d ", l[i]);
+		}
+		lld ans[2] = {0, 0};
+		for (int i = n; i; i--) {
+			lld tmp = cantortree.query(l[i]);
+			if (tmp) for (int I = 0; I < 2; I++) {
+				ans[I] = (ans[I] + tmp * fac[n - i][I]) % MOD[I];
+			}
+			cantortree.add(l[i], 1);
+		}
+		for (int I = 0; I < 2; I++) {
+			printf("%lld ", ans[I]);
 		}
 	}
 	_Main() {
