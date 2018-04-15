@@ -10,25 +10,21 @@ int main() {}
 namespace OI {
 typedef long long lld;
 const lld MOD = 479 << 21 | 1;
-const lld REV2 = MOD + 1 >> 1;
 const int MXN = 4200000;
 const int MXP = 23;
 //const int MXN = 1050000;
 //const int MXP = 21;
-const int XOR = 0, OR = 1, AND = 2;
-
 typedef pair<int, int> p;
 struct _Main {
-	//0 XOR, 1 OR, 2 AND
 	vector <p> mission[MXP];
-	lld res[3][MXP][MXN];
-	lld a[3][MXN], b[3][MXN];
+	lld res[MXP][MXN];
+	lld a[MXN], b[MXN];
 	int n, mxpow, mxbit;
-//	int cnt;
+	int cnt;
 	void getmission(int al, int ar, int bl, int br, int bit) {
 		if (al + bl > n) return;
 		if (ar + br <= n) {
-//			cnt++;
+			cnt++;
 			mission[bit].push_back(make_pair(al, bl));
 			return;
 		}
@@ -39,7 +35,7 @@ struct _Main {
 		getmission(amid + 1, ar, bmid + 1, br, bit - 1);
 	}
 	void FWT() {
-		lld *x, *y, *arr, t1, t2;
+		lld *x, *y, *arr;
 		for (int I = 0; I <= mxbit; I++) {
 			if (I) {
 				int half = 1 << I - 1;
@@ -48,80 +44,59 @@ struct _Main {
 					for (int i = 0; i < mxpow; i += half << 1) {
 						x = arr + i; y = arr + i + half;
 						for (int j = 0; j < half; j++) {
-							t1 = x[j]; t2 = y[j];
-							x[j] = (t1 + t2) % MOD;
-							y[j] = (t1 - t2) % MOD;
+							x[j] = (x[j] + y[j]) % MOD;
 						}
 					}
 				}
 			}
 			for (int i = 0; i < mission[I].size(); i++) {
-				t1 = mission[I][i].first;
-				t2 = mission[I][i].second;
-				for (int J = 0; J < 3; J++) {
-					x = a[J] + t1;
-					y = b[J] + t2;
-					arr = res[J][I] + (J == XOR ? (t1 ^ t2) : (J == OR ? (t1 | r2) : (t1 & t2)));
-					for (int j = 0; j < 1 << I; j++) {
-						arr[j] = arr[j] + x[j] * y[j];
-					}
+				x = a + mission[I][i].first;
+				y = b + mission[I][i].second;
+				arr = res[I] + (((mission[I][i].first >> I) & (mission[I][i].second >> I)) << I);
+				for (int j = 0; j < 1 << I; j++) {
+					arr[j] = (arr[j] + x[j] * y[j]) % MOD;
 				}
 			}
 		}
 	}
 	
 	void NFWT() {
-		lld *arr, *x, *y, t1, t2;
+		lld *arr, *x, *y;
 		for (int I = mxbit; I >= 1; I--) {
 			int half = 1 << I - 1;
-			
-			arr = res[XOR][I];
+			arr = res[I];
 			for (int i = 0; i < mxpow; i += half << 1) {
 				x = arr + i; y = arr + i + half;
 				for (int j = 0; j < half; j++) {
-					t1 = x[j]; t2 = y[j];
-					x[j] = t1 + t2 >> 1;
-					y[j] = t1 - t2 >> 1;
+					x[j] = (x[j] - y[j]) % MOD;
 				}
 			}
-			
-			
-			for (int J = 0; J < 3; J++) {
-				x = res[I - 1];
-				for (int i = 0; i < mxpow; i++) {
-					x[i] = (x[i] + arr[i]) % MOD;
-				}				
+			x = res[I - 1];
+			for (int i = 0; i < mxpow; i++) {
+				x[i] = (x[i] + arr[i]) % MOD;
 			}
-
 		}
 	}
 	
 	_Main() {
+		freopen("data0.in", "r", stdin);
 		read(n);
-		for (int i = 0; i <= n; i++) {
-			read(a[0][i]);
+		/*for (int i = 0; i <= n; i++) {
+			read(a[i]);
 		}
-		memmove(a[1], a[0], (n + 1) * sizeof(lld));
-		memmove(a[2], a[1], (n + 1) * sizeof(lld));
 		for (int i = 0; i <= n; i++) {
-			read(b[0][i]);
-		}
-		memmove(b[1], b[0], (n + 1) * sizeof(lld));
-		memmove(b[2], b[1], (n + 1) * sizeof(lld));
+			read(b[i]);
+		}*/
 		for (mxbit = 0; 1 << mxbit <= n; mxbit++);
 		mxpow = 1 << mxbit;
 		getmission(0, mxpow - 1, 0, mxpow - 1, mxbit);
-//		cerr << cnt;
+		cerr << cnt;
 		FWT();
 		NFWT();
 		lld ans[3] = {0, 0, 0};
-		for (int J = 0; J < 3; J++) {
-			for (int i = 0; i <= n; i++) {
-				ans[i % 3] += res[0][i];
-	//			printf("ans %d = %lld\n", i, res[0][i]);
-			}			
+		for (int i = 0; i <= n; i++) {
+			ans[i % 3] += res[0][i];
 		}
-
 		for (int i = 0; i < 3; i++) {
 			ans[i] %= MOD;
 			ans[i] += ans[i] < 0 ? MOD : 0;

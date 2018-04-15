@@ -14,8 +14,8 @@ typedef long long lld;
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "std";
-string bruteName = "brute";
+string stdName = "grox4th";
+string bruteName = "grox4th_more_log";
 bool make_data = 1;
 bool run_ans = true;
 
@@ -45,7 +45,17 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
+		int n = (1 << 21)  - 200000;
+		cout << n << endl;
+		
+		for (int i = 0; i <= n; i++) {
+			cout << lrand(0, 1e9) << sp;
+		}
+		cout << endl;
+		for (int i = 0; i <= n; i++) {
+			cout << lrand(0, 1e9) << sp;
+		}
+		
 		EndFor1:
 		cout.close();
 	}
