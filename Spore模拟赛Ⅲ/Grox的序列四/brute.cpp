@@ -26,6 +26,17 @@ struct _Main {
 				res[i ^ j] += a[i] * b[j] % MOD;
 			}
 		}
+		for (int i = 0; i <= n; i++) {
+			for (int j = 0; i + j <= n; j++) {
+				res[i | j] += a[i] * b[j] % MOD;
+			}
+		}		
+		for (int i = 0; i <= n; i++) {
+			for (int j = 0; i + j <= n; j++) {
+				res[i & j] += a[i] * b[j] % MOD;
+			}
+		}		
+
 		lld ans[3] = {0, 0, 0};
 		for (int i = 0; i <= n; i++) {
 			res[i] %= MOD;

@@ -16,20 +16,20 @@ struct _Main{
 string dataName = "data";
 string stdName = "grox4th";
 string bruteName = "grox4th_more_log";
-bool make_data = 1;
+bool make_data = 0;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 10
 ,   exbeg = 0
-,   exend = 0
+,   exend = 5
 ;
 
 bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -45,15 +45,39 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = (1 << 21)  - 200000;
-		cout << n << endl;
+		int n = (1 << 20) - 1, mn = 0, mx = 100;
+		if (I < 3) {
+			n = I * 1000;
+		} else
+		if (I == 3) {
+			n = 1 << 19;
+		} else
+		if (I == 4) {
+			n = (1 << 19) + 1;
+		} else 
+		if (I == 5) {
+			n = (1 << 19) - 2;
+		} else 
+		if(I == 6) {
+			n = 1000000;
+		} else 
+		if (I == 7) {
+			n = (1 << 20) - 1;
+		} else
+		if (I == 8) {
+			n = (1 << 20) - 100000;
+		} else if (I == 9) {
+			n = (1 << 20) - 1;
+			mn = 95, mx = 100;
+		}
 		
+		cout << n << endl;
 		for (int i = 0; i <= n; i++) {
-			cout << lrand(0, 1e9) << sp;
+			cout << lrand(mn, mx) << sp;
 		}
 		cout << endl;
 		for (int i = 0; i <= n; i++) {
-			cout << lrand(0, 1e9) << sp;
+			cout << lrand(mn, mx) << sp;
 		}
 		
 		EndFor1:
@@ -66,7 +90,16 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-	
+		int n, mn = 0, mx = 100;
+		n = I;
+		cout << n << endl;
+		for (int i = 0; i <= n; i++) {
+			cout << lrand(mn, mx) << sp;
+		}
+		cout << endl;
+		for (int i = 0; i <= n; i++) {
+			cout << lrand(mn, mx) << sp;
+		}	
         
 		EndFor2:
 		cout.close();

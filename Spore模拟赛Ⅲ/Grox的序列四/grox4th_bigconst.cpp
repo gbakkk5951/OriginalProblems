@@ -12,7 +12,7 @@ const lld MOD = 479 << 21 | 1;
 const int MXN = 1050000;
 const int MXP = 21;
 const int XOR = 0, OR = 1, AND = 2;
-
+const lld REV2 = MOD + 1 >> 1;
 typedef pair<int, int> p;
 struct _Main {
 	//0 XOR, 1 OR, 2 AND
@@ -43,8 +43,8 @@ struct _Main {
 						x = arr + i; y = arr + i + half;
 						for (int j = 0; j < half; j++) {
 							t1 = x[j]; t2 = y[j];
-							x[j] = t1 + t2;
-							y[j] = t1 - t2;
+							x[j] = (t1 + t2) % MOD;
+							y[j] = (t1 - t2) % MOD;
 						}
 					}
 					// ORÊÇ0, 1 X 0 
@@ -52,7 +52,7 @@ struct _Main {
 					for (int i = 0; i < mxpow; i += half << 1) {
 						x = arr + i; y = arr + i + half;
 						for (int j = 0; j < half; j++) {
-							y[j] += x[j];
+							y[j] = (y[j] + x[j]) % MOD;
 						}
 					}
 					
@@ -60,7 +60,7 @@ struct _Main {
 					for (int i = 0; i < mxpow; i += half << 1) {
 						x = arr + i; y = arr + i + half;
 						for (int j = 0; j < half; j++) {
-							x[j] += y[j];
+							x[j] = (x[j] + y[j]) % MOD;
 						}
 					}
 				}
@@ -73,7 +73,7 @@ struct _Main {
 					y = b[J] + t2;
 					arr = res[J][I] + ((J == XOR) ? (t1 ^ t2) : ((J == OR) ? (t1 | t2) : (t1 & t2)));
 					for (int j = 0; j < 1 << I; j++) {
-						arr[j] = arr[j] + x[j] * y[j];
+						arr[j] = (arr[j] + x[j] * y[j]) % MOD;
 					}
 				}
 			}
@@ -90,8 +90,8 @@ struct _Main {
 				x = arr + i; y = arr + i + half;
 				for (int j = 0; j < half; j++) {
 					t1 = x[j]; t2 = y[j];
-					x[j] = t1 + t2 >> 1;
-					y[j] = t1 - t2 >> 1;
+					x[j] = (t1 + t2) * REV2 % MOD;
+					y[j] = (t1 - t2) * REV2 % MOD;
 				}
 			}
 			
@@ -100,7 +100,7 @@ struct _Main {
 			for (int i = 0; i < mxpow; i += half << 1) {
 				x = arr + i; y = arr + i + half;
 				for (int j = 0; j < half; j++) {
-					y[j] -= x[j];
+					y[j] = (y[j] - x[j]) % MOD;
 				}
 			}
 			
@@ -108,7 +108,7 @@ struct _Main {
 			for (int i = 0; i < mxpow; i += half << 1) {
 				x = arr + i; y = arr + i + half;
 				for (int j = 0; j < half; j++) {
-					x[j] -= y[j];
+					x[j] = (x[j] - y[j]) % MOD;
 				}
 			}
 			
@@ -116,7 +116,7 @@ struct _Main {
 				x = res[J][I - 1];
 				arr = res[J][I];
 				for (int i = 0; i < mxpow; i++) {
-					x[i] = x[i] + arr[i];
+					x[i] = (x[i] + arr[i]) % MOD;
 				}	
 			}
 
