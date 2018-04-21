@@ -13,18 +13,18 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
-string stdName = "grox5th";
+string dataName = "grox6th";
+string stdName = "grox6th";
 string bruteName = "brute";
-bool make_data = 1;
+bool make_data = 0;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 15
-,   end = 15
-,   exbeg = 8
-,   exend = 9
+int beg = 0
+,   end = 10
+,   exbeg = 0
+,   exend = 0
 ;
 
 bool check_brute = 0;
@@ -45,28 +45,58 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int mx = 1e9, k = 200;
+		int Qn = 500;
+		int b = lrand(-mx, mx);
+		
 		if (I == 0) {
-			cout << 1900000041 << sp << 2972 << sp << 1900000043 ;
+			k = -1;
 		} else
-		if (I < 4) {
-			cout << lrand(1, 2e9) << sp << lrand(0, 3000) << sp << lrand(1, 2e9);
+		if (I == 1) {
+			k = 0;
 		} else 
-		if (I < 8) {
-			cout << lrand(1, 9);
-			for (int i = 1; i <= 998; i++) {
-				cout << lrand(0, 9);
-			}
-			cout << sp << lrand(0, 3000) << sp << lrand(1, 2e9);
-		} else 
-		if (I < 10) {
-			cout << 1;
-			for (int i = 1; i <= 1000; i++) {
-				cout << 0;
-			}
-			cout << sp << 3000 << sp << (lld)2e9 - (I == 9 ? 0 : lrand(1, 1e7));
-		} else if (I < 15) {
-			cout << lrand(1, 5) << sp << (I - 10) << sp << (lld)1e9 + 7;
+		if (I == 2) {
+			b = 0;
+		} else
+		if (I == 3) {
+			b = 1;
+		} 
+		
+		
+		cout << Qn << sp << b << sp << k << endl;
+		for (int i = 0; i <= k + 1; i++) {
+			cout << lrand(-mx, mx) << sp;
 		}
+		cout << endl;
+		if (I == 4) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				if (Q != 1 && (Q & 1)) {
+					cout << 1 << sp;
+					for (int i = 0; i <= k + 1; i++) {
+						cout << lrand(-mx, mx) << sp;
+					}
+					cout << endl;				
+				} else {
+					if (Q == 1) cout << 0 << sp << 0 << endl;
+					else cout << 0 << sp << lrand(0, 1e9) << endl;
+				}
+			}
+		} else 
+		if (I != 4) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				if (Q != 1 && rand() % 20 == 0) {
+					cout << 1 << sp;
+					for (int i = 0; i <= k + 1; i++) {
+						cout << lrand(-mx, mx) << sp;
+					}
+					cout << endl;				
+				} else {
+					if (Q == 1) cout << 0 << sp << 0 << endl;
+					else cout << 0 << sp << lrand(0, 1e9) << endl;
+				}
+			}
+		}
+		
 		EndFor1:
 		cout.close();
 	}
@@ -77,36 +107,8 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		if (I < 8) {
-		
-			if (I & 1) {
-				cout << lrand(1, 9);
-				for (int i = 1; i <= 998; i++) {
-					cout << lrand(0, 9);
-				}
-			} else {
-				cout << 0;
-			}
-	        cout << sp;
-	        if (I & 2) {
-	        	cout << bit_rand(1, 3000);
-	        } else {
-	        	cout << 0;
-	        }
-	        cout << sp;
-	        if (I & 4) {
-	        	cout << lrand(2, 2e9);
-	        } else {
-	        	cout << 1;
-	        }
-        } else
-        if (I == 8) {
-			for (int i = 1; i <= 90; i++) {
-				cout << ((lld)1e9 + 7);
-			}
-			cout << ((lld)1e9 - lrand(50, 100));
-			cout << sp << lrand(2700, 3000) << sp << ((lld)1e9 + 7);        	
-        }
+	
+        
 		EndFor2:
 		cout.close();
 	}	
