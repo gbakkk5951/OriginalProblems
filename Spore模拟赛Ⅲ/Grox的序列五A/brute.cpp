@@ -8,7 +8,7 @@ int main() {}
 namespace OI {
 typedef long long lld;
 struct _Main {
-	int mod, n, k;
+	lld mod, n, k;
 	lld com[1005][1005];
 	lld fastpower(lld base, lld pow, lld mod) {
 		lld ret = 1;

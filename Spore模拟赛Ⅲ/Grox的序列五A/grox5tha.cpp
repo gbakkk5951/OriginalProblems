@@ -38,6 +38,13 @@ lld calc() {
 			xishu[i][j] = (j * xishu[i - 1][j] + xishu[i - 1][j - 1]) % p;
 		}
 	}
+	/*
+	for (int i = 1; i <= 10; i++) {
+		for (int j = 1; j <= 10; j++) {
+			printf("%-6lld ", xishu[i][j]);
+		}
+		printf("\n");
+	}*/
 	lld mul = 1, pow;
 	for (int i = 1; i <= k; i++) {
 		mul = mul * (mn - i + 1) % p;

@@ -29,12 +29,11 @@ struct Splay {
 		null->size = 0;
 	}
 	void rotate(Node *nd) {
-		Node *f = nd->f, *gf = f->f, *s;
+		Node *f = nd->f, *gf = f->f;
 		nd->f = gf;
 		gf->s[f == gf->s[1]] = nd;
 		int spo = nd == f->s[1];
-		s = f->s[spo] = nd->s[spo ^ 1];
-		s->f = f;
+		(f->s[spo] = nd->s[spo ^ 1])->f = f;
 		f->f = nd;
 		nd->s[spo ^ 1] = f;
 		update(f);
