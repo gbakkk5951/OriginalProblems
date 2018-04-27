@@ -14,7 +14,7 @@ typedef long long lld;
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "std";
+string stdName = "timber";
 string bruteName = "brute";
 bool make_data = 1;
 bool run_ans = true;
@@ -22,14 +22,14 @@ bool run_ans = true;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 20
 ,   exbeg = 0
-,   exend = 0
+,   exend = 3
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -37,7 +37,7 @@ bool brute_time_count = true;
 //////////////
 
 //Splay<400005>leaf, id, void_id;
-
+int id[500050];
 void make(){
 	int I;
 	int i,j,k;
@@ -45,6 +45,98 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int cnt;
+		int m;		
+		int n = 500000;
+		for (int i = 1; i <= n; i++) {
+			id[i] = i;
+		}
+		if (I & 1) shuffle(id + 1, n);
+		
+		if (I >> 1 == 0) { //bitrand(1,5000)棵 
+			cnt = bit_rand(1, 5000);
+			m = n - cnt;
+			cout << n << sp << m << endl;
+			randforest(1, n, cnt, cout);
+		} else 
+		if (I >> 1 == 1) {//lrand(1,50W)棵 
+			cnt = lrand(1, 500000);
+			m = n - cnt;
+			cout << n << sp << m << endl;
+			randforest(1, n, cnt, cout);
+		} else
+		if (I >> 1 == 2) { // 1条40W链 + 10W随机边 
+			m = n - 1;
+			cout << n << sp << m << endl;
+			mchain(1, 2, 4e5, cout);
+			for (int i = 4e5 + 1; i <= n; i++) {
+				add(i, lrand(1, i - 1), cout);
+			}
+		} else if (I >> 1 == 3) {//一棵随机树 
+			m = n - 1;
+			cout << n << sp << m << endl;
+			mtree(1, 2, n, cout);
+		} else if (I >> 1 == 4) {//700棵随机树 
+			cnt = 700;
+			m = n - cnt;
+			cout << n << sp << m << endl;
+			randforest(1, n, cnt, cout);
+		} else if (I >> 1 == 5) {// 4.5W * 10个的菊花 + 5W随机边
+			cnt = 10; m = n - cnt;
+			cout << n << sp << m << endl; 
+			for (int i = 1; i <= 10; i++) {
+				mflower((i - 1) * 4.5e4 + 1, (i - 1) * 4.5e4 + 2, i * 4.5e4, cout);
+			}
+			for (int i = 4.5e5 + 1; i <= n; i++) {
+				add(i, lrand(1, i - 1), cout);
+			}
+			
+		} else if (I >> 1 == 6) {// 4个 4W+2W+4W哑铃   + 10w随机边 
+			cnt = 4;
+			m = n - cnt;
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= 4; i++) {
+				int base = (i - 1) * 1e5;
+				int l = 1, r = 2e4;
+				mchain(base + 1, base + 2, base + 2e4, cout);
+				mflower(base + 1, base + 2e4 + 1, base + 6e4, cout);
+				mflower(base + 2e4, base + 6e4 + 1, base + 1e5, cout);
+			}
+			for (int i = 4e5 + 1; i <= n; i++) {
+				add(i, lrand(1, i - 1), cout);
+			}
+		} else if (I >> 1 == 7) {//4个10W毛毛虫 + 10w随机边 
+			cnt = 4;
+			m = n - cnt;
+			cout << n << sp << m << endl;			
+			for (int i = 1; i <= 4; i++) {
+				mworm(((i - 1) * 1e5) + 1, ((i - 1) * 1e5) + 2, i * 1e5, cout);
+			}
+			for (int i = 4e5 + 1; i <= n; i++) {
+				add(i, lrand(1, i - 1), cout);
+			}
+		} else if (I >> 1 == 8) {//1个10W毛毛虫，1个10W菊花，1个10W随机树,10W点1W树，10W 随机边 
+			cnt = 1e4 + 3;
+			m = n - cnt;
+			cout << n << sp << m << endl;			
+			mworm(1, 2, 1e5, cout);
+			mflower(1e5 + 1, 1e5 + 2, 2e5, cout);
+			mtree(2e5 + 1, 2e5 + 2, 3e5, cout);
+			randforest(3e5 + 1, 4e5, 1e4, cout);
+			for (int i = 4e5 + 1; i <= n; i++) {
+				add(i, lrand(1, i - 1), cout);
+			}
+		} else if (I >> 1 == 9) {//40W的菊花二叉树+10W随机边 
+			cnt = 1;
+			m = n - 1;
+			cout << n << sp << m << endl;
+			mbtree(1, 2, 2e5, cout);
+			mflower(1, 2e5 + 1, 4e5, cout);
+			for (int i = 4e5 + 1; i <= n; i++) {
+				add(i, lrand(1, i - 1), cout);
+			}
+		}
+
 
 		EndFor1:
 		cout.close();
@@ -56,7 +148,24 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-	
+		if (I == 0) {
+			cout << 1 << sp << 0 << endl;
+		} else 
+		if (I == 1) {
+			cout << 2 << sp << 1 << endl << 1 << sp << 2 << endl;
+		} else 
+		if (I == 2) {
+			int n = 5e5, cnt = 4.5e5;
+			int m = n - cnt;
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= (int)1.5e5; i++) {
+				add(i * 3, i * 3 - 2, cout);
+				add(i * 3 - 2, i * 3 - 1, cout);
+			}
+			for (int i = 4.5e5 + 1; i <= n; i++) {
+				add(i, lrand(1, i - 1), cout);
+			}
+		}
         
 		EndFor2:
 		cout.close();
@@ -166,7 +275,6 @@ _Main(){
 
 
 }	
-vector <int> id[500050];
 int mksq(int root, int l, int r, ostream &cout) {
 	if (r - l + 1 < 200000 * 2 + 10) {
 		mchain(root, l, r, cout);
@@ -217,11 +325,8 @@ void mworm(int root, int now, int end, ostream &cout) {
 	}
 }
 void add(int a, int b, ostream &cout) { //要求编号较大的点是第一次连边 
-	if (a > b) swap(a, b);
-	setfa(b, getfa(a));
-	id[getfa(b)].push_back(b);
 	if (rand() & 1) swap(a, b);
-	cout << a << sp << b << endl;
+	cout << id[a] << sp << id[b] << endl;
 }
 
 int gap[500005];
@@ -231,10 +336,6 @@ int getfa(int a) {
 }
 void setfa(int a, int b) {
 	fa[a] = b;
-}
-int getpair(int a) {
-	int t = getfa(a);
-	return id[t][lrand(0, id[t].size() - 1)];
 }
 void randforest(int beg, int end, int cnt, ostream &cout) {
 	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));
@@ -247,7 +348,7 @@ void randforest(int beg, int end, int cnt, ostream &cout) {
 	for (int i = beg; i <= end + 1; i++) {
 		if (gap[i]) {
 			if (i > head) {
-				mtree(head, head + 1, i - 1, cout);
+				mtree(head, head + 1, i, cout);
 			}
 			head = i;
 		}

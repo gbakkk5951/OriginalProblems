@@ -38,6 +38,8 @@ bool brute_time_count = true;
 
 //Splay<400005>leaf, id, void_id;
 
+
+
 void make(){
 	int I;
 	int i,j,k;
@@ -45,7 +47,8 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
+		
+		
 		EndFor1:
 		cout.close();
 	}
