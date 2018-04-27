@@ -13,23 +13,23 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
-string stdName = "std";
+string dataName = "name";
+string stdName = "recover";
 string bruteName = "brute";
-bool make_data = 1;
+bool make_data = 0;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 0
 ,   exbeg = 0
-,   exend = 0
+,   exend = 10
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -38,8 +38,6 @@ bool brute_time_count = true;
 
 //Splay<400005>leaf, id, void_id;
 
-
-
 void make(){
 	int I;
 	int i,j,k;
@@ -47,8 +45,7 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		
-		
+
 		EndFor1:
 		cout.close();
 	}

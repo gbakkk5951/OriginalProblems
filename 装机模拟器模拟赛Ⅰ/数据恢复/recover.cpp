@@ -8,43 +8,45 @@ int main() {}
 namespace OI {
 typedef double lf;
 typedef long long lld;
-const lld MOD = 1e9 + 7;
+const lld MOD = 7LL << 52 | 1;
 const lld PHI = MOD - 1;
 const int MXN = 3e6;
+const lf LF_MOD = MOD;
 struct _Main {
 	char str[MXN];
-	int n, len, k;
+	int n, k;
 	lld rem, fact;
+	inline lld mul(lld a, lld b) {
+		return (a * b - (lld)((lf)a / LF_MOD * b) * MOD) % MOD;
+	}
 	lld fastpower(lld base, lld pow) {
 		lld ret = 1;
 		pow += pow < 0 ? PHI : 0;
 		while (pow) {
-			ret = (pow & 1) ? ret * base % MOD : ret;
-			base = (pow >>= 1) ? base * base % MOD : base;
+			ret = (pow & 1) ? mul(ret, base) : ret;
+			base = (pow >>= 1) ? mul(base, base) : base;
 		}
 		return ret;
 	}
 	_Main() {
-		scanf("%d%d%d", &n, &k, &len);
+		scanf("%d%d", &n, &k);
 		scanf("%s", str);
 		fact = 1;
 		for (int i = 2; i <= n; i++) {
-			fact = fact * i % MOD;
+			fact = mul(fact, i);
 		}
-		for (int i = len - k; i < len; i++) {
+		fact += fact < 0 ? MOD : 0;
+		for (int i = 0; i < k; i++) {
 			rem = (rem * 10 + str[i] - '0') % MOD;
 		}
-		rem = rem * fastpower(fastpower(10, k), -1) % MOD;
-		fact = fact * fastpower(fastpower(10, k), -1) % MOD;
-		lld ans = 0;
-		for (lld i = 0; ; i++) {
-			if ((rem + i) % MOD == fact) {
-				ans = i;
-				break;
-			}
-		}
+		rem = mul(rem, fastpower(fastpower(10, k), -1));
+		fact = mul(fact, fastpower(fastpower(10, k), -1));
+		rem += rem < 0 ? MOD : 0;
+		fact += fact < 0 ? MOD : 0;
+		lld ans = fact - rem;
+		ans += ans < 0 ? MOD : 0;
 		printf("%lld", ans);
-		printf("%s", str + len - k);
+		printf("%s", str);
 	}
 	
 template <typename Type>
