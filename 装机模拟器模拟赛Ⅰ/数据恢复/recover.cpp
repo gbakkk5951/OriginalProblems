@@ -45,7 +45,7 @@ struct _Main {
 		fact += fact < 0 ? MOD : 0;
 		lld ans = fact - rem;
 		ans += ans < 0 ? MOD : 0;
-		printf("%lld", ans);
+		if (ans != 0) printf("%lld", ans);
 		printf("%s", str);
 	}
 	
