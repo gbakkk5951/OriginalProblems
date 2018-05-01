@@ -41,54 +41,51 @@ struct dp {
 		return id;
 	}
 };
-dp mx[MXN][3];
-dp ans;
-void dfs1(int nd, int fa) {
-	int t;
-	for (int e = head[nd]; e; e = edge[e][NXT]) {
-		t = edge[e][DST];
-		if (t != fa) {
-			dfs1(t, nd);
-			mx[nd][2] = (dp[t] + edge[e][VAL])[t];
-			sort(mx[nd], mx[nd] + 3, greater<dp>());
-		}
-	}
-}
-void dfs2(int nd, int fa, const dp &from) {
-	sort(mx[nd], mx[nd] + 3, greater<dp>());
-	int t;
-	for (int e = head[nd]; e; e = edge[e][NXT]) {
-		t = edge[e][DST];
-		if (t != fa) {
-			dfs(t, nd, 
-			((mx[nd][0] == t ? mx[nd][1] : mx[nd][0])
-				[nd] + edge[e][VAL]) );
-		}
-	}
-	if (beg[nd]) {
-		ans = max(ans, mx[nd][0][nd]);
-	}
-}
-
 
 
 
 struct _Main {
-	dp far_leaf[MXN];
-	dp far_beg[MXN];
+	heap lh, bh, ph;
+
+	dp far_leaf[MXN][3];
+	dp far_beg[MXN][3];
 	
 	int far_pair[MXN][3];
 	int mark[MXN];
 	
-	void push(int nd) {
-		int t;
+	void getdp(int nd, int fa) {
+		int t, v;
 		for (int e = head[nd]; e; e = edge[e][NXT]) {
 			t = edge[e][DST];
-			if (!mark[t]) {
-				
+			if (t != fa) {
+				getdp(t, nd);
+				v = edge[e][VAL];
+				far_leaf[nd][2] = far_leaf[t][0][t] + v;
+				far_beg[nd][2] = far_beg[t][0][t] + v;
+				if (far_pair[nd][VAL] < far_pair[t][VAL] + v) {
+					far_pair[nd][BEG] = t;
+					far_pair[nd][LEAF] = t;
+					far_pair[nd][VAL] = far_pair[t][VAL] + v;
+				}
+				if (far_pair[nd][VAL] < far_leaf[nd][2].val + far_beg[nd][0].val) {
+					far_pair[nd][VAL] = far_leaf[nd][2].val + far_beg[nd][0].val;
+					far_pair[nd][BEG] = far_beg[nd][0].beg;
+					far_pair[nd][LEAF] = far_leaf[nd][2].id;
+				}
+				if (far_pair[nd][VAL] < far_beg[nd][2].val + far_leaf[nd][0].val) {
+					far_pair[nd][VAL] = far_beg[nd][2].val + far_leaf[nd][0].val;
+					far_pair[nd][BEG] = far_beg[nd][2].id;
+					far_pair[nd][LEAF] = far_leaf[nd][0].id;
+				}
+				sort(far_leaf[nd], far_leaf[nd] + 3, greater<dp>());
+				sort(far_leaf[nd], far_leaf[nd] + 3, greater<dp>());
 			}
 		}
+		
+		
 	}
+	int root;
+	int sum;
 	_Main() {
 		int a, b, c;
 		read(n); read(k);
@@ -101,14 +98,34 @@ struct _Main {
 		}
 		dfs1(1, 0);
 		dfs2(1, 0);
-		root = ans.id;
-		mark(ans.id, 0);
+		root = init_ans();
+		getdp(root, 0);
+		mark[root] = 1;
+		for (int nd = root, lst = 0, nxt; i > 0; ) {
+			nxt = mx[i][0]() == lst ? mx[i][1]() : mx[i][0]();
+			mark[nxt] = 1;
+			push(nd);
+			lst = nd;
+			nd = nxt;
+		}
+		
 		
 	}
 	int n, k;
 	int beg[MXN];
 	
-	heap lh, bh, ph;
+	void push(int nd) {
+		int t;
+		for (int e = head[nd]; e; e = edge[e][NXT]) {
+			t = edge[e][DST];
+			if (!mark[t]) {
+				lh.push(far_leaf[t][0][t]);
+				bh.push(far_beg[t][0][t]);
+				ph.push((dp) {far_pair[t][VAL], t});
+			}
+		}
+	}
+
 	dp get_top(heap &a) {
 		while (!a.empty() && mark[a.top()()]) {
 			a.pop();
@@ -136,6 +153,36 @@ struct _Main {
 		edge[eidx][NXT] = head[a];
 		head[a] = eidx;
 	}
+
+	dp mx[MXN][3];
+	dp init_ans;
+	void dfs1(int nd, int fa) {
+		int t;
+		for (int e = head[nd]; e; e = edge[e][NXT]) {
+			t = edge[e][DST];
+			if (t != fa) {
+				dfs1(t, nd);
+				mx[nd][2] = (dp[t] + edge[e][VAL])[t];
+				sort(mx[nd], mx[nd] + 3, greater<dp>());
+			}
+		}
+	}
+	void dfs2(int nd, int fa, const dp &from) {
+		sort(mx[nd], mx[nd] + 3, greater<dp>());
+		int t;
+		for (int e = head[nd]; e; e = edge[e][NXT]) {
+			t = edge[e][DST];
+			if (t != fa) {
+				dfs(t, nd, 
+				((mx[nd][0] == t ? mx[nd][1] : mx[nd][0])
+					[nd] + edge[e][VAL]) );
+			}
+		}
+		if (beg[nd]) {
+			init_ans = max(init_ans, mx[nd][0][nd]);
+		}
+	}
+
 template <typename Type>
 	void read(Type &a) {
 		char t;
