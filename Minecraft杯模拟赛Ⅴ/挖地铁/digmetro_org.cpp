@@ -16,17 +16,17 @@ const int INF = 0x3f3f3f3f;
 const int LEAF = 0, BEG = 1;
 struct dp {
 	int val, id;
-	inline bool operator < (const dp &b) const {
+	bool operator < (const dp &b) const {
 		return val < b.val;
 	}
-	inline bool operator > (const dp &b) const {
+	bool operator > (const dp &b) const {
 		return val > b.val;
 	}
 	inline bool friend operator == (const dp &a, int b) {
-		return a() == b;
+		return a.id == b;
 	}
 	inline bool friend operator == (int a, const dp &b) {
-		return a == b();
+		return a == b.id;
 	}
 	inline dp operator + (int add) const {
 		return (dp) {val + add, id};
@@ -49,9 +49,13 @@ struct _Main {
 
 	dp far_leaf[MXN];
 	dp far_beg[MXN];
+	
 	int far_pair[MXN][3];
 	int mark[MXN];
 	
+	int root;
+	int sum;
+	int ans[MXN], int idx;
 	int calc() {
 		dp p, l1, l2, b1, b2, l, b;
 		p = get_top(ph);
@@ -74,15 +78,15 @@ struct _Main {
 		}
 		int beg = 0, leaf = 0;
 		if (l.val + b.val > p.val) {
-			ret = l.val + b.val;
-			beg = b();
-			leaf = l();
+			ret = l.val + r.val;
+			beg = l();
+			leaf = r();
 			mark[beg] = mark[leaf] = 1;
 		} else {
 			//走公共
 			ret = p.val;
-			mark[p()] = 1;
-			for (nd = p(), nxt; nd; nd = nxt) {
+			mark[p.id] = 1;
+			for (nd = p.id, nxt; nd; nd = nxt) {
 				if ((nxt = far_pair[nd][BEG]) != far_pair[nd][LEAF]) {
 					beg = far_pair[nd][BEG];
 					leaf = far_pair[nd][LEAF];
@@ -95,13 +99,13 @@ struct _Main {
 			}
 		}
 		// 走beg
-		for (int nd = beg, nxt; nd; nd = nxt) { 
+		if (beg != 0) for (int nd = beg, nxt; nd; nd = nxt) { 
 			nxt = far_beg[nd]();
 			mark[nxt] = 1;
 			push(nd);
 		}
 		//走leaf
-		for (int nd = leaf, nxt; nd; nd = nxt) { 
+		if (leaf != 0) for (int nd = leaf, nxt; nd; nd = nxt) { 
 			nxt = far_leaf[nd]();
 			mark[nxt] = 1;
 			push(nd);
@@ -109,10 +113,6 @@ struct _Main {
 		return ret;
 	}
 	_Main() {
-		static int ans[MXN];
-		int root;
-		int sum;
-		int idx;
 		int a, b, c;
 		read(n); read(k);
 		for (int i = 1; i <= k; i++) {
@@ -128,11 +128,12 @@ struct _Main {
 		root = init_ans();
 		getdp(root, 0);
 		mark[root] = 1;
-		for (int nd = root, lst = 0, nxt; nd; nd = nxt) {
+		for (int nd = root, lst = 0, nxt; nd; ) {
 			nxt = mx[i][0]() == lst ? mx[i][1]() : mx[i][0]();
 			mark[nxt] = 1;
 			push(nd);
 			lst = nd;
+			nd = nxt;
 		}
 		ans[++idx] = init_ans.val;
 		while (ans[idx] != sum) {
@@ -153,8 +154,8 @@ struct _Main {
 		for (int e = head[nd]; e; e = edge[e][NXT]) {
 			t = edge[e][DST];
 			if (t != fa) {
-				v = edge[e][VAL];
 				getdp(t, nd);
+				v = edge[e][VAL];
 				leaf = far_leaf[t][t] + v;
 				beg = far_beg[t][t] + v;
 				if (far_pair[nd][VAL] < far_pair[t][VAL] + v) {
@@ -179,34 +180,37 @@ struct _Main {
 	}
 	
 	void push(int nd) {
-		int t, v;
+		int t;
 		for (int e = head[nd]; e; e = edge[e][NXT]) {
 			t = edge[e][DST];
-			v = edge[e][VAL];
 			if (!mark[t]) {
-				lh.push(far_leaf[t][t] + v);
-				bh.push(far_beg[t][t] + v);
-				ph.push((dp) {far_pair[t][VAL] + v, t});
+				lh.push(far_leaf[t][t]);
+				bh.push(far_beg[t][t]);
+				ph.push((dp) {far_pair[t][VAL], t});
 			}
 		}
 	}
 
 	dp get_top(heap &a) {
-		while (mark[a.top()()]) { 
+		while (!a.empty() && mark[a.top()()]) { //其实不用判这个empty
 			a.pop();
 		}
-		return a.top();
+		return a.empty() ? (dp) {-INF, 0} : heap.top();
 	}
 
-	dp get_sec(heap &a) {//assert !mark[a.top()]
+	dp get_sec(heap &a) {//调之前确保top没被mark
 		dp ret;
-		dp tmp = a.top();
-		a.pop();
-		while (!a.empty() && mark[a.top()()]) {
+		if (!a.empty()) {//其实不用判这个empty
+			dp tmp = a.top();
 			a.pop();
+			while (!a.empty() && mark[a.top()()]) {
+				a.pop();
+			}
+			ret = a.empty() ? (dp) {-INF, 0} : a.top();	
+			a.push(tmp); 
+		} else {
+			ret.val = dp {-INF, 0};
 		}
-		ret = a.empty() ? (dp) {-INF, 0} : a.top();	
-		a.push(tmp); 
 		return ret;
 	}
 	
