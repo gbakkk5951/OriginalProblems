@@ -13,23 +13,23 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
-string stdName = "std";
-string bruteName = "brute";
-bool make_data = 1;
+string dataName = "digmetro";
+string stdName = "digmetro";
+string bruteName = "WA";
+bool make_data = 0;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 20
 ,   exbeg = 0
 ,   exend = 0
 ;
 
 bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -37,7 +37,8 @@ bool brute_time_count = true;
 //////////////
 
 //Splay<400005>leaf, id, void_id;
-
+int rand_func;
+int id[500050];
 void make(){
 	int I;
 	int i,j,k;
@@ -45,7 +46,73 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
+		rand_func = I & 1;
+		int tp = I >> 2;
+		int n = 5e5;
+		
+		int k = I >> 1 & 1 ? 5 : bit_rand(6000, 500000);
+		for (int i = 1; i <= n; i++) {
+			id[i] = i;
+		}
+		if (I & 1) {
+			shuffle(id + 1, n);
+		}
+		
+		if (I % 4 == 0) {
+			k = 5;
+		} else
+		if (I % 4 == 1) {
+			k = 200;
+		} else
+		if (I % 4 == 2) {
+			k = 2000;
+		} else {
+			k = 100000;
+		}
+		static char vis[500000 + 10];
+		memset(vis, 0, sizeof(vis));
+		if (tp == 0) {//随机树
+			if (I % 4 == 3) {
+				k = 490000;
+			}
+		}
+		if (tp == 4) {//菊花-链-菊花 + 10W随机 
+			if (I % 4 == 3) {
+				k = 200000;
+			}
+		}
+		cout << n << sp << k << endl;
+		for (int i = 1; i <= k; i++) {
+			int t;
+			while (vis[t = lrand(1, n)]);
+			vis[t] = 1;
+			cout << t << sp;
+		}
+		cout << endl;
+		
+		if (tp == 0) {//随机树
+			mtree(1, 2, n, cout);
+		} else
+		if (tp == 1) {//链 + 10W随机 
+			mchain(1, 2, 4e5, cout);
+			rand_edge(4e5 + 1, n, cout);
+		} else
+		if (tp == 2) {//毛毛虫+10W随机 
+			mworm(1, 2, 4e5, cout);
+			rand_edge(4e5 + 1, n, cout);
+		} else
+		if (tp == 3) {//菊花 + 10W随机 
+			mflower(1, 2, 4e5, cout);
+			rand_edge(4e5 + 1, n, cout);
+		} else
+		if (tp == 4) {//菊花-链-菊花 + 10W随机 
+			mchain(1, 2, 2e5, cout);
+			mflower(1, 2e5 + 1, 3e5, cout);
+			mflower(2e5, 3e5 + 1, 4e5, cout);
+			rand_edge(4e5 + 1, n, cout);
+		}
+		
+		
 		EndFor1:
 		cout.close();
 	}
@@ -166,7 +233,6 @@ _Main(){
 
 
 }	
-vector <int> id[500050];
 int mksq(int root, int l, int r, ostream &cout) {
 	if (r - l + 1 < 200000 * 2 + 10) {
 		mchain(root, l, r, cout);
@@ -216,17 +282,14 @@ void mworm(int root, int now, int end, ostream &cout) {
 		}
 	}
 }
-void rand_edge(int l, int r, ostream &cout) {
-	for (int i = l; i <= r; i++) {
-		add(i, lrand(1, i - 1), cout);
-	}
-}
 void add(int a, int b, ostream &cout) { //要求编号较大的点是第一次连边 
-	if (a > b) swap(a, b);
-	setfa(b, getfa(a));
-	id[getfa(b)].push_back(b);
 	if (rand() & 1) swap(a, b);
-	cout << a << sp << b << endl;
+	cout << a << sp << b << sp;
+	if (rand_func == 0) {
+		cout << lrand(1, 100) << endl;
+	} else {
+		cout << lrand(1, 2) << endl;
+	}	
 }
 
 int gap[500005];
@@ -237,9 +300,10 @@ int getfa(int a) {
 void setfa(int a, int b) {
 	fa[a] = b;
 }
-int getpair(int a) {
-	int t = getfa(a);
-	return id[t][lrand(0, id[t].size() - 1)];
+void rand_edge(int l, int r, ostream &cout) {
+	for (int i = l; i <= r; i++) {
+		add(i, lrand(1, i - 1), cout);
+	}
 }
 void randforest(int beg, int end, int cnt, ostream &cout) {
 	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));

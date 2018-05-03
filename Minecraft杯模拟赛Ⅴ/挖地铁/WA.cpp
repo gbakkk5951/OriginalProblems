@@ -88,7 +88,7 @@ struct _Main {
 					beg = far_pair[nd][BEG];
 					leaf = far_pair[nd][LEAF];
 					mark[beg] = mark[leaf] = 1;
-					push(nd); //卡下这个
+//					push(nd); //卡下这个
 					break;
 				}
 				mark[nxt] = 1;
