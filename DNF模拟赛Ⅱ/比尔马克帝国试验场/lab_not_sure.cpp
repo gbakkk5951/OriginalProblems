@@ -54,8 +54,6 @@ struct SegTree {
 		if (nl == nr) {
 			node[nd].zero = 1;
 			node[nd].zerosum = d[nl];
-			node[nd].negmax = -INF; //卡一下没赋值
-			node[nd].posmin = INF; //卡一下没赋值
 			return;
 		}
 		int mid = nl + nr >> 1;
