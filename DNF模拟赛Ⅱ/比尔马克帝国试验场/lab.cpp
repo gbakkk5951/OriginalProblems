@@ -1,3 +1,4 @@
+#pragma GCC optimize(2)
 using namespace std;
 int main() {}
 #include <cstdio>

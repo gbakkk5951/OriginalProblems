@@ -14,7 +14,7 @@ typedef long long lld;
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "grox4th";
+string stdName = "grox4th_speed_up";
 string bruteName = "grox4th_more_log";
 bool make_data = 0;
 bool run_ans = true;
@@ -45,7 +45,7 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = (1 << 20) - 1, mn = 0, mx = 1e9;
+		int n = (1 << 20) - 1, mn = 0, mx = 100;
 		if (I < 3) {
 			n = I * 1000;
 		} else
@@ -69,7 +69,7 @@ void make(){
 		} else if (I == 9) {
 			n = (1 << 20) - 1;
 			mn = 95, mx = 100;
-		} 
+		}
 		
 		cout << n << endl;
 		for (int i = 0; i <= n; i++) {

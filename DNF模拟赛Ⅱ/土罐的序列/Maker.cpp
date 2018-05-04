@@ -13,21 +13,21 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
-string stdName = "grox4th";
-string bruteName = "grox4th_more_log";
-bool make_data = 0;
+string dataName = "canister";
+string stdName = "canister";
+string bruteName = "brute";
+bool make_data = 1;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 10
+,   end = 11
 ,   exbeg = 0
-,   exend = 5
+,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 0;
 bool loop_count = true;
@@ -41,44 +41,182 @@ bool brute_time_count = true;
 void make(){
 	int I;
 	int i,j,k;
+	
 	for(I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = (1 << 20) - 1, mn = 0, mx = 1e9;
-		if (I < 3) {
-			n = I * 1000;
-		} else
-		if (I == 3) {
-			n = 1 << 19;
-		} else
-		if (I == 4) {
-			n = (1 << 19) + 1;
-		} else 
-		if (I == 5) {
-			n = (1 << 19) - 2;
-		} else 
-		if(I == 6) {
-			n = 1000000;
-		} else 
-		if (I == 7) {
-			n = (1 << 20) - 1;
-		} else
-		if (I == 8) {
-			n = (1 << 20) - 100000;
-		} else if (I == 9) {
-			n = (1 << 20) - 1;
-			mn = 95, mx = 100;
-		} 
+		const int MXN = 2e5 + 10;
+		static int id[MXN << 1];
+		int n = 200000, m = 200000, kn = 10;
 		
-		cout << n << endl;
-		for (int i = 0; i <= n; i++) {
-			cout << lrand(mn, mx) << sp;
+		if (I & 1) {
+			kn = 2;
+		} else {
+			kn = 5000;
 		}
-		cout << endl;
-		for (int i = 0; i <= n; i++) {
-			cout << lrand(mn, mx) << sp;
+		if (I == 9) {
+			kn = 400000;
 		}
+		if (I == 10) {
+			kn = 300;
+		}
+		if (I == 0) {
+			kn = 1;
+		}
+		
+		if (I < 6) {
+			for (int i = 1; i <= kn; i++) {
+				id[i] = lrand(1, 1e9);
+			}
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << id[lrand(1, kn)] << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				int op = lrand(1, 4);
+				int l, r, v, nl, len;
+				randRange(1, n, l, r);
+				cout << op << sp;
+				if (op == 1)  {
+					cout << l << sp << r << sp << id[lrand(1, kn)] << endl;
+				} else
+				if (op == 2) {
+					cout << l << sp << r << endl;
+				} else 
+				if (op == 3) {
+					len = r - l + 1;
+					cout << l << sp << len << sp << lrand(1, n - len + 1) << endl;
+				} else
+				if (op == 4) {
+					cout << l << sp << r << endl;
+				}
+			}			
+		} else
+		if (I == 6) {
+			for (int i = 1; i <= kn; i++) {
+				id[i] = lrand(1, 1e9);
+			}
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << id[lrand(1, kn)] << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				int op = lrand(1, 4);
+				int l, r, v, nl, len;
+				randRange(1, n, l, r);
+				cout << op << sp;
+				if (op == 1)  {
+					r = min((lld)r, l + lrand(0, 100));
+					cout << l << sp << r << sp << id[lrand(1, kn)] << endl;
+				} else
+				if (op == 2) {
+					cout << l << sp << r << endl;
+				} else 
+				if (op == 3) {
+					len = r - l + 1;
+					cout << l << sp << len << sp << lrand(1, n - len + 1) << endl;
+				} else
+				if (op == 4) {
+					cout << l << sp << r << endl;
+				}
+			}
+		} else
+		if (I == 7 || I == 8) {
+			n = 5000;
+			for (int i = 1; i <= kn; i++) {
+				id[i] = lrand(1, 1e9);
+			}
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << id[lrand(1, kn)] << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				int op = lrand(1, 4);
+				int l, r, v, nl, len;
+				randRange(1, n, l, r);
+				cout << op << sp;
+				if (op == 1)  {
+					cout << l << sp << r << sp << id[lrand(1, kn)] << endl;
+				} else
+				if (op == 2) {
+					cout << l << sp << r << endl;
+				} else 
+				if (op == 3) {
+					len = r - l + 1;
+					cout << l << sp << len << sp << lrand(1, n - len + 1) << endl;
+				} else
+				if (op == 4) {
+					cout << l << sp << r << endl;
+				}
+			}
+		} else if (I == 9) {
+			for (int i = 1; i <= kn; i++) {
+				id[i] = lrand(1, 1e9);
+			}
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << id[lrand(1, kn)] << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				int op = lrand(1, 4);
+				int l, r, v, nl, len;
+				randRange(1, n, l, r);
+				l = max(1LL, l - lrand(1, 30000));
+				r = min((lld)n, r + lrand(1, 30000));
+				cout << op << sp;
+				if (op == 1)  {
+					cout << l << sp << r << sp << id[lrand(1, kn)] << endl;
+				} else
+				if (op == 2) {
+					cout << l << sp << r << endl;
+				} else 
+				if (op == 3) {
+					len = r - l + 1;
+					cout << l << sp << len << sp << lrand(1, n - len + 1) << endl;
+				} else
+				if (op == 4) {
+					cout << l << sp << r << endl;
+				}
+			}				
+			
+		} else if (I == 10) {
+			for (int i = 1; i <= kn; i++) {
+				id[i] = lrand(1, 1e9);
+			}
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << id[lrand(1, kn)] << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				int op = lrand(1, 4);
+				int l, r, v, nl, len;
+				randRange(1, n, l, r);
+				l = max((lld)1, l - lrand(1, 30000));
+				r = min((lld)n, r + lrand(1, 30000));
+				cout << op << sp;
+				if (op == 1)  {
+					cout << l << sp << r << sp << id[lrand(1, kn)] << endl;
+				} else
+				if (op == 2) {
+					cout << l << sp << r << endl;
+				} else 
+				if (op == 3) {
+					len = r - l + 1;
+					cout << l << sp << len << sp << lrand(1, n - len + 1) << endl;
+				} else
+				if (op == 4) {
+					cout << l << sp << r << endl;
+				}
+			}				
+		}
+
+		
 		
 		EndFor1:
 		cout.close();
@@ -90,16 +228,7 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n, mn = 0, mx = 100;
-		n = I;
-		cout << n << endl;
-		for (int i = 0; i <= n; i++) {
-			cout << lrand(mn, mx) << sp;
-		}
-		cout << endl;
-		for (int i = 0; i <= n; i++) {
-			cout << lrand(mn, mx) << sp;
-		}	
+	
         
 		EndFor2:
 		cout.close();
@@ -250,6 +379,20 @@ void mbtree(int root, int now, int end, ostream &cout) {
 		add(root, now, cout);
 	}
 }
+void mworm(int root, int now, int end, ostream &cout) {
+	while (now <= end) {
+		add(root, now++, cout);
+		if (now <= end) {
+			add(root, now++, cout);
+			root = now - 1;
+		}
+	}
+}
+void rand_edge(int l, int r, ostream &cout) {
+	for (int i = l; i <= r; i++) {
+		add(i, lrand(1, i - 1), cout);
+	}
+}
 void add(int a, int b, ostream &cout) { //要求编号较大的点是第一次连边 
 	if (a > b) swap(a, b);
 	setfa(b, getfa(a));
@@ -271,11 +414,11 @@ int getpair(int a) {
 	return id[t][lrand(0, id[t].size() - 1)];
 }
 void randforest(int beg, int end, int cnt, ostream &cout) {
-	memset(gap, 0, (end - beg + 1) * sizeof(int));
+	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));
 	for (int i = beg ; i < beg + cnt - 1; i++) {
 		gap[i] = 1;
 	}
-	shuffle(gap, end - beg + 1);
+	shuffle(gap + beg, end - beg + 1);
 	gap[end + 1] = 1; 
 	int head = beg;
 	for (int i = beg; i <= end + 1; i++) {

@@ -1,3 +1,4 @@
+#pragma GCC optimize(2)
 using namespace std;
 int main() {}
 #include <cstdio>
@@ -5,7 +6,6 @@ int main() {}
 #include <cstring>
 #include <algorithm>
 #include <cstdlib>
-#include <vector>
 namespace OI {
 typedef long long lld;
 const lld MOD = 479 << 21 | 1;

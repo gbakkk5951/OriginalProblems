@@ -12,7 +12,7 @@ namespace OI {
 typedef long long lld;
 const lld MOD = 479 << 21 | 1;
 //const int MXN = 4200000;
-const lld REV2 = MOD + 1 >> 1;
+//const lld REV2 = MOD + 1 >> 1;
 const int MXN = 1050000;
 //const int MXP = 21;
 
@@ -24,8 +24,8 @@ void XOR(lld arr[], int len) {
 			x = arr + j; y = arr + j + half;
 			for (int k = 0; k < half; k++) {
 				t1 = x[k]; t2 = y[k];
-				x[k] = (t1 + t2) % MOD;
-				y[k] = (t1 - t2) % MOD;
+				x[k] = t1 + t2;
+				y[k] = t1 - t2;
 			}
 		}
 	}
@@ -39,8 +39,8 @@ void NXOR(lld arr[], int len) {
 			x = arr + j; y = arr + j + half;
 			for (int k = 0; k < half; k++) {
 				t1 = x[k]; t2 = y[k];
-				x[k] = (t1 + t2) % MOD * REV2 % MOD;
-				y[k] = (t1 - t2) % MOD * REV2 % MOD;
+				x[k] = t1 + t2 >> 1;
+				y[k] = t1 - t2 >> 1;
 			}
 		}
 	}
@@ -53,7 +53,7 @@ void OR(lld arr[], int len) {
 		for (int j = 0; j < len; j += half << 1) {
 			x = arr + j; y = arr + j + half;
 			for (int k = 0; k < half; k++) {
-				(y[k] += x[k]) %= MOD;
+				y[k] += x[k];
 			}
 		}
 	}
@@ -66,7 +66,7 @@ void NOR(lld arr[], int len) {
 		for (int j = 0; j < len; j += half << 1) {
 			x = arr + j; y = arr + j + half;
 			for (int k = 0; k < half; k++) {
-				(y[k] -= x[k]) %= MOD;
+				y[k] -= x[k];
 			}
 		}
 	}
@@ -79,7 +79,7 @@ void AND(lld arr[], int len) {
 		for (int j = 0; j < len; j += half << 1) {
 			x = arr + j; y = arr + j + half;
 			for (int k = 0; k < half; k++) {
-				(x[k] += y[k]) %= MOD;
+				x[k] += y[k];
 			}
 		}
 	}
@@ -92,7 +92,7 @@ void NAND(lld arr[], int len) {
 		for (int j = 0; j < len; j += half << 1) {
 			x = arr + j; y = arr + j + half;
 			for (int k = 0; k < half; k++) {
-				(x[k] -= y[k]) %= MOD;
+				x[k] -= y[k];
 			}
 		}
 	}
@@ -131,7 +131,7 @@ struct _Main {
 				FWT(x, len);
 				FWT(y, len);
 				for (int i = 0; i < len; i++) {
-					tmp[i] = x[i] * y[i] % MOD;
+					tmp[i] = x[i] * y[i];
 				}
 				NFWT(tmp, len);
 				for (int i = 0, j = pos % 3; i < len; i++) {
