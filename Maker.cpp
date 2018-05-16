@@ -78,27 +78,27 @@ void run(){
 	int I;
     float a, b;
 	for(I=beg;I<end;I++){
-		cmd= stdName + ".exe > "+dataName+to_string(I)+".out < "+dataName+to_string(I)+".in";
+		cmd= "./" + stdName + " > "+dataName+to_string(I)+".out < "+dataName+to_string(I)+".in";
 		cerr<<"Run: "<<cmd<<endl;
-		a = clock();
+		a = clock() / 1000.0;
 		system(cmd.c_str());
-		b = clock();
+		b = clock() / 1000.0;
 		if (time_count) {
 		    cerr<<stdName + " uses "<<b - a<<"ms"<<endl;
 		}
 		
 		if (check_brute) {
-    		cmd= bruteName + ".exe > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
+    		cmd= "./" + bruteName + " > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
     		cerr<<"Run: "<<cmd<<endl;
-            a = clock();
+            a = clock() / 1000.0;
             system(cmd.c_str());
-    		b = clock();
+    		b = clock() / 1000.0;
     		if (brute_time_count) {
     		    cerr<<bruteName + " uses "<<b - a<<"ms"<<endl;
     		}    		
-    		cmd="fc brute"+to_string(I)+".out "+dataName+to_string(I)+".out";
+    		cmd="diff brute"+to_string(I)+".out "+dataName+to_string(I)+".out";
     		if(system(cmd.c_str()) && check_out_pause){
-    			system("pause");
+    			getchar();
     		}
 	    }
 	}
@@ -122,9 +122,9 @@ void run(){
     		if (brute_time_count) {
     		    cerr<<bruteName + " uses "<<b - a<<"ms"<<endl;
     		}    
-    		cmd="fc brute_ex"+to_string(I)+".out "+dataName+"_ex"+to_string(I)+".out";
+    		cmd="diff brute_ex"+to_string(I)+".out "+dataName+"_ex"+to_string(I)+".out";
     		if(system(cmd.c_str()) && check_out_pause){
-    			system("pause");
+    			getchar();
     		}
 		}
 	}
@@ -296,7 +296,7 @@ void getprime(){
 }
 	
 int lrand(){
-	return (rand()<<16) | (rand()<<1) ^rand();	
+	return rand();
 }
 long long llrand(){
 	return (long long)((long long)lrand()<<32)|((long long )lrand()<<1)^rand();
