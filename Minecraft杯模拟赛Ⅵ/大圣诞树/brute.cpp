@@ -102,14 +102,14 @@ struct _Main {
 		ans = getans();
 		printf("%d\n", ans);
 		if (cnt == 0) {
-			printf("%d", ans);
+			printf("%d\n", ans);
 			return;
 		}
 		for (int e = 2; e <= eidx; e++) {
 			edge[e][CUT] = 0;
 		}
 		ans = getans();
-		printf("%d", ans);
+		printf("%d\n", ans);
 	}
 	int eidx;
 	int head[MXN], edge[MXN][3];

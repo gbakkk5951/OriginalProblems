@@ -1,3 +1,4 @@
+#pragma GCC optimize(2)
 using namespace std;
 int main() {}
 #include <cstdio>
@@ -5,11 +6,17 @@ int main() {}
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
+
+#include <iostream>
+#include <string>
+
 #include <vector>
 #include <queue>
 #include <map>
 #include <set>
 namespace OI {
+
+
 typedef pair<int, int> p;
 typedef priority_queue<p> hp;
 typedef set<p, greater<p> > st;
@@ -17,6 +24,8 @@ const int DST = 0, NXT = 1;
 const int MXN = 2e5 + 10;
 const int MXP = 19;
 const int INF = 0x3f3f3f3f;
+
+const string sp = " ";
 
 int a[MXN], b[MXN], c[MXN];
 int n;
@@ -40,20 +49,24 @@ template <typename Type>
 
 int ins_cnt;
 struct _Main {
-	st sub_st[MXP][MXN];
+	st sub_set[MXP][MXN];
+	hp sub_hp[MXN];
+	hp tot_hp;
 	int sub_f[MXP][MXN];
 	int sub_dis[MXP][MXN];
 	int sub_del[MXP][MXN];
 	int sub_tp[MXP][MXN];
+	int mark[MXN];
 	int lst[MXN];
 	int mxa[MXN], mxb[MXN];
 	int mxlen[MXN];
 	
 	void update_sub_hp(int rt) {
 		int mk = mark[rt];
-		mxa[rt] = gettop(sub_hp[rt]);
-		mxb[rt] = getsec(sub_hp[rt]);
-		mxlen[rt] = sub_set[mk][tp1].begin()->first + sub_set[mk][tp2].begin()->first;
+		mxa[rt] = gettop(sub_hp[rt], mk);
+		mxb[rt] = getsec(sub_hp[rt], mk);
+		mxlen[rt] = sub_set[mk][mxa[rt]].begin()->first + sub_set[mk][mxb[rt]].begin()->first;
+		if (mxlen[rt] > 0) tot_hp.push((p) {mxlen[rt], rt});
 	}
 	void deledge(int nd, int fa) {
 		int rt = fa, mk = mark[fa];
@@ -83,12 +96,12 @@ struct _Main {
 			}
 		}
 	}
-	int gettop(hp &heap, int mk) {//有两个空元素 -2,0, -1, 0
+	int gettop(hp &heap, int mk) {//有两个空元素 -1,0
 		popheap(heap, mk);
 		return heap.top().second;
 	}
-	int getsec(hp &heap, int mk) {//top已经合法 有两个空元素 -2,0, -1,0
-		int top = heapheap.top().second;
+	int getsec(hp &heap, int mk) {//top已经合法 有两个空元素 -1,0
+		int top = heap.top().second;
 		int ret = 0;
 		heap.pop();
 		popheap(heap, mk);
@@ -157,7 +170,11 @@ struct _Main {
 		}
 	}
 	void getdis(int nd, int fa, int dis, int tp, int mk) {
+		sub_f[mk][nd] = fa;
+		sub_dis[mk][nd] = dis;
+		sub_tp[mk][nd] = tp;
 		sub_set[mk][tp].insert((p) {dis, nd});
+		
 		int t;
 		for (int e = head[nd]; e; e = edge[e][NXT]) {
 			t = edge[e][DST];
@@ -181,7 +198,7 @@ struct _Main {
 		mark[nd] = mk;
 		int t;
 		init_hp(nd);
-		if (size[nd] == 1) return;
+		if (tot == 1) return; //不应该是size[nd] 因为根已经变了
 		for (int e = head[nd]; e; e = edge[e][NXT]) {
 			t = edge[e][DST];
 			if (!mark[t]) {
@@ -189,17 +206,26 @@ struct _Main {
 				sub_hp[nd].push((p) {sub_set[mk][t].begin()->first, t});
 			}
 		}
+		update_sub_hp(nd);
+		for (int e = head[nd]; e; e = edge[e][NXT]) { //可以尝试并到上面去
+			t = edge[e][DST];
+			if (!mark[t]) {
+				getsize(t, nd, 0);
+				build_tree(t, size[t], nd, mk + 1);
+			}
+		}
 		
 	}
 	_Main() {
 		p nd;
 		int mk, id, ans = 0;
-		for (int i = 1; 1 << i - 1 <= n; i++) {
+		for (int i = 1; 1 << i <= n; i++) {
 			sub_set[i][0].insert((p) {-1, 0});
 		}
 		if (ins_cnt++ == 1) {
 			memset(c, 0, n * sizeof(int));
 		}
+		
 		for (int i = 1; i <= n - 1; i++) {
 			if (!c[i]) {
 				add(a[i], b[i]);
@@ -213,19 +239,23 @@ struct _Main {
 			}
 		}
 		while (!tot_hp.empty()) {
-			while (1) {
+			while (!tot_hp.empty()) {
 				nd = tot_hp.top();
-				tot_hp.pop();
 				id = nd.second;
 				mk = mark[id];
 				if (nd.first != mxlen[id]) {
+					tot_hp.pop();
 					if (mxlen[id] > 0) tot_hp.push((p) {mxlen[id], id});
 				} else {
 					break;
 				}
 			}
-			delpath(sub_set[mk][mxa[id]].begin()->second, sub_set[mk][mxb[id]].begin()->second);
-			++ans;
+			
+			if (!tot_hp.empty()) {
+				tot_hp.pop();
+				delpath(sub_set[mk][mxa[id]].begin()->second, sub_set[mk][mxb[id]].begin()->second);
+				++ans;
+			}
 		}
 		printf("%d\n", ans);
 	}
@@ -234,7 +264,7 @@ struct _Main {
 	void add(int a, int b) {
 		eidx++;
 		edge[eidx][DST] = b;
-		edge[eidx][NXT] = a;
+		edge[eidx][NXT] = head[a];
 		head[a] = eidx;
 	}
 }solver[2];
