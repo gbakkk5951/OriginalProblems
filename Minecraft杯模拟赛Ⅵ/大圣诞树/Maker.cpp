@@ -28,10 +28,10 @@ bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 0
+int beg = 15
 ,   end = 15
-,   exbeg = 0
-,   exend = 3
+,   exbeg = 3
+,   exend = 4
 ;
 
 bool check_brute = 0;
@@ -113,6 +113,12 @@ void make(){
 			rate = 1;
 			cout << n << endl;
 			mtree(1, 2, n, cout);
+		} else
+		if (I == 3) {
+			n = 100000;
+			rate = 10;
+			cout << n << endl;
+			mflower(1, 2, n, cout);
 		}
         
 		EndFor2:
