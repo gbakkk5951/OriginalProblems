@@ -23,14 +23,14 @@ bool run_ans = true;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 20
 ,   exbeg = 0
-,   exend = 0
+,   exend = 2
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -38,7 +38,17 @@ bool brute_time_count = true;
 //////////////
 
 //Splay<400005>leaf, id, void_id;
-
+int limit = 9;
+void toint(int val, ostream &cout) {
+	int len;
+	for (len = 30; len > 0; len--) {
+		if (val >> len == 1) break;
+	}
+	for (; len >= 0; len--) {
+		cout << (val >> len & 1 ? 1 + (rand() % 9 == 0) * lrand(0, limit - 1) : 0);
+	}
+	cout << endl;
+}
 void make(){
 	int I;
 	int i,j,k;
@@ -46,7 +56,47 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int Qn = 100;
+		cout << Qn << endl;
+		if (I & 1) {
+			limit = 9;
+		} else {
+			limit = 1;
+		}
 		
+		if (I >> 1 == 0) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(Q - 1, cout);
+			}
+		} else
+		if (I >> 1 == 1) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(Q + 99, cout);
+			}
+		} else
+		if (I >> 1 < 5) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(lrand(200, 1 << 20), cout);
+			}
+		} else
+		if (I >> 1 < 7) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(lrand(1000, 1 << 25), cout);
+			}
+		} else
+		if (I >> 1 < 8) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(lrand(1 << 20, 1 << 28), cout);
+			}
+		} else if (I >> 1 < 9) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(lrand(1 << 28, (1 << 30) - 1), cout);
+			}
+		} else if (I >> 1 < 10) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(lrand(7 << 27, (1 << 30) - 1), cout);
+			}
+		}
 		EndFor1:
 		cout.close();
 	}
@@ -57,8 +107,23 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		
-        
+		int Qn = 100;
+		if (I & 1) {
+			limit = 9;
+		} else {
+			limit = 1;
+		}
+		cout << Qn << endl;
+		if (I >> 1 == 0) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint(160000 - Q + 3, cout);
+			}
+		} else 
+		if (I >> 1 == 1) {
+			for (int Q = 1; Q <= Qn; Q++) {
+				toint((1 << 30) - 1 - Q * 47917, cout);
+			}
+		}
 		EndFor2:
 		cout.close();
 	}	
@@ -79,12 +144,11 @@ void run(){
 	int I;
     timeval a, b;
 	double delta_t;
-	int sysret;
 	for(I=beg;I<end;I++){
 		cmd= "./" + stdName + " > "+dataName+to_string(I)+".out < "+dataName+to_string(I)+".in";
 		cerr<<"Run: "<<cmd<<endl;
 		gettimeofday(&a, NULL);
-		sysret = system(cmd.c_str());
+		system(cmd.c_str());
 		gettimeofday(&b, NULL);
 		delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
 		if (time_count) {
@@ -95,14 +159,14 @@ void run(){
     		cmd= "./" + bruteName + " > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
     		cerr<<"Run: "<<cmd<<endl;
 			gettimeofday(&a, NULL);
-			sysret = system(cmd.c_str());
+			system(cmd.c_str());
 			gettimeofday(&b, NULL);
 			delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
     		if (brute_time_count) {
     		    cerr<<bruteName + " uses "<<delta_t<<"ms"<<endl;
     		}    		
     		cmd="diff brute"+to_string(I)+".out "+dataName+to_string(I)+".out";
-    		if(sysret = system(cmd.c_str()) && check_out_pause){
+    		if(system(cmd.c_str()) && check_out_pause){
     			getchar();
     		}
 	    }
@@ -112,7 +176,7 @@ void run(){
 		cmd= "./" + stdName + " > "+dataName+"_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Run: "<<cmd<<endl;
 		gettimeofday(&a, NULL);
-		sysret = system(cmd.c_str());
+		system(cmd.c_str());
 		gettimeofday(&b, NULL);
 		delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
 		if (time_count) {
@@ -123,14 +187,14 @@ void run(){
     		cmd= "./" + bruteName + " > brute_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
     		cerr<<"Run: "<<cmd<<endl;
 			gettimeofday(&a, NULL);
-			sysret = system(cmd.c_str());
+			system(cmd.c_str());
 			gettimeofday(&b, NULL);
 			delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
     		if (brute_time_count) {
     		    cerr<<bruteName + " uses "<< delta_t <<"ms"<<endl;
     		}    
     		cmd="diff brute_ex"+to_string(I)+".out "+dataName+"_ex"+to_string(I)+".out";
-    		if(sysret = system(cmd.c_str()) && check_out_pause){
+    		if(system(cmd.c_str()) && check_out_pause){
     			getchar();
     		}
 		}

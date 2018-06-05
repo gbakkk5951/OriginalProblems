@@ -14,9 +14,10 @@ struct _Main {
 	int to_binary(char str[]) {
 		int len = strlen(str);
 		for (int i = 0; i < len; i++) {
+			str[i] -= '0';
 			if (str[i] > 1) {
 				for (int j = i; j < len; j++) {
-					str[i] = 1;
+					str[j] = 1;
 				}
 				break;
 			}
@@ -42,6 +43,7 @@ struct _Main {
 			dst = to_binary(str);
 			tmp = dst / MOD;
 			now = 0;
+			ans = 0;
 			for (; now <= dst; now++) {
 				bina = 0;
 				for (unsigned i = 0; now >> i; i++) {
