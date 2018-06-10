@@ -46,7 +46,7 @@ struct Node {
 		ss = (s[0]->ss + st + s[1]->ss);
 	}
 	void rotate() {
-		Node * gf = f->f, *s;
+		Node * gf = f->f;
 		int spo;
 		gf->s[f == gf->s[1]] = this;
 		spo = this == f->s[1];
@@ -58,10 +58,10 @@ struct Node {
 		f = gf;
 	}
 	lld sell(lld num) {
-		nd->st -= num;
-		nd->ss -= num;
+		st -= num;
+		ss -= num;
 		num %= MOD;
-		nd->as = (nd->as - num * c) % MOD;
+		as = (as - num * c) % MOD;
 		return num * c % MOD;
 	}
 }pool[MXN], *null;
@@ -100,7 +100,7 @@ struct Tree {
 		}
 		int spo;
 		while (1) {
-			spo = *ins < *nd; 
+			spo = *obj < *nd; 
 			if (nd->s[spo] == null) {
 				nd->s[spo] = obj;
 				obj->f = nd;
@@ -147,7 +147,7 @@ struct Tree {
 				nd->clear();
 				break;
 			} 
-			if (ns->s[0] != null) {
+			if (nd->s[0] != null) {
 				if (nd->s[0]->ss < mxn) {
 					mxn -= nd->s[0]->ss;
 					ret += nd->s[0]->as;
@@ -200,7 +200,9 @@ struct _Main {
 		read(n); read(Qn);
 		for (int i = 1; i <= n; i++) {
 			read(a); read(b);
-			node[i] = new_(i, a, b);
+			node[i] = new_(i);
+			node[i]->c = a;
+			node[i]->p = b;
 		}
 		memcpy(arr, node, (n + 1) * sizeof(Node *));
 		sort(arr + 1, arr + n + 1, cmp);
