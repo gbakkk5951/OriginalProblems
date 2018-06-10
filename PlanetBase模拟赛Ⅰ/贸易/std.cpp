@@ -8,12 +8,170 @@ int main() {}
 namespace OI {
 typedef long long lld;
 const int MXN = 1e5 + 10;
+const lld MOD = 1e9 + 7;
+struct Node {
+	Node *s[2], *f;
+	lld c, i, p, st, cs, ps, ss, vs, as, ct, pt;
+	bool operator < (const Node &b) const {
+		if (c != b.c) return c < b.c;
+		return i < b.i;
+	}
+	inline void clear() {
+		st = ss = as = 0;
+		ct = 1;
+	}
+	inline void produce(lld t) {
+		pt += t;
+		st += t * p;
+		ss += t * ps;
+		as += vs * t % MOD;
+	}
+	inline void push() {
+		if (ct) {
+			s[0]->clear();
+			s[1]->clear();
+			ct = 0;
+		}
+		if (pt) {
+			s[0]->produce(pt);
+			s[1]->produce(pt);
+			pt = 0;
+		}
+	}
+	inline void update() {
+		cs = (s[0]->cs + c + s[1]->cs) % MOD;
+		ps = (s[0]->ps + p + s[1]->ps);
+		vs = (s[0]->vs + p * c + s[1]->vs) % MOD; 
+		as = (s[0]->as + st % MOD * c + s[1]->as) % MOD;
+		ss = (s[0]->ss + st + s[1]->ss);
+	}
+	void rotate() {
+		Node * gf = f->f, *s;
+		int spo;
+		gf->s[f == gf->s[1]] = this;
+		spo = nd == f->s[1];
+		(f->s[spo] = s[spo ^ 1])->f = f;
+		f->f = this;
+		s[spo ^ 1] = f; 
+		f->update();
+		update();
+		f = gf;
+	}
+	lld sell(lld num) {
+		nd->st -= num;
+		nd->ss -= num;
+		num %= MOD;
+		nd->as = (nd->as - num * c) % MOD;
+		return num * c % MOD;
+	}
+}pool[MXN], *null;
+int pidx;
+Node *new_(int id) {
+	Node *nd = &pool[pidx++];
+	nd->s[0] = nd->s[1] = nd->f = null;
+	nd->i = id;
+	return nd;
+}
+struct Tree {
+	Node *root;
+	Tree() {
+		null = new_(0);
+		null->s[0] = null->s[1] = null->f = null;
+		root = null;
+	}
+	void splay(Node *nd) {
+		Node *f = nd->f;
+		while (f != null) {
+			
+		}
+		
+	}
+	void insert(Node *obj) {
+		Node *nd = root;
+		if (nd == null) {
+			root = obj;
+			return;
+		}
+		int spo;
+		while (1) {
+			spo = *ins < *nd; 
+			if (nd->s[spo] == null) {
+				nd->s[spo] = obj;
+				obj->f = nd;
+				splay(obj);
+				break;
+			} else {
+				nd = nd->s[spo];
+			}
+		}
+	} 
+	void erase(Node *obj) {
+		Node *nd = root;
+		while (1) {
+			nd->push();
+			if (nd == obj) {
+				break;
+			} else {
+				nd = nd->s[*obj < *nd];
+			}
+		}
+		int spo;
+		while ((spo = nd->s[1] != null) || nd->s[0] != null) {
+			nd->s[spo]->push();
+			nd->s[spo]->rotate();
+		}
+		Node *f = nd->f;
+		f->s[nd == f->s[1]] = null;
+		nd->f = null;
+		splay(f);
+	}
+	lld sell(lld mxn) {//卡一下这个不rotate
+		lld ret = 0;
+		Node *nd = root;
+		while (1) {
+			nd->push();
+			if (nd->st <= mxn) {
+				ret += nd->as;
+				nd->clear();
+				splay(nd);
+				return ret;
+			} 
+			if (ns->s[0] != null) {
+				if (nd->s[0]->ss < mxn) {
+					mxn -= nd->s[0]->ss;
+					ret += nd->s[0]->as;
+					nd->s[0]->clear();
+				} else {
+					nd = nd->s[0];
+					continue;
+				}
+			}
+			if (nd->st >= mxn) {
+				ret += nd->sell(mxn);
+				break;
+			}
+			mxn -= nd->st;
+			ret += nd->sell(nd->st);
+			if (nd->s[1] != null) {
+				nd = nd->s[1];
+			} else {
+				break;
+			}
+		}
+		splay(nd);
+		return ret % MOD;
+	}
+}tree;
+bool cmp(Node *a, Node *b) {
+	return *a < *b;
+}
 struct _Main {
+	
 	int cost[MXN];
 	_Main() {
 		int n, Qn;
-		int op, a, b;
-		lld tot;
+		int op;
+		lld a, b;
 		read(n); read(Qn);
 		for (int i = 1; i <= n; i++) {
 			read(cost[i]); read(b);
@@ -27,8 +185,8 @@ struct _Main {
 				tree.root->produce(a);
 			} else 
 			if (op == 2) {//鍑哄敭
-				read(tot);
-				printf("%lld\n", tree.sell(tot));
+				read(a);
+				printf("%lld\n", tree.sell(a));
 			} else
 			if (op == 3) {//浜ч噺
 				read(a); read(b);
@@ -37,8 +195,9 @@ struct _Main {
 				tree.root->update();
 			} else
 			if (op == 4) {//浠锋牸
-				tree.erase((pr) {cost[a], a});
-				cost[a] = a;
+				read(a); read(b);
+				tree.erase(node[a]);
+				node[a]->c = b;
 				tree.insert(node[a]);
 			}
 		} 
