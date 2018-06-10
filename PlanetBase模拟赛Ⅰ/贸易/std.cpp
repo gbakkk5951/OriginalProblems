@@ -49,7 +49,7 @@ struct Node {
 		Node * gf = f->f, *s;
 		int spo;
 		gf->s[f == gf->s[1]] = this;
-		spo = nd == f->s[1];
+		spo = this == f->s[1];
 		(f->s[spo] = s[spo ^ 1])->f = f;
 		f->f = this;
 		s[spo ^ 1] = f; 
@@ -80,16 +80,22 @@ struct Tree {
 		root = null;
 	}
 	void splay(Node *nd) {
-		Node *f = nd->f;
+		Node *f = nd->f, *gf;
 		while (f != null) {
-			
+			gf = f->f;
+			if (gf != null) {
+				((f == gf->s[1]) == (nd == f->s[1]) ? f : nd)->rotate(); 
+			}
+			nd->rotate();
+			f = nd->f;
 		}
-		
+		root = nd;
 	}
 	void insert(Node *obj) {
 		Node *nd = root;
 		if (nd == null) {
 			root = obj;
+			obj->update();
 			return;
 		}
 		int spo;
@@ -105,7 +111,7 @@ struct Tree {
 			}
 		}
 	} 
-	void erase(Node *obj) {
+	void find(Node *obj, char rot) {
 		Node *nd = root;
 		while (1) {
 			nd->push();
@@ -115,6 +121,12 @@ struct Tree {
 				nd = nd->s[*obj < *nd];
 			}
 		}
+		if (rot) {
+			splay(obj);
+		}
+	}
+	void erase(Node *nd) {
+		find(nd, 0);
 		int spo;
 		while ((spo = nd->s[1] != null) || nd->s[0] != null) {
 			nd->s[spo]->push();
@@ -133,8 +145,7 @@ struct Tree {
 			if (nd->st <= mxn) {
 				ret += nd->as;
 				nd->clear();
-				splay(nd);
-				return ret;
+				break;
 			} 
 			if (ns->s[0] != null) {
 				if (nd->s[0]->ss < mxn) {
@@ -159,25 +170,41 @@ struct Tree {
 			}
 		}
 		splay(nd);
-		return ret % MOD;
+		ret %= MOD;
+		ret += ret < 0 ? MOD : 0;
+		return ret;
+	}
+	Node *build (Node *arr[], int l, int r) {
+		int mid = l + r >> 1;
+		Node *nd = arr[mid];
+		if (l < mid) {
+			nd->s[0] = build(arr, l, mid - 1);
+		}
+		if (r > mid) {
+			nd->s[1] = build(arr, mid + 1, r);
+		}
+		nd->update();
+		return nd;
 	}
 }tree;
 bool cmp(Node *a, Node *b) {
 	return *a < *b;
 }
+Node *node[MXN];
+Node *arr[MXN];
 struct _Main {
-	
-	int cost[MXN];
 	_Main() {
 		int n, Qn;
 		int op;
 		lld a, b;
 		read(n); read(Qn);
 		for (int i = 1; i <= n; i++) {
-			read(cost[i]); read(b);
-			node[i] = new_(i, cost[i], b);
+			read(a); read(b);
+			node[i] = new_(i, a, b);
 		}
-		tree.root = tree.build(1, 1, n);
+		memcpy(arr, node, (n + 1) * sizeof(Node *));
+		sort(arr + 1, arr + n + 1, cmp);
+		tree.root = tree.build(arr, 1, n);
 		for (int Q = 1; Q <= Qn; Q++) {
 			read(op);
 			if (op == 1) {//生产
@@ -190,8 +217,8 @@ struct _Main {
 			} else
 			if (op == 3) {//产量
 				read(a); read(b);
-				tree.find((pr) {cost[a], a});
-				tree.root->p = cost[a];
+				tree.find(node[a], 1);
+				tree.root->p = b;
 				tree.root->update();
 			} else
 			if (op == 4) {//价格
