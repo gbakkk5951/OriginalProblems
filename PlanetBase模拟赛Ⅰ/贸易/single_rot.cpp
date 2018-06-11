@@ -87,10 +87,11 @@ struct Tree {
 		}
 		Node *f = nd->f, *gf;
 		while (f != null) {
+			/*
 			gf = f->f;
 			if (gf != null) {
 				((f == gf->s[1]) == (nd == f->s[1]) ? f : nd)->rotate(); 
-			}
+			}*/
 			nd->rotate();
 			f = nd->f;
 		}
