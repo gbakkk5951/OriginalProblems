@@ -18,17 +18,17 @@ string dataName = "data";
 string stdName = "std";
 string bruteName = "brute";
 bool make_data = 1;
-bool run_ans = 1;
+bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 0
-,   end = 20
-,   exbeg = 0
+int beg = 20
+,   end = 24
+,   exbeg = 2
 ,   exend = 2
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 0;
 bool loop_count = true;
@@ -38,203 +38,60 @@ bool brute_time_count = true;
 //////////////
 
 //Splay<400005>leaf, id, void_id;
+
 void make(){
 	int I;
 	int i,j,k;
+	static int con[(int)1e5 + 10];
 	for(I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = 1000000, kn = 20;
-		if (I >= 10) n -= 3;
-		cout << n << sp << kn << endl;
-		if (I == 0) {
-			for (int i = 1; i <= n; i++) {
-				cout << (rand() % 30000 ? 1 : 0);
-			}
-		} else
-		if (I == 1) {
-			for (int i = 1; i <= n; i++) {
-				cout << (rand() % 300 ? 1 : 0);
-			}
-		} else
-		if (I == 2) {
-			for (int i = 1; i <= n; i++) {
-				cout << (rand() & 1);
-			}
-		} else
-		if (I == 3) {
-			for (int i = 1; i <= n; i++) {
-				cout << 1;
-			}
-		} else
-		if (I == 4) {
-			for (int i = 1; i <= 200000; i++) {
-				cout << 1;
-			}
-			for (int i = 200000 + 1; i <= 700000; i++) {
-				cout << 0;
-			}
-			for (int i = 700000 + 1; i <= 1000000; i++) {
-				cout << 1;
-			}
-		} else
-		if (I == 5) {
-			for (int i = 1; i <= 300000; i++) {
-				cout << (i % 3 == 2);
-			}
-			for (int i = 300001; i <= 700000; i++) {
-				cout << (i % 4 == 2 || i % 4 == 3 );
-			}
-			for (int i = 1; i <= 300000; i++) {
-				cout << (i % 3 == 2);
-			}
-		} else
-		if (I == 6) {
-			static char str[1000010];
-			for (int i = 1; i <= 500000; i++) {
-				str[i] = rand() & 1;
-			}
-			getrev(str, str + 500000 , 500000);
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
-		} else 
-		if (I == 7) {
-			static char str[1000010];
-			for (int i = 1; i <= 15625; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 1; i <= 6; i++) {
-				getrev(str, str + (15625 << i - 1), 15625 << i - 1);
-			}
-			
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
-		} else
-		if (I == 8) {
-			static char str[1000050];
-			for (int i = 1; i <= 9; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 9; i <= n; i += 8) {
-				getrev(str + i - 9, str + i, 9);
-			}
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
-		} else
-		if (I == 9) {
-			static char str[1000050];
-			for (int i = 1; i <= 7; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 7; i <= n / 2; i += 7) {
-				getrev(str + i - 7, str + i, 7);
-			}
-			for (int i = n / 2 + 1; i <= n; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
-		}
-		I -= 10;
-		if (I == 0) {
-			for (int i = 1; i <= n; i++) {
-				cout << (rand() % 30000 ? 1 : 0);
-			}
-		} else
-		if (I == 1) {
-			for (int i = 1; i <= n; i++) {
-				cout << (rand() % 300 ? 1 : 0);
-			}
-		} else
-		if (I == 2) {
-			for (int i = 1; i <= n; i++) {
-				cout << (rand() & 1);
-			}
-		} else
-		if (I == 3) {
-			for (int i = 1; i <= n; i++) {
-				cout << 1;
-			}
-		} else
-		if (I == 4) {
-			for (int i = 1; i <= 200000; i++) {
-				cout << 1;
-			}
-			for (int i = 200000 + 1; i <= 700000; i++) {
-				cout << 0;
-			}
-			for (int i = 700000 + 1; i <= 999997; i++) {
-				cout << 1;
-			}
-		} else
-		if (I == 5) {
-			for (int i = 1; i <= 300000; i++) {
-				cout << (i % 3 == 2);
-			}
-			for (int i = 300001; i <= 700000; i++) {
-				cout << (i % 4 == 2 || i % 4 == 3 );
-			}
-			for (int i = 1; i <= 999997; i++) {
-				cout << (i % 3 == 2);
-			}
-		} else
-		if (I == 6) {
-			static char str[1000010];
-			for (int i = 1; i <= 499999; i++) {
-				str[i] = rand() & 1;
-			}
-			getrev(str, str + 499998 , 499999);
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
-		} else 
-		if (I == 7) {
-			static char str[1000010];
-			for (int i = 1; i <= 15625; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 1; i <= 6; i++) {
-				getrev(str, str + (15625 << i - 1), 15625 << i - 1);
-			}
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
-		} else
-		if (I == 8) {
-			static char str[1000050];
-			for (int i = 1; i <= 10; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 10; i <= n; i += 10) {
-				getrev(str + i - 10, str + i, 10);
-			}
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
 		
+		
+		int n = 100000;
+		for (int i = 1; i <= n; i++) {
+			id[i] = i;
+			con[i] = i;
 		}
-		if (I == 9) {
-			static char str[1000050];
-			for (int i = 1; i <= 5; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 5; i <= n * 17 / 19; i += 5) {
-				getrev(str + i - 5, str + i, 5);
-			}
-			for (int i = n *17 / 19 + 1; i <= n; i++) {
-				str[i] = rand() & 1;
-			}
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i];
-			}
+		cout << n << endl;
+		int tp1 = I & 1;
+		int tp3 = I >> 2;
+		if (tp1) {
+			shuffle(id + 1, n);
+		}
+		shuffle(con + 1, n);
+		for (int i = 1; i <= n; i++) {
+			cout << lrand(1, 5000) << sp << con[i] << endl;
+		}
+		if (tp3 == 0) {//b tree
+			mbtree(1, 2, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 1) {
+			mworm(1, 2, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 2) {
+			mtree(1, 2, n, cout);
+		} else
+		if (tp3 == 3) {
+			mflower(1, 2, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 4) {
+			mchain(1, 2, 35000, cout);
+			mchain(1, 35001, 70000, cout);
+			mflower(35000, 70001, 80000, cout);
+			mtree(80000, 80001, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 5) {
+			mchain(1, 2, 80000, cout);
+			mworm(50037, 80001, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
 		}
 		EndFor1:
-		I += 10;
 		cout.close();
 	}
 	
@@ -244,35 +101,37 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = 975273, kn = 20;
-		if (I == 0) {
-			cout << n << sp << kn << endl;
-			static char str[1000005];
-			for (int i = 1; i <= 10; i++) {
-				str[i] = rand() & 1;
-			}
-			getrev(str, str + 9, 10);
-			for (int i = 19; i <= n; i += 19) {
-				memcpy(str + i + 1, str + 1, 19 * sizeof(char));
-			}
-			for (int i = 1; i <= n; i++) {
-				cout << (int)str[i] ;
-			}
-		} else
-		if (I == 1) {
-			cout << "1 20" << endl << 0 << endl;
+		/*
+		for (int i = 1; i <= 1000000; i++) {
+			id[i] = i;
 		}
-        
+		*/
+		if (I == 0) {
+			cout << 1 << endl << 1 << sp << 1 << endl;
+		} else 
+		if (I == 1) {
+			int n = 100000;
+			for (int i = 1; i <= n; i++) {
+				id[i] = i;
+				con[i] = i;
+			}
+			for (int i = 1; i <= 500; i++) {
+				int a = lrand(1, n), b = lrand(1, n);
+				swap(con[a], con[b]);
+				swap(id[a], id[b]);
+			}
+			cout << n << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 5000) << sp << con[i] << endl;
+			}
+			mtree(1, 2, n / 2, cout);
+			mchain(1, n / 2 + 1, n, cout);
+		}
 		EndFor2:
 		cout.close();
-	}	
-	
-	
-}
-void getrev(char* src, char *dst, int len) {
-	for (int i = 1; i <= len; i++) {
-		dst[i] = src[len - i + 1];
 	}
+	
+	
 }
 int Qcnt;
 
@@ -382,7 +241,6 @@ _Main(){
 
 
 }	
-vector <int> id[500050];
 int mksq(int root, int l, int r, ostream &cout) {
 	if (r - l + 1 < 200000 * 2 + 10) {
 		mchain(root, l, r, cout);
@@ -437,10 +295,8 @@ void rand_edge(int l, int r, ostream &cout) {
 		add(i, lrand(1, i - 1), cout);
 	}
 }
-void add(int a, int b, ostream &cout) { //要求编号较大的点是第一次连边 
-	if (a > b) swap(a, b);
-	setfa(b, getfa(a));
-	id[getfa(b)].push_back(b);
+int id[1000050];
+void add(int a, int b, ostream &cout) { 
 	if (rand() & 1) swap(a, b);
 	cout << a << sp << b << endl;
 }
@@ -452,10 +308,6 @@ int getfa(int a) {
 }
 void setfa(int a, int b) {
 	fa[a] = b;
-}
-int getpair(int a) {
-	int t = getfa(a);
-	return id[t][lrand(0, id[t].size() - 1)];
 }
 void randforest(int beg, int end, int cnt, ostream &cout) {
 	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));

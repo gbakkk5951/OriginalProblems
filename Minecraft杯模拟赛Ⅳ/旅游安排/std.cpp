@@ -14,6 +14,9 @@ const int
     DST = 0,
     DIS = 2,
     FLOW = 2,
+    void pop() {
+        head++;
+    }
     COST = 3,
     INF = 0x3f3f3f3f,
     MAXN = 2100,

@@ -1,4 +1,3 @@
-#pragma GCC optimize(2)
 using namespace std;
 int main() {}
 #include <cstdio>
@@ -7,13 +6,12 @@ int main() {}
 #include <cstring>
 #include <algorithm>
 namespace OI {
-const int MXN = 2e6 + 10;
-int ans[MXN >> 1][21];//开多了
+const int MXN = 2e5 + 10;
+int ans[MXN][21];
 int log[MXN >> 1];
 int n, kn;
 struct Node {
 	Node *s[2], *fail;
-	Node *f[21];
 	int len, h, cnt[21];
 }pool[MXN];
 int pidx;
@@ -51,10 +49,6 @@ struct PalinTree {
 			for (int i = 1; i <= kn; i++) {
 				s->cnt[i] += s->len % i == 0;
 			}
-			s->f[0] = f;
-			for (int I = 1; 1 << I <= s->h; I++) {
-				s->f[I] = s->f[I - 1]->f[I - 1];
-			}
 			nd->s[val] = s;
 		}
 		nd = nd->s[val];
@@ -68,10 +62,12 @@ struct PalinTree {
 					continue;
 				}
 				top = nd;
-				for (int I = log[top->h]; I >= 0; I--) {
-					f = top->f[I];
-					if (f && f->cnt[i] < f->len / i) {
+				while (1) {
+					f = top->fail;
+					if (f->cnt[i] < f->len / i) {
 						top = f;
+					} else {
+						break;
 					}
 				}
 				top = top->fail;//神Tm = f->fail
@@ -92,7 +88,7 @@ struct _Main {
 		for (int i = 1; i <= n; i++) {
 			str[i] -= '0';
 		}
-		memmove(str + n + 1, str + 1, n * sizeof(char));//sizeof char
+		memmove(str + n + 1, str + 1, n * sizeof(char));//神Tmsizeof(int)
 		for (int i = 1; i <= 2 * n - 1; i++) {
 			tree.insert(str[i], i >= n ? (i - 1) % n + 1 : 0);
 		}
@@ -103,13 +99,11 @@ struct _Main {
 		for (int i = 1; i <= 2 * n - 1; i++) {
 			tree.insert(str[i], i >= n ? n - ((i - 1) % n + 1) + 1 : 0);
 		}
-		int out;
 		for (int i = 1; i <= n; i++) {
-			out = 0;
 			for (int j = 1; j <= kn; j++) {
-				out ^= ans[i][j] * j;
+				printf("%d ", ans[i][j]);
 			}
-			printf("%d\n", out);
+			printf("\n");
 		}
 	}//AC
 }std;
