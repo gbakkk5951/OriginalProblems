@@ -37,15 +37,123 @@ const lf PI = acos(-1.0);
 const int INF = 0x3f3f3f3f;
 const lld LINF = (lld)INF << 32 | INF;
 const int DST = 0, NXT = 1, VAL = 2, FLOW = 2, CST = 3;
+const int MXN = 5e3 + 10;
 struct _Main {
-	int atk
-	lld ahp, aam, aatk, acst;
+	lld Ahp, Aam, Aatk, Acst;
+	lld Nhp, Nam, Natk, Ncst;
 	int n;
-	int am[MXN], hp[MXN], 
+	void copy() {
+		Ahp = Nhp;
+		Aam = Nam;
+		Aatk = Natk;
+		Acst = Ncst;
+	}
+	void update() {
+		if (Ncst < Acst) {
+			copy();
+		} else
+		if (Ncst == Acst) {//尝试构造一组数据使得不能讲这个归并到上面去
+			if (Nhp < Ahp || Nhp == Ahp && Nam < Aam) {
+				copy();
+			} 
+		}
+	}
+	lld Csthp, Cstam, Cstatk;
+	lld Vam, Vatk;
+	lld Oam, Ohp, Oatk;
+	lld hp[MXN], am[MXN], atk[MXN], num[MXN];
+	
+	lld times[MXN], val[MXN];
+	lld Ntimes, Nval;
+	inline lld up(lld a, lld b) {
+		return (a + b - 1) / b;
+	}
+	lld Am, Atk, Hp;
+	int n;
 	_Main() {
-		acst = LINF;
-		
-		
+		int low = 0, high = 0;
+		Acst = LINF;
+		read(n);
+		read(Ohp); read(Oam); read(Oatk);
+		read(Csthp); read(Cstam); read(Vam); read(Cstatk); read(Vatk);
+		for (int i = 1; i <= n; i++) {
+			read(num[i]);
+			read(hp[i]);
+			read(am[i]); 
+			read(atk[i]);
+			low = max(low, up(am[i] - Oatk + 1, Vatk));
+			high = max(high, up(Ohp[i] + am[i], Vatk));
+			Am =  max(Am, up(Oatk[i] - Oam, Vam));
+			/*
+			if (Oatk[i] <= Oam) {
+				n--; 
+			}
+			*/// 这个可能会WA
+		}
+		for (int i = 1; i <= n; i++) {//初始化以及挂链
+			if (atk[i] <= Oam) continue;
+			lld pos = (atk[i] - Oam + Vam - 1) / Vam;
+			lld oatk = Oatk + low * Vatk;
+			lld atktimes = up(hp[i], oatk - am[i]);
+			times[pos] += num[i] * atktimes; 
+			val[pos] += num[i] * ((atk[i] - Oam) % Vam) * atktimes;
+			int lst = low;
+			lld Atk;
+			for (int st = 1, ed; st <= hp[i]; st = ed + 1) {// hp / (Natk - am) 上取整的值
+				ed = hp[i] / (hp[i] / st);
+				if (st != ed && hp[i] % ed == 0) {
+					--ed;
+				}
+				Atk = up(st + am[i] - Oatk, Vatk);
+				if (Atk > lst) {
+					lst = Atk;
+					add(Atk, i);
+				}
+			}
+		}
+		//大写表示次数
+		for (Atk = low; Atk <= high; ++Atk) {
+			Natk = Oatk + Atk * Vatk;
+			lld Latk = Oatk + (Atk - 1) * Vatk;
+			for (int e = head[Atk]; e; e = edge[e][NXT]) {
+				int nd = edge[e][DST];
+				lld pos = (atk[nd] - Oam + Vam - 1) / Vam;
+				lld delta = up(hp[nd], Natk - am[nd]) - up(hp[nd], Latk - am[nd]);
+				delta *= num[nd];
+				if (pos < Am) {
+					times[pos] += delta; 
+					val[pos] += ((atk[nd] - Oam) % Vam) * delta;
+				} else {
+					Ntimes += delta; 
+					Nval += ((atk[nd] - Oam) % Vam) * delta;
+					Nval += (Oatk[i] - Nam) * delta;
+				}
+			}
+			//挪动Am
+			while ((lf)Csthp * (val[Am - 1] + (lf)Ntimes * Vam) - Cstam < 0) {
+				//用double 判定精度足够， 因为 Cstam 是 int 范围
+				--Am;
+				Nval += val[Am] + Ntimes * Vam;
+				Ntimes += times[Am];
+			}
+			Nam = Oam + Am * Vam;
+			Nhp = max(Ohp, Nval + 1);		
+			Hp = Nhp - Ohp;
+			Ncst = Atk * Cstatk;
+			Ncst += Am * Cstam;
+			Ncst += Hp * Csthp;
+			update();
+		}
+		printf("%lld\n%lld %lld %lld", Acst, Ahp, Aam, Aatk);
+	}
+	int head[MXN];
+	int edge[MXN * MXN][2];
+	int eidx;
+	void add(int pos, int val) {
+		eidx++;
+		edge[eidx][DST] = val;
+		edge[eidx][NXT] = head[pos];
+		head[pos] = eidx;
 	}
 template <typename Type>
 	void read(Type &a) {
