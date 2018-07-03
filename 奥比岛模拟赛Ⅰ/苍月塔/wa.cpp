@@ -118,9 +118,7 @@ struct _Main {
 				}
 			}
 		}
-//		cerr <<"[" << low << ", " << high << "]" << endl;
 		for (Atk = low; Atk <= high; ++Atk) {
-//			cerr << "Atk = " << Atk << endl;
 			Natk = Oatk + Atk * Vatk;
 			lld Latk = Oatk + (Atk - 1) * Vatk;
 			for (int e = head[Atk]; e; e = edge[e][NXT]) {
@@ -137,8 +135,8 @@ struct _Main {
 				}
 			}
 			while (Am > 0 && 
-				  max(Nval + val[Am - 1] + (lf)Ntimes * Vam + 1 - Ohp, 0.0) * Csthp
-				- max(Nval + 1 - Ohp, 0LL) * Csthp - Cstam < 0) {//卡一下没有+1的
+				  !(max(Nval + val[Am - 1] + (lf)Ntimes * Vam + 1 - Ohp, 0.0) * Csthp
+				- max(Nval + 1 - Ohp, 0LL) * Csthp - Cstam > 0)) {//卡一下没有+1的
 				--Am;
 				Nval += val[Am] + Ntimes * Vam;
 				Ntimes += times[Am];

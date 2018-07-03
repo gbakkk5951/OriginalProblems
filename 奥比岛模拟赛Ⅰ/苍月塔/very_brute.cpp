@@ -58,7 +58,7 @@ struct _Main {
 			copy();
 		} else
 		if (Ncst == Acst) {
-			if (Nhp < Ahp || Nhp == Ahp && Nam < Aam) {
+			if (Nhp < Ahp || Nhp == Ahp && Nam < Aam) {//攻击力递增枚举
 				copy();
 			}
 		}
@@ -81,33 +81,28 @@ struct _Main {
 		read(n);
 		read(Ohp); read(Oam); read(Oatk);
 		read(Csthp); read(Cstam); read(Vam); read(Cstatk); read(Vatk);
-		lld low = 0, high = 0;
+		lld low = 0, high = 0, highAm = 0;
 		for (int i = 1; i <= n; i++) {
 			read(k[i]); read(hp[i]); read(am[i]); read(atk[i]);
 			low = max(low, up(am[i] + 1 - Oatk, Vatk));
 			high = max(high, up(am[i] + hp[i] - Oatk, Vatk));
-			Am = max(Am, up(atk[i] - Oam, Vam));
+			highAm = max(highAm, up(atk[i] - Oam, Vam));
 		}
+		
 		Acst = LINF;
-		Nam = Oam + Am * Vam;//初值没赋
 		for (Atk = low; Atk <= high; Atk++) {
 			Natk = Oatk + Atk * Vatk;
-			Hp = calcHp();
-			while (Am > 0) {
-				--Am;
+			for (Am = highAm; Am >= 0; --Am) {
 				Nam = Oam + Am * Vam;
-				lld tmp = calcHp();
-				if (!((lf)(tmp - Hp) * Csthp - Cstam < 0)) {
-					++Am;
+				Hp = calcHp();
+				if ((lf)Hp * Csthp > 1e18) {
 					break;
-				} else {
-					Hp = tmp;
 				}
+				Natk = Oatk + Atk * Vatk;
+				Nhp = Ohp + Hp;
+				Ncst = Hp * Csthp + Am * Cstam + Atk * Cstatk;
+				update();
 			}
-			Nam = Oam + Am * Vam;
-			Nhp = Ohp + Hp;
-			Ncst = Hp * Csthp + Am * Cstam + Atk * Cstatk;
-			update();
 		}
 		printf("%lld\n%lld %lld %lld", Acst, Ahp, Aam, Aatk);
 	}
