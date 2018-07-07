@@ -52,7 +52,7 @@ struct Flow {
 		eidx = 1;
 	}
 	
-	int head[MXN], edge[MXN << 1][3], eidx;
+	int head[MXN], edge[MXN + MXM << 1][3], eidx;
 	void dir_add(int a, int b, int c) {
 		eidx++;
 		edge[eidx][DST] = b;
@@ -61,6 +61,7 @@ struct Flow {
 		head[a] = eidx;
 	}
 	void add(int a, int b, int c) {
+		printf("add %d %d\n", a, b);
 		dir_add(a, b, c);
 		dir_add(b, a, 0);
 	}
@@ -69,14 +70,14 @@ struct Flow {
 	int q[MXN];
 	int getlay() {
 		memset(lay, 0, size * sizeof(int));
-		lay[dst] = src;
 		int qh = 0, qt = -1;
+		lay[src] = 1;
 		q[++qt] = src;
 		while (qh <= qt) {
 			int nd = q[qh++];
 			for (int e = head[nd]; e; e = edge[e][NXT]) {
 				int t = edge[e][NXT];
-				if (!lay[t]) {
+				if (edge[e][FLOW] && !lay[t]) {
 					lay[t] = lay[nd] + 1;
 					q[++qt] = t;
 				}
@@ -84,18 +85,30 @@ struct Flow {
 		}
 		return lay[dst];
 	}
+	
 	int now[MXN];
 	int getflow(int nd, int mx) {
 		if (nd == dst) return mx;
 		int rem = mx;
 		for (int e = now[nd]; e; e = edge[e][NXT]) {
 			int t = edge[e][DST];
-			if (edge[e][FLOW])
+			if (edge[e][FLOW] && lay[t] > lay[nd]) {
+				t = getflow(t, min(edge[e][FLOW], rem));
+				if (t) {
+					edge[e][FLOW] -= t;
+					edge[e ^ 1][FLOW] += t;
+					rem -= t;
+					if (rem == 0) {
+						now[nd] = e;
+						return mx;
+					}
+				}
+			}
 		}
 		now[nd] = 0;
 		return mx - rem;
 	}
-	void run() {
+	int run() {
 		int ret = 0;
 		while (getlay()) {
 			memcpy(now, head, size * sizeof(int));
@@ -109,20 +122,72 @@ struct Flow {
 			for (int e = head[l[i]]; e; e = edge[e][NXT]) {
 				int t = edge[e][DST];
 				if (t != src && edge[e][FLOW] == 0) {
-					mark[l[i]] = t;
-					mark[t] = l[i];
+					match[l[i]] = t;
+					match[t] = l[i];
 					break;
-				} 
+				}
 			}
 		}
 	}
 }flow;
 struct _Main {
-	int head[mXN]
+	int head[MXN], edge[MXN << 1][2], eidx;
+	void add(int a, int b) {
+		eidx++;
+		edge[eidx][DST] = b;
+		edge[eidx][NXT] = head[a];
+		head[a] = eidx;
+	}
+	int mark[MXN];
+	void domark(int nd) {
+		if (mark[nd]) {
+			return;
+		}
+		mark[nd] = 1;
+		for (int e = head[nd]; e; e = edge[e][NXT]) {
+			int t = edge[e][DST];
+			if (!mark[t] && t != match[nd]) {
+				mark[t] = 1;
+				domark(match[t]);
+			}
+		}
+	}
+	int n, m;
+	char bel[MXN];
 	_Main() {
-		
-		
-		
+		read(n); read(m);
+		int a, b;
+		flow.size = n + 2;
+		flow.dst = n + 1;
+		for (int i = 1; i <= n; i++) {
+			read(bel[i]);
+			if (bel[i] == 0) {
+				flow.add(0, i, 1);
+				l[++ln] = i;
+			} else {
+				r[++rn] = i;
+				flow.add(i, n + 1, 1);
+			}
+		}
+		for (int i = 1; i <= m; i++) {
+			read(a); read(b);
+			if (bel[a] == 1) swap(a, b);
+			add(a, b);
+			flow.add(a, b, 1);
+		}
+		int cnt = flow.run();
+		printf("%d\n", cnt);
+		flow.getmatch();
+		for (int i = 1; i <= rn; i++) {
+			if (!match[r[i]]) {
+				domark(r[i]);
+			}
+		}
+		for (int i = 1; i <= n; i++) {
+			if (bel[i] == 0 && mark[i] || bel[i] == 1 && !mark[i]) {
+				printf("%d ", i);
+			}
+		}
 	}
 template <typename Type>
 	void read(Type &a) {
