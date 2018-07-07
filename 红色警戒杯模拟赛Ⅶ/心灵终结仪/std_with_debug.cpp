@@ -150,12 +150,130 @@ struct SegTree {
 		return 0;
 	}
 }tree;	
+struct brute {
+	lld arr[MXN];
+	void add(int l, int r, int val) {
+		for (int i = l; i <= r; i++) {
+			arr[i] += val;
+		}
+	}
+	void asi(int l, int r, int val) {
+		for (int i = l; i <= r; i++) {
+			arr[i] = val;
+		} 
+	}
+	lld sum(int l, int r) {
+		lld ret = 0;
+		for (int i = l; i <= r; i++) {
+			ret += arr[i];
+		}
+		return ret;
+	}
+	lld mx(int l, int r) {
+		lld ret = -LINF;
+		for (int i = l; i <= r; i++) {
+			ret = max(ret, arr[i]);
+		}
+		return ret;
+	}
+}brute;
+
 
 
 struct _Main {
 	
+	void test_segTree() {
+		n = 1e5;
+		int m = 1e3;
+		int mx = 2e8 + 1;
+		int base = -1e8;
+		int tmp;
+		for (int i = 1; i <= n; i++) {
+			tmp = base + rand() % mx;
+			brute.asi(i, i, tmp);
+			tree.asi(i, tmp);
+		}
+		for (int i = 1; i <= m; i++) {
+			int op = rand() % 4;
+			int l = rand() % n + 1;
+			int r = l + (rand() % (n - l + 1));
+			tmp = base + rand() % mx;
+			if (op == 0) {//区间加
+				tree.add(l, r, tmp);
+				brute.add(l, r, tmp);
+			} else
+			if (op == 1) {//区间赋值
+				tree.asi(l, r, tmp);
+				brute.asi(l, r, tmp);
+			} else
+			if (op == 2) {//区间求和
+				if (tree.sum(l, r) != brute.sum(l, r)) {
+					printf("???");
+				}
+			} else
+			if (op == 3) {//区间最值
+				if (tree.mx(l, r) != brute.mx(l, r)) {
+					printf("???");
+				}
+			}
+		}
+		printf("segtree_test finished\n");
+	}
+	lld val[MXN];
+	void br_pathadd(int a, int b, int v) {
+		while (a != b) {
+			if (h[a] < h[b]) swap(a, b);
+			val[a] += v;
+			a = f[a];
+		}
+		val[a] += v;
+	}
+	lld br_pathsum(int a, int b) {
+		lld ret = 0;
+		while (a != b) {
+			if (h[a] < h[b]) swap(a, b);
+			ret += val[a];
+			a = f[a];
+		}
+		ret += val[a];
+		return ret;
+	}
+	void randTree() {
+		for (int i = 2; i <= n; i++) {
+			int b = rand() % (i - 1) + 1;
+			add(i, b); add(b, i);
+		}
+	}
+	void Test_Path() {
+		n = 1000; int m = 1000;
+		int mx = 2e8 + 1, base = -1e8;
+		int seed = 1567948 ^ (unsigned long long) new char;
+		srand(seed);
+		randTree();
+		predfs(1, 0);
+		getid(1, 1);
+		for (int i = 1; i <= n; i++) {
+			int op = rand() & 1;
+			int a = rand() % n + 1, b = rand() % n + 1;
+			int tmp = rand() % mx + base;
+			if (op == 1) {
+				br_pathadd(a, b, tmp);
+				pathadd(a, b, tmp);
+			} else
+			if (op == 0) {
+				if (br_pathsum(a, b) != pathsum(a, b)) {
+					cerr << "???";
+				}
+			} 
+		}
+	}
+	
 	
 	_Main() {
+		//Test_tree();
+		//Test_Path();
+		//test_segTree();
+		
 		int Qn;
 		int op, a, b, v;
 		read(n); read(Qn);
