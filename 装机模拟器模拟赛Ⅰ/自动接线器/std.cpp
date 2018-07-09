@@ -61,7 +61,6 @@ struct Flow {
 		head[a] = eidx;
 	}
 	void add(int a, int b, int c) {
-		printf("add %d %d\n", a, b);
 		dir_add(a, b, c);
 		dir_add(b, a, 0);
 	}
@@ -76,7 +75,7 @@ struct Flow {
 		while (qh <= qt) {
 			int nd = q[qh++];
 			for (int e = head[nd]; e; e = edge[e][NXT]) {
-				int t = edge[e][NXT];
+				int t = edge[e][DST];
 				if (edge[e][FLOW] && !lay[t]) {
 					lay[t] = lay[nd] + 1;
 					q[++qt] = t;
