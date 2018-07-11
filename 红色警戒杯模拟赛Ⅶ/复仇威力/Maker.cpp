@@ -46,6 +46,15 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int n = 500000, L = lrand(1, 100), R = lrand(L, n);
+		cout << n << sp << L << sp << R << endl;
+		for (int i = 1; i <= n; i++) {
+			cout << lrand(-1000, 1000) << sp;
+		}
+		cout << endl;
+		mtree(1, 2, n, cout);
+		//mtree(1, 2, n, cout);
+		
 		/*
 		for (int i = 1; i <= 1000000; i++) {
 			id[i] = i;

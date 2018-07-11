@@ -28,7 +28,7 @@ int beg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 1;
 bool loop_count = true;
@@ -42,15 +42,26 @@ bool brute_time_count = true;
 void make(){
 	int I;
 	int i,j,k;
+	for (int i = 1; i <= 1000000; i++) {
+		id[i] = i;
+	}
 	for(I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
+		int n = 20000, m = 1;
+		cout << n << sp << m << endl;
+		for (int i = 1; i <= n; i++) {
+			cout << lrand(-1e9, 1e9) << sp;
 		}
-		*/
+		cout << endl;
+		for (int i = 1; i <= m; i++) {
+			for (int j = 1; j <= 4000; j++) {
+				swap(id[n - j + 1], id[n - lrand(1, 4000) + 1]);
+			}
+			mchain(1, 2, n, cout);
+//			rand_edge(2, n, cout);
+		}
 		
 		EndFor1:
 		cout.close();

@@ -17,20 +17,20 @@ struct _Main{
 string dataName = "data";
 string stdName = "std";
 string bruteName = "brute";
-bool make_data = 1;
+bool make_data = 0;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 15
 ,   exbeg = 0
 ,   exend = 0
 ;
 
 bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -46,12 +46,89 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
+		int n = 100000, mxv = 250000;
+		int MOD = mxv;
+		if (I < 2) {
+			cout << n << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, mxv) << sp;
+			}
+		} else 
+		if (I < 4) {
+			n = 5000;
+			cout << n << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, mxv) << sp;
+			}
+		} else
+		if (I < 6) {
+			mxv = 15000;
+			cout << n << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, mxv) << sp;
+			}
+		} else
+		if (I == 6) {
+			cout << n << endl;
+			int lst = lrand(1, mxv);
+			for (int i = 1; i <= n; i++) {
+				lst = (lst + 503) % MOD + 1;
+				cout << lst << sp;
+			}
+		} else
+		if (I == 7) {
+			cout << n << endl;
+			int lst = lrand(1, mxv), add;
+			for (int i = 1; i <= n; i++) {
+				lst = (lst + 79) % MOD + 1;
+				cout << lst << sp;
+			}
+		} else
+		if (I == 8) {
+			cout << n << endl;
+			int lst = lrand(1, mxv), add;
+			for (int i = 1; i <= n; i++) {
+				lst = (lst + 1037) % MOD + 1;
+				cout << lst << sp;
+			}
+		} else
+		if (I == 9) {
+			cout << n << endl;
+			int lst = lrand(1, mxv), add;
+			for (int i = 1; i <= n; i++) {
+				lst = (lst + lrand(3, 19)) % MOD + 1;
+				cout << lst << sp;
+			}
+		} else
+		if (I == 10) {//1 to N
+			cout << n << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << i << sp;
+			}
+		} else
+		if (I == 11) {
+			cout << n << endl;
+			int lst = 1;
+			for (int i = 1; i <= n; i++) {
+				((lst += lrand(0, 2)) %= MOD) += 1;
+				cout << lst << sp;
+			}
+		} else
+		if (I == 12 || I == 13) {
+			if (I == 13) n = 3000;
+			static int arr[250050];
+			for (int i = 1; i <= 250050; i++) {
+				arr[i] = i;
+			}
+			shuffle(arr + 1, 250000);
+			cout << n << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << arr[i] << sp;
+			}
+		} else
+		if (I == 14) {
+			cout << 1 << sp << lrand(1, 250000) << endl;
 		}
-		*/
-		
 		EndFor1:
 		cout.close();
 	}
@@ -62,11 +139,6 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
-		}
-		*/
 		
         
 		EndFor2:
@@ -183,6 +255,7 @@ _Main(){
 
 
 }	
+vector <int> id[500050];
 int mksq(int root, int l, int r, ostream &cout) {
 	if (r - l + 1 < 200000 * 2 + 10) {
 		mchain(root, l, r, cout);
@@ -237,8 +310,10 @@ void rand_edge(int l, int r, ostream &cout) {
 		add(i, lrand(1, i - 1), cout);
 	}
 }
-int id[1000050];
 void add(int a, int b, ostream &cout) { 
+	if (a > b) swap(a, b);
+	setfa(b, getfa(a));
+	id[getfa(b)].push_back(b);
 	if (rand() & 1) swap(a, b);
 	cout << a << sp << b << endl;
 }
@@ -250,6 +325,10 @@ int getfa(int a) {
 }
 void setfa(int a, int b) {
 	fa[a] = b;
+}
+int getpair(int a) {
+	int t = getfa(a);
+	return id[t][lrand(0, id[t].size() - 1)];
 }
 void randforest(int beg, int end, int cnt, ostream &cout) {
 	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));

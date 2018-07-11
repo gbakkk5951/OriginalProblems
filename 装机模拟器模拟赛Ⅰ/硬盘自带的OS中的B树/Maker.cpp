@@ -28,7 +28,7 @@ int beg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 1;
 bool loop_count = true;
@@ -46,12 +46,49 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
+		
+		int n = 200000, Qn = 200000;
+		cout << n << sp << Qn << endl;
+		for (int i = 1; i <= n; i++) {
 			id[i] = i;
 		}
-		*/
-		
+		shuffle(id + 1, n);
+		mtree(1, 2, n, cout);
+		int rem = 2e5;
+		for (int Q = 1; Q <= Qn; Q++) {
+			int op = lrand(1, rem ? 4 : 3);
+			if (op == 1) {
+				int a, b, c;
+				a = lrand(1, n);
+				b = lrand(1, n);
+				c = lrand(-10000, 10000);
+				cout << op << sp << a << sp << b << sp << c << endl;
+			} else 
+			if (op == 2) {
+				int a = lrand(1, n);
+				cout << op << sp << a << endl;
+			} else
+			if (op == 3) {
+				int a, b, c;
+				a = lrand(1, n);
+				b = lrand(1, n);
+				c = lrand(-10000, 10000);
+				cout << op << sp << a << sp << b << sp << c << endl;
+			} else
+			if (op == 4) {
+				int kn = bit_rand(1, min(n, rem));
+				rem -= kn;
+				static int idx = 1;
+				cout << op << sp << kn << sp;
+				for (int i = 1; i <= kn; i++) {
+					cout << id[idx] << sp;
+					if (++idx == n + 1) {
+						idx = 1;
+					}
+				}
+				cout << endl;
+			}
+		}
 		EndFor1:
 		cout.close();
 	}
@@ -240,7 +277,7 @@ void rand_edge(int l, int r, ostream &cout) {
 int id[1000050];
 void add(int a, int b, ostream &cout) { 
 	if (rand() & 1) swap(a, b);
-	cout << a << sp << b << endl;
+	cout << a << sp << b << sp << lrand(-10000, 10000) << endl;
 }
 
 int gap[500005];

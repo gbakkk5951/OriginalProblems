@@ -9,7 +9,7 @@ namespace OI {
 const int MXN = 1e5 + 10;
 struct _Main {
 	int arr[MXN];
-	int ans[MXN];
+	int ans[250020];
 	int r[MXN];
 	_Main() {
 		int mx = 0, n;

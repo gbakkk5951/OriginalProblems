@@ -23,14 +23,14 @@ bool run_ans = true;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 20
 ,   exbeg = 0
-,   exend = 0
+,   exend = 4
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -46,11 +46,49 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
+		int n = 5e5, mn, mx;
+		cout << n << endl;
+		for (int i = 1; i <= n; i++) {
 			id[i] = i;
 		}
-		*/
+		int tp1 = I & 1;
+		int tp2 = I >> 1 & 1;
+		int tp3 = I >> 2;
+		if (tp1) {
+			shuffle(id + 1, n);
+		}
+		if (tp2) {
+			mn = -1, mx = 1;
+		} else {
+			mn = -1e6, mx = 1e6;
+		}
+		for (int i = 1; i <= n; i++) {
+			cout << lrand(mn, mx) << sp;
+		}
+		cout << endl;
+		if (tp3 == 0) {
+			mflower(1, 2, 4e5, cout);
+			rand_edge(4e5 + 1, n, cout);
+		} else
+		if (tp3 == 1) {
+			mtree(1, 2, n, cout);
+		} else
+		if (tp3 == 2) {
+			mworm(1, 2, 4e5, cout);
+			rand_edge(4e5 + 1, n, cout);
+		} else
+		if (tp3 == 3) {
+			for (int i = 1; i <= 4000; i++) {
+				mchain(1, 2 + (i - 1) * 100, 1 + i * 100, cout);
+			}
+			rand_edge(4e5 + 2, n, cout);
+		} else
+		if (tp3 == 4) {
+			mchain(1, 2, 200000, cout);
+			mflower(1, 200000 + 1, 300000, cout);
+			mflower(200000, 300000 + 1, 400000, cout);
+			rand_edge(4e5 + 1, n, cout);
+		}
 		
 		EndFor1:
 		cout.close();
@@ -62,12 +100,40 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
+		int n = 5e5;
+		if (I == 0) {
+			cout << 1 << endl << 563;
+			goto EndFor2;
+		}
+		for (int i = 1; i <= n; i++) {
 			id[i] = i;
 		}
-		*/
-		
+		cout << n << endl;
+		if (I == 1) {
+			for (int i = 1; i <= n; i++) {
+				cout << i << sp;
+			}
+			cout << endl;
+			mchain(1, 2, n, cout);
+		} else
+		if (I == 2) {
+			for (int i = 1; i <= n; i++) {
+				cout << -i << sp;
+			}
+			cout << endl;
+			mchain(1, 2, n, cout);
+		} else
+		if (I == 3) {//卡并查集+暴力接儿子
+			for (int i = 1; i <= n / 2; i++) {
+				cout << i + 1 << sp;
+			}
+			for (int i = n / 2 + 1; i <= n; i++) {
+				cout << 1 << sp;
+			}
+			cout << endl;
+			mchain(1, 2, n / 2, cout);
+			mflower(n / 2, n / 2 + 1, n, cout);
+		}
         
 		EndFor2:
 		cout.close();
@@ -362,7 +428,7 @@ lld bit_rand(lld min, lld max) {
     return bit_rand() % (max - min + 1) + min;
 }
 	
-string charset = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+\"`-={}|[]\\:;��<>?,./ ";	
+string charset = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+\"`-={}|[]\\:;¡¯<>?,./ ";	
 
 char randchar(int l, int r) {
     return charset[lrand(l, r)];

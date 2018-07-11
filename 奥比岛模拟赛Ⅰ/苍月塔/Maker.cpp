@@ -14,16 +14,16 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
+string dataName = "data_hack";
 string stdName = "std";
-string bruteName = "brute";
+string bruteName = "wa";
 bool make_data = 1;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 0
-,   end = 1
+int beg = 21
+,   end = 22
 ,   exbeg = 0
 ,   exend = 0
 ;
@@ -46,6 +46,153 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int n, Ohp, Oam, Oatk, Csthp, Cstam, Vam, Cstatk, Vatk;
+		int mx = 100;
+		if (I == 17) {
+			n = lrand(1, 5);
+			Ohp = lrand(1, mx / 10);
+			Oam = lrand(1, mx / 10);
+			Oatk = lrand(1, mx / 10);
+			Csthp = lrand(1, mx);
+			Cstam = lrand(1, mx);
+			Vam = lrand(1, 10);
+			Cstatk = lrand(1, 10);
+			Vatk = lrand(1, 10);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 3) << sp << lrand(1, mx) << sp << lrand(1, 10) << sp << lrand(1, mx) << endl;
+			}
+		
+		}
+		if (I == 19) {
+			mx = 5e6;
+			n = lrand(1, 5000);
+			Ohp = lrand(1, 5);
+			Oam = lrand(1, 5);
+			Oatk = lrand(1, 5);
+			Csthp = lrand(1, 1e9);
+			Cstam = lrand(1, 1e9);
+			Vam = lrand(1, 1);
+			Cstatk = lrand(1, 10);
+			Vatk = lrand(1, 1);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 3) << sp << lrand(mx, mx) << sp << lrand(1, 10) << sp << lrand(1, mx) << endl;
+			}
+		
+		}
+		if (I == 21) {
+			n = lrand(1, 5);
+			Ohp = lrand(1, mx / 10);
+			Oam = lrand(1, mx / 10);
+			Oatk = lrand(1, mx / 10);
+			Csthp = lrand(1, mx);
+			Cstam = lrand(1, mx);
+			Vam = lrand(1, 10);
+			Cstatk = lrand(1, 10);
+			Vatk = lrand(1, 10);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 3) << sp << lrand(1, mx) << sp << lrand(1, 10) << sp << lrand(1, mx) << endl;
+			}
+		
+		
+		}
+		goto EndFor1;
+		if (I == 0) {
+			n = lrand(1, 5000);
+			Ohp = lrand(1, mx / 10);
+			Oam = lrand(1, mx / 10);
+			Oatk = lrand(1, mx / 10);
+			Csthp = 1e9;
+			Cstam = 1e9;
+			Vam = mx;
+			Cstatk = lrand(1, 1000);
+			Vatk = lrand(1, 10);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 5e3) << sp << lrand(1, mx) << sp << lrand(1, 300000) << sp << lrand(1, mx) << endl;
+			}
+		
+		}
+		if (I < 10) {
+			n = lrand(1, 5000);
+			Ohp = lrand(1, mx / 10);
+			Oam = lrand(1, mx / 10);
+			Oatk = lrand(1, mx / 10);
+			Csthp = lrand(1, mx);
+			Cstam = lrand(1, mx);
+			Vam = lrand(1, 10);
+			Cstatk = lrand(1, 1000);
+			Vatk = lrand(1, 10);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 5e3) << sp << lrand(1, mx) << sp << lrand(1, 300000) << sp << lrand(1, mx) << endl;
+			}
+		} else if (I < 12) {
+			n = lrand(1, 5000);
+			Ohp = lrand(1, mx / 10);
+			Oam = lrand(1, mx / 10);
+			Oatk = lrand(1, mx / 10);
+			Csthp = lrand(1, 1e9);
+			Cstam = lrand(1, 1e9);
+			Vam = lrand(1, 10);
+			Cstatk = lrand(1, 1000);
+			Vatk = lrand(1, 10);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 1) << sp << lrand(1, mx) << sp << lrand(1, 300000) << sp << lrand(1, mx) << endl;
+			}
+		
+		} else
+		if (I < 16) {
+			n = lrand(5000, 5000);
+			Ohp = lrand(1, mx);
+			Oam = lrand(1, mx);
+			Oatk = lrand(1, mx);
+			Csthp = lrand(1, 1e9);
+			Cstam = lrand(1, 1e9);
+			Vam = lrand(1, mx);
+			Cstatk = lrand(1, mx);
+			Vatk = lrand(1, mx);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 5e3) << sp << lrand(1, mx) << sp << lrand(1, mx) << sp << lrand(1, mx) << endl;
+			}
+		
+		} else
+		if (I < 20) {
+			n = lrand(1, 1000);
+			Ohp = lrand(1, 1);
+			Oam = lrand(1, mx / 100);
+			Oatk = lrand(1, mx / 100);
+			Csthp = lrand(1, mx / 1000);
+			Cstam = lrand(1, mx);
+			Vam = lrand(1, 1);
+			Cstatk = lrand(1, 1000);
+			Vatk = lrand(1, 1);
+			cout << n << endl;
+			cout << Ohp << sp << Oam << sp << Oatk << endl;
+			cout << Csthp << sp << Cstam << sp << Vam << sp << Cstatk << sp << Vatk << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 5) << sp << lrand(1, mx) << sp << lrand(1, 300000) << sp << lrand(1, mx) << endl;
+			}
+		
+		}
 		/*
 		for (int i = 1; i <= 1000000; i++) {
 			id[i] = i;

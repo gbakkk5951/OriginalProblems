@@ -12,25 +12,31 @@ using namespace std;
 #include <sys/time.h>
 //#include "splay.hpp"
 typedef long long lld;
+/*
+struct timeval{
+	 time_t      tv_sec;     // seconds 
+	 suseconds_t tv_usec;    // microseconds 
+};
+*/
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "std";
+string stdName = "christmas";
 string bruteName = "brute";
 bool make_data = 1;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 0
-,   end = 1
-,   exbeg = 0
-,   exend = 0
+int beg = 15
+,   end = 15
+,   exbeg = 3
+,   exend = 4
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -38,7 +44,7 @@ bool brute_time_count = true;
 //////////////
 
 //Splay<400005>leaf, id, void_id;
-
+int rate;
 void make(){
 	int I;
 	int i,j,k;
@@ -46,12 +52,45 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
+		rate = 100;
+		int n = 100000, idx = 1;
+		cout << n << endl;
+		if (I % 3 == 0) {
+			rate = 10000;
+		} else
+		if (I % 3 == 1) {
+			rate = 3;
+		} else {
+			rate = 300;
 		}
-		*/
-		
+		if (I / 3 == 0) {
+			int sq = 200;
+			idx = 1;
+			mtree(1, 2, n / 2, cout);
+			idx = idx + n / 2;
+			for (int i = 1; i <= sq; i++) {
+				mflower(i, idx, idx + sq - 1, cout);
+				idx += sq;
+			}
+			rand_edge(idx, n, cout);
+		} else if (I / 3 == 1) {
+			mflower(1, 2, 80000, cout);
+			mbtree(80000, 80000 + 1, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else if (I / 3 == 2) {
+			mchain(1, 2, 60000, cout);
+			mflower(1, 60000 + 1, 70000, cout);
+			mflower(60000, 70000 + 1, 80000, cout);
+			mtree(2000, 80000 + 1, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else if (I / 3 == 3) {
+			mtree(1, 2, n, cout);
+		} else if (I / 3 == 4) {
+			mbtree(1, 2, 50000, cout);
+			mflower(1, 50000 + 1, 60000, cout);
+			mworm(1, 60000 + 1, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		}
 		EndFor1:
 		cout.close();
 	}
@@ -62,12 +101,25 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
+		int n;
+		if (I == 0) {
+			cout << 1 << endl;
+		} else
+		if (I == 1) {
+			cout << 2 << endl;
+			cout << 1 << sp << 2 << sp << 1 << endl;
+		} else if (I == 2) {
+			n = 100000;
+			rate = 1;
+			cout << n << endl;
+			mtree(1, 2, n, cout);
+		} else
+		if (I == 3) {
+			n = 100000;
+			rate = 10;
+			cout << n << endl;
+			mflower(1, 2, n, cout);
 		}
-		*/
-		
         
 		EndFor2:
 		cout.close();
@@ -88,31 +140,29 @@ const int
 void run(){
 	int I;
     timeval a, b;
-	double delta_t;
-	int sysret;
+	double t_delta;
 	for(I=beg;I<end;I++){
 		cmd= "./" + stdName + " > "+dataName+to_string(I)+".out < "+dataName+to_string(I)+".in";
 		cerr<<"Run: "<<cmd<<endl;
 		gettimeofday(&a, NULL);
-		sysret = system(cmd.c_str());
+		system(cmd.c_str());
 		gettimeofday(&b, NULL);
-		delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
+		t_delta = (1000000LL * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0; 
 		if (time_count) {
-		    cerr<<stdName + " uses "<<delta_t<<"ms"<<endl;
+			cerr<<stdName + " uses "<< t_delta <<"ms"<<endl;
 		}
-		
 		if (check_brute) {
-    		cmd= "./" + bruteName + " > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
+			cmd= "./" + bruteName + " > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
     		cerr<<"Run: "<<cmd<<endl;
 			gettimeofday(&a, NULL);
-			sysret = system(cmd.c_str());
+			system(cmd.c_str());
 			gettimeofday(&b, NULL);
-			delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
-    		if (brute_time_count) {
-    		    cerr<<bruteName + " uses "<<delta_t<<"ms"<<endl;
-    		}    		
-    		cmd="diff brute"+to_string(I)+".out "+dataName+to_string(I)+".out";
-    		if(sysret = system(cmd.c_str()) && check_out_pause){
+			t_delta = (1000000LL * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0; 
+			if (brute_time_count) {
+				cerr << bruteName + " uses " << t_delta << "ms" << endl;
+			}
+			cmd="diff brute"+to_string(I)+".out "+dataName+to_string(I)+".out";
+    		if(system(cmd.c_str()) && check_out_pause){
     			getchar();
     		}
 	    }
@@ -122,25 +172,25 @@ void run(){
 		cmd= "./" + stdName + " > "+dataName+"_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Run: "<<cmd<<endl;
 		gettimeofday(&a, NULL);
-		sysret = system(cmd.c_str());
+		system(cmd.c_str());
 		gettimeofday(&b, NULL);
-		delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
+		t_delta = (1000000LL * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0; 
 		if (time_count) {
-		    cerr<<stdName + " uses "<< delta_t <<"ms"<<endl;
+			cerr<<stdName + " uses "<< t_delta <<"ms"<<endl;
 		}
 		
 		if (check_brute) {	
     		cmd= "./" + bruteName + " > brute_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
     		cerr<<"Run: "<<cmd<<endl;
 			gettimeofday(&a, NULL);
-			sysret = system(cmd.c_str());
+			system(cmd.c_str());
 			gettimeofday(&b, NULL);
-			delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
-    		if (brute_time_count) {
-    		    cerr<<bruteName + " uses "<< delta_t <<"ms"<<endl;
-    		}    
+			t_delta = (1000000LL * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0; 
+			if (brute_time_count) {
+				cerr << bruteName + " uses " << t_delta << "ms" << endl;
+			}
     		cmd="diff brute_ex"+to_string(I)+".out "+dataName+"_ex"+to_string(I)+".out";
-    		if(sysret = system(cmd.c_str()) && check_out_pause){
+    		if(system(cmd.c_str()) && check_out_pause){
     			getchar();
     		}
 		}
@@ -183,6 +233,7 @@ _Main(){
 
 
 }	
+vector <int> id[500050];
 int mksq(int root, int l, int r, ostream &cout) {
 	if (r - l + 1 < 200000 * 2 + 10) {
 		mchain(root, l, r, cout);
@@ -237,10 +288,9 @@ void rand_edge(int l, int r, ostream &cout) {
 		add(i, lrand(1, i - 1), cout);
 	}
 }
-int id[1000050];
-void add(int a, int b, ostream &cout) { 
+void add(int a, int b, ostream &cout) { //要求编号较大的点是第一次连边 
 	if (rand() & 1) swap(a, b);
-	cout << a << sp << b << endl;
+	cout << a << sp << b << sp << (rate == 0 ? 0 : rand() % rate == 0) << endl;
 }
 
 int gap[500005];
@@ -250,6 +300,10 @@ int getfa(int a) {
 }
 void setfa(int a, int b) {
 	fa[a] = b;
+}
+int getpair(int a) {
+	int t = getfa(a);
+	return id[t][lrand(0, id[t].size() - 1)];
 }
 void randforest(int beg, int end, int cnt, ostream &cout) {
 	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));

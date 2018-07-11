@@ -12,6 +12,7 @@ using namespace std;
 #include <sys/time.h>
 //#include "splay.hpp"
 typedef long long lld;
+const int MXN = 1e6 + 10;
 struct _Main{
 //////////////
 string dataName = "data";
@@ -23,42 +24,122 @@ bool run_ans = true;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 20
 ,   exbeg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
 
 //////////////
-
 //Splay<400005>leaf, id, void_id;
 
+string str[MXN];
+int m[MXN];
+string randstr(int n) {
+	string ret;
+	for (int i = 1; i <= n; i++) {
+		ret += '0' + (char)lrand(0, 3);
+	}
+	return ret;
+} 
+void push(int &Qn, const string &a) {//自动控制
+	++Qn;
+	int low = 0, h = a.length() >> 1;
+	for (int i = 1; i <= h; i++) {
+		low += a[i - 1] != a[h + i - 1];
+	}
+	str[Qn] = a;
+	m[Qn] = bit_rand(low, h * 2);
+}
+void push(int &Qn, const string &a, int tms) {//手动控制
+	++Qn;
+	m[Qn] = tms;
+	str[Qn] = a;
+}
+void print(int Qn, ostream &cout) {
+	cout << Qn << endl;
+	for (int i = 1; i <= Qn; i++) {
+		cout << str[i].length() << sp << m[i] << sp << str[i] << endl;
+		str[i].clear();
+	}
+}
 void make(){
-	int I;
-	int i,j,k;
-	for(I=beg;I<end;I++){
+	int num = 0, n = 1, m = 0;
+	for(int I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
+		int Qn = 0;
+		int rem = 1e6;
+		static string now;
+		int tmp;
+		if (I < 10) {
+			while (rem >= n) {
+				now.clear();
+				tmp = num;
+				for (int i = 1; i <= n; i++) {
+					now += '0' + (char)(tmp % 3);
+					tmp /= 3;
+				}
+				push(Qn, now, m);
+				rem -= n;
+				if (++m == n + 1) {
+					m = 0;
+					++num;
+					if (num == (int)pow(3, n)) {
+						num = 0;
+						n += 2;
+					}
+				}
+			}
+		} else
+		if (I < 13) {
+			for (int i = 1; i <= 1000; i++) {
+				if (rand() & 1) {
+					push(Qn, randstr(999));
+				} else {
+					push(Qn, randstr(999), lrand(0, 999));
+				}
+			}
+		} else
+		if (I < 15) {
+			while (rem > 100) {
+				int n = bit_rand(23, min(50000, rem));
+				n -= ~n & 1;
+				rem -= n;
+				if (rand() & 1) {
+					push(Qn, randstr(n));
+				} else {
+					push(Qn, randstr(n), lrand(0, n));
+				}
+			}
+		} else
+		if (I < 17) {
+			for (int i = 1; i <= 2; i++) {
+				int n = 5e5 - (I == 16 ? 0 : bit_rand(1, 50000));
+				n -= ~n & 1;
+				push(Qn, randstr(n));
+			}
+		} else
+		if (I < 20) {
+			int n = 1e6 - (I == 19 ? 0 : bit_rand(1, 50000));
+			n -= ~n & 1;
+			push(Qn, randstr(n));
 		}
-		*/
-		
+		print(Qn, cout);
 		EndFor1:
 		cout.close();
 	}
 	
 
 	
-	for(I=exbeg;I<exend;I++){
+	for(int I=exbeg;I<exend;I++){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
@@ -362,7 +443,7 @@ lld bit_rand(lld min, lld max) {
     return bit_rand() % (max - min + 1) + min;
 }
 	
-string charset = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+\"`-={}|[]\\:;��<>?,./ ";	
+string charset = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+\"`-={}|[]\\:;¡¯<>?,./ ";	
 
 char randchar(int l, int r) {
     return charset[lrand(l, r)];

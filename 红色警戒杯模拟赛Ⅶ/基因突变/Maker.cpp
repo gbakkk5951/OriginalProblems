@@ -23,14 +23,14 @@ bool run_ans = true;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 30
 ,   exbeg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -46,6 +46,36 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		
+		int d1 = lrand(2, 29), d2 = lrand(2, 30);
+		int l1 = lrand(1, 19999), l2 = lrand(1, 19999);
+		if (I > 18 && I < 25) {
+			l1 = 20000;
+			l2 = 20000;
+			d1 = 30;
+		} else
+		if (I >= 25) {
+			l1 = 19999;
+			l2 = 20000;
+			d1 = 30;
+		}
+		
+		if (l1 > l2) swap(l1, l2);
+		if (d1 < d2) swap(d1, d2);
+		if (I == 7) {
+			d2 = d1 + 1;
+		} else
+		if (I == 8) {
+			l1 = l2 + 1;
+		}
+		cout << d1 << sp << d2 << sp << l1 << sp << l2 << endl;
+		for (int i = 1; i <= l1; i++) {
+			cout << lrand(i == 1, d1 - 1) << sp;
+		}
+		cout << endl;
+		for (int i = 1; i <= l2; i++) {
+			cout << lrand(i == 1, d1 - 1) << sp;
+		}
 		/*
 		for (int i = 1; i <= 1000000; i++) {
 			id[i] = i;

@@ -22,15 +22,15 @@ bool run_ans = true;
 
 lld srand_seed = 0;
 
-int beg = 0
-,   end = 1
-,   exbeg = 0
-,   exend = 0
+int beg = 20
+,   end = 24
+,   exbeg = 2
+,   exend = 2
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -42,16 +42,55 @@ bool brute_time_count = true;
 void make(){
 	int I;
 	int i,j,k;
+	static int con[(int)1e5 + 10];
 	for(I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
-		}
-		*/
 		
+		
+		int n = 100000;
+		for (int i = 1; i <= n; i++) {
+			id[i] = i;
+			con[i] = i;
+		}
+		cout << n << endl;
+		int tp1 = I & 1;
+		int tp3 = I >> 2;
+		if (tp1) {
+			shuffle(id + 1, n);
+		}
+		shuffle(con + 1, n);
+		for (int i = 1; i <= n; i++) {
+			cout << lrand(1, 5000) << sp << con[i] << endl;
+		}
+		if (tp3 == 0) {//b tree
+			mbtree(1, 2, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 1) {
+			mworm(1, 2, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 2) {
+			mtree(1, 2, n, cout);
+		} else
+		if (tp3 == 3) {
+			mflower(1, 2, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 4) {
+			mchain(1, 2, 35000, cout);
+			mchain(1, 35001, 70000, cout);
+			mflower(35000, 70001, 80000, cout);
+			mtree(80000, 80001, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		} else
+		if (tp3 == 5) {
+			mchain(1, 2, 80000, cout);
+			mworm(50037, 80001, 90000, cout);
+			rand_edge(90000 + 1, n, cout);
+		}
 		EndFor1:
 		cout.close();
 	}
@@ -67,11 +106,30 @@ void make(){
 			id[i] = i;
 		}
 		*/
-		
-        
+		if (I == 0) {
+			cout << 1 << endl << 1 << sp << 1 << endl;
+		} else 
+		if (I == 1) {
+			int n = 100000;
+			for (int i = 1; i <= n; i++) {
+				id[i] = i;
+				con[i] = i;
+			}
+			for (int i = 1; i <= 500; i++) {
+				int a = lrand(1, n), b = lrand(1, n);
+				swap(con[a], con[b]);
+				swap(id[a], id[b]);
+			}
+			cout << n << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(1, 5000) << sp << con[i] << endl;
+			}
+			mtree(1, 2, n / 2, cout);
+			mchain(1, n / 2 + 1, n, cout);
+		}
 		EndFor2:
 		cout.close();
-	}	
+	}
 	
 	
 }
