@@ -106,7 +106,6 @@ struct _Main {
 					for (int j = 1; j <= n; j++) {
 						D |= (((S ^ s) >> j & 1) ? c[j] : 0) << ((j - 1) * 3);
 					}
-					printf("%d -> %d %lld\n", I, D, r * v);
 					ndp[D] = (ndp[D] + r * v) % MOD;
 					if (s == 0) break;
 				}
