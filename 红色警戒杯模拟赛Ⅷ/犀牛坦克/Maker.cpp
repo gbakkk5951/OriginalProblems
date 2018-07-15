@@ -28,9 +28,9 @@ int beg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 0;
+bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = 0;
+bool loop_check = 1;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -46,16 +46,8 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = 500000, L = lrand(1, 100), R = lrand(L, n);
-		cout << n << sp << L << sp << R << endl;
-		for (int i = 1; i <= n; i++) {
-			cout << lrand(-1000, 1000) << sp;
-		}
-		cout << endl;
-		mchain(1, 2, 100, cout);
-		mtree(1, 101, n, cout);
-		//mtree(1, 2, n, cout);
-		
+		int n = lrand(2, 5), m = lrand(2, 7);
+		cout << n << sp << m << endl;
 		/*
 		for (int i = 1; i <= 1000000; i++) {
 			id[i] = i;

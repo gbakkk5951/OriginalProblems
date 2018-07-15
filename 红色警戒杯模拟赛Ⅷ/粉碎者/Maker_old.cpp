@@ -15,17 +15,17 @@ typedef long long lld;
 struct _Main{
 //////////////
 string dataName = "data";
-string stdName = "std";
+string stdName = "brute";
 string bruteName = "brute";
-bool make_data = 1;
+bool make_data = 0;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 20//20
 ,   exbeg = 0
-,   exend = 0
+,   exend = 3//3
 ;
 
 bool check_brute = 0;
@@ -46,21 +46,65 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = 500000, L = lrand(1, 100), R = lrand(L, n);
-		cout << n << sp << L << sp << R << endl;
+		int ShortRange = I & 1;
+		int mn = ((I >> 1 & 1) ? -1000 : -500);
+		int mx = ((I >> 1 & 1) ? 500 : 1000);
+		int n = 5e5;
+		int L, R;
 		for (int i = 1; i <= n; i++) {
-			cout << lrand(-1000, 1000) << sp;
-		}
-		cout << endl;
-		mchain(1, 2, 100, cout);
-		mtree(1, 101, n, cout);
-		//mtree(1, 2, n, cout);
-		
-		/*
-		for (int i = 1; i <= 1000000; i++) {
 			id[i] = i;
 		}
-		*/
+		shuffle(id + 1, n);
+		if (ShortRange) {
+			L = lrand(1, 23);
+			R = lrand(L, L + 1000);
+		} else {
+			L = lrand(1, 100000);
+			R = lrand(L, min(n - 1, 200000));
+		}
+		
+		
+		
+		int Tp = I >> 2;
+		if (Tp == 0) R = lrand(L, 400000);
+		cout << n << sp << L << sp << R << endl;
+		for (int i = 1; i <= n; i++) {
+			cout << lrand(mn, mx) << sp;
+		}
+		cout << endl;
+		
+		if (Tp == 0) {
+			mchain(1, 2, 400000, cout);
+			rand_edge(400000 + 1, n, cout);
+		} else 
+		if (Tp == 1) {
+			mflower(1, 2, 300000, cout);
+			mchain(1, 300000 + 1, 400000, cout);;
+			rand_edge(400000 + 1, n, cout);
+		} else
+		if (Tp == 2) {
+			mbtree(1, 2, 200000, cout);
+			mchain(1, 200000 + 1, 300000, cout);
+			mflower(5000, 300000 + 1, 400000, cout);
+			rand_edge(400000 + 1, n, cout);
+		} else 
+		if (Tp == 3) {
+			mksq(1, 2, 200000, cout);
+			mworm(1, 200000 + 1, 300000,cout);
+			mflower(1, 300000 + 1, 350000, cout);
+			mchain(1, 350000 + 1, 400000, cout);
+			rand_edge(400000 + 1, n, cout);
+		} else
+		if (Tp == 4) {
+			for (int i = 0; i < 30; i++) {
+				mchain(1, i ? i * 10000 + 1 : 2, i * 10000 + 5000, cout);
+				mflower(i * 10000 + 5000, i * 10000 + 5000 + 1, (i + 1) * 10000, cout);
+			}
+			mworm(300000, 300000 + 1, 400000, cout);
+			rand_edge(400000 + 1, n, cout);
+		}
+		
+		
 		
 		EndFor1:
 		cout.close();
@@ -72,11 +116,25 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
+		if (I == 0) {
+			cout << 1 << sp << 0 << sp << 0 << endl << lrand(-1000, 1000) << endl;
+		} else
+		if (I == 1) {
+			int n = 5e5, L = 0, R = 0;
+			cout << n << sp << L << sp << R << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(-1000, 1000) << endl;
+			}
+			mtree(1, 2, n, cout);
+		} else
+		if (I == 2) {
+			int n = 5e5, L = 0, R = 10;
+			cout << n << sp << L << sp << R << endl;
+			for (int i = 1; i <= n; i++) {
+				cout << lrand(-1000, 1000) << endl;
+			}
+			mtree(1, 2, n, cout);
 		}
-		*/
 		
         
 		EndFor2:
@@ -194,12 +252,12 @@ _Main(){
 
 }	
 int mksq(int root, int l, int r, ostream &cout) {
-	if (r - l + 1 < 200000 * 2 + 10) {
+	if (r - l + 1 < 500 * 2 + 10) {
 		mchain(root, l, r, cout);
 		return r;
 	}
 	int mid = l + r >> 1;
-	int ls = l + 200000 - 1, rs = mid + 200000 - 1;
+	int ls = l + 500 - 1, rs = mid + 500 - 1;
 	mchain(root, l, ls, cout);
 	mchain(root, mid, rs, cout);
 	int ret = mksq(ls, ls + 1, mid - 1, cout);
@@ -250,7 +308,7 @@ void rand_edge(int l, int r, ostream &cout) {
 int id[1000050];
 void add(int a, int b, ostream &cout) { 
 	if (rand() & 1) swap(a, b);
-	cout << a << sp << b << endl;
+	cout << id[a] << sp << id[b] << endl;
 }
 
 int gap[500005];
