@@ -164,8 +164,8 @@ struct _Main {
 				flow.add(0, i, 1);
 				l[++ln] = i;
 			} else {
-				r[++rn] = i;
 				flow.add(i, n + 1, 1);
+				r[++rn] = i;
 			}
 		}
 		for (int i = 1; i <= m; i++) {
