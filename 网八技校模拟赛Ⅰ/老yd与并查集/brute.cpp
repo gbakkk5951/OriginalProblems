@@ -37,52 +37,28 @@ const lf PI = acos(-1.0);
 const int INF = 0x3f3f3f3f;
 const lld LINF = (lld)INF << 32 | INF;
 const int DST = 0, NXT = 1, VAL = 2, FLOW = 2, CST = 3;
-const int MXN = 1e7 + 10;
 const lld MOD = 1e9 + 7;
 const lf e = exp(1.0);
 struct _Main {
-	lld A, B, C, D;
-	lld f[MXN], fr[MXN], cp[MXN], dp[MXN], r[MXN];
-	lld q[MXN], mx;
-	lld com(int n, int m) {
-		return f[n] * fr[m] % MOD * fr[n - m] % MOD; 
-	}
-	void init(int n) {
-		r[0] = 0;
-		dp[0] = cp[0] = f[0] = f[1] = fr[0] = fr[1] = r[1] = 1;
-		dp[1] = D; cp[1] = C;
-		for (int i = 2; i <= n; i++) {
-			r[i] = -MOD / i * r[MOD % i] % MOD + MOD;
-			f[i] = f[i - 1] * i % MOD;
-			fr[i] = fr[i - 1] * r[i] % MOD;
-			cp[i] = cp[i - 1] * C % MOD;
-			dp[i] = dp[i - 1] * D % MOD;
-		}
+
+	lld dp[1005][400];
+	int A, B, C, D;
+	int Qn;
+	int n;
+	lld getdp(int on, int en) {
+		if (n - on * 1 - en * e < B) {
+			return A;
+		} 
+		if (dp[on][en]) return dp[on][en];
+		return dp[on][en] = (C * getdp(on + 1, en) + D * getdp(on, en + 1)) % MOD;
 	}
 	_Main() {
 		read(A); read(B); read(C); read(D);
-		int Qn, n;
 		read(Qn);
 		for (int Q = 1; Q <= Qn; Q++) {
-			read(q[Q]); mx = max(mx, q[Q]);
-		}
-		init(mx);
-		for (int Q = 1; Q <= Qn; Q++) {
-			lld ans = 0;
-			n = q[Q];
-			ans += cp[n - B + 1] % MOD;
-			for (int i = 1; !(n - (i - 1) * e < B); i++) {
-				for (int j = max(ceil(n - i * e - B), 0.0); !(n - j - (i - 1) * e < B); j++) {
-//					printf("i = %d, j = %d\n", i, j);
-					//end at f(n - i * e - j)
-					if (n - i * e - (j - 1) < B) {//最后一个必须-e
-						ans = (ans + com(i + j - 1, j) * cp[j] % MOD * dp[i]) % MOD;
-					} else {//最后一次可1可e
-						ans = (ans + com(i + j, j) * cp[j] % MOD * dp[i]) % MOD;
-					}
-				}
-			}
-			printf("%lld\n", ans * A % MOD);
+			read(n);
+			memset(dp, 0, sizeof(dp));
+			printf("%lld\n", getdp(0, 0));
 		}
 	}
 template <typename Type>

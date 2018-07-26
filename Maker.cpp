@@ -237,11 +237,7 @@ void rand_edge(int l, int r, ostream &cout) {
 		add(i, lrand(1, i - 1), cout);
 	}
 }
-int id[1000050];
-void add(int a, int b, ostream &cout) { 
-	if (rand() & 1) swap(a, b);
-	cout << a << sp << b << endl;
-}
+
 
 int gap[500005];
 int fa[500005];
