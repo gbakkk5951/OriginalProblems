@@ -44,6 +44,15 @@ struct _Main {
 	lld A, B, C, D;
 	lld f[MXN], fr[MXN], cp[MXN], dp[MXN], r[MXN];
 	lld q[MXN], mx;
+	/*
+	lld fastpower(lld base, lld pow) {
+		lld ret = 1;
+		while (pow) {
+			ret = (pow & 1) ? ret * base % MOD : ret;
+			base = (pow >>= 1) ? base * base % MOD : base;
+		}
+		return ret;
+	}*/
 	lld com(int n, int m) {
 		return f[n] * fr[m] % MOD * fr[n - m] % MOD; 
 	}
@@ -55,6 +64,7 @@ struct _Main {
 			r[i] = -MOD / i * r[MOD % i] % MOD + MOD;
 			f[i] = f[i - 1] * i % MOD;
 			fr[i] = fr[i - 1] * r[i] % MOD;
+//			fr[i] = fastpower(f[i], MOD - 2);
 			cp[i] = cp[i - 1] * C % MOD;
 			dp[i] = dp[i - 1] * D % MOD;
 		}
