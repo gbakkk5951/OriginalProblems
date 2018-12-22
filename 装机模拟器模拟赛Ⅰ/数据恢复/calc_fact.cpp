@@ -24,7 +24,7 @@ typedef vector<lld> V;
 typedef V::iterator it;
 
 char name[] = {"name_ex0.in"};
-int beg = 0, end = 10;
+int beg = 0, end = 1;
 V arr[500010];
 struct Cmp {
 	bool operator () (int a, int b) {
@@ -99,23 +99,27 @@ namespace NTTsp {
 
 struct _Main {
 	int n;
+	void clearvec(vector<lld> &_old) {
+		vector<lld> new_;
+		_old.swap(new_);
+	}
 	void clear() {
 		for (int i = 1; i <= n; i++) {
-			arr[i].clear();
+			clearvec(arr[i]);
 		}
 	}
 	priority_queue<int, vector<int>, Cmp> heap;
 	_Main() {
 		NTTsp::init();
 		int input[10];
-		for (int I = 0; I < 10; I++) {
+		for (int I = beg; I < end; I++) {
 			cerr << "input" << sp << I << " : ";	
 			cin >> input[I];
 		}
 		for (int I = beg; I < end; I++) {
-			name[7] = I + '0';
+//			name[7] = I + '0';
 			cerr << "making " << I << endl;
-			ofstream cout (name);
+//			ofstream cout (name);
 //			cin >> n;
 			n = input[I];
 			clear();
@@ -169,8 +173,8 @@ struct _Main {
 					break;
 				}
 			}
-			i -= rand() % 15 + 1;
-			i = max(i, 0);
+			//i -= rand() % 15 + 1;
+			//i = max(i, 0);
 			cout << n << sp << i + 1 << endl;
 			for ( ; i >= 0; i--) {
 				cout << arr[ans][i] + (arr[ans][i] < 0 ? MOD : 0);
