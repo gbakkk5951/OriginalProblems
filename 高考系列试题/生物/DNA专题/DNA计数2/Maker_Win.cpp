@@ -22,14 +22,14 @@ bool run_ans = true;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 10
+,   end = 1
 ,   exbeg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 0;
+bool check_brute = 1;
 bool check_out_pause = true;
-bool loop_check = 0;
+bool loop_check = 1;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -45,21 +45,7 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int n = 500000;
-		cout << n << endl;
-		if (I < 3) {
-			for (int i = 1; i <= n; i++) {
-				cout << (I * n + i) << endl;
-			}
-		} if (I == 3) {
-			for (int i = 1; i <= n; i++) {
-				cout << ((lld)(1e9 + 1 - i)) << endl;
-			}
-		}else {
-			for (int i = 1; i <= n; i++) {
-				cout << lrand(3 * n + 1, 1e9 - n) << endl;
-			}
-		}
+
 		EndFor1:
 		cout.close();
 	}
@@ -247,6 +233,10 @@ int getfa(int a) {
 }
 void setfa(int a, int b) {
 	fa[a] = b;
+}
+int getpair(int a) {
+	int t = getfa(a);
+	return id[t][lrand(0, id[t].size() - 1)];
 }
 void randforest(int beg, int end, int cnt, ostream &cout) {
 	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));
