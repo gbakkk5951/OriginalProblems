@@ -166,7 +166,6 @@ _Main(){
 
 
 }	
-vector <int> id[500050];
 int mksq(int root, int l, int r, ostream &cout) {
 	if (r - l + 1 < 200000 * 2 + 10) {
 		mchain(root, l, r, cout);
@@ -221,10 +220,8 @@ void rand_edge(int l, int r, ostream &cout) {
 		add(i, lrand(1, i - 1), cout);
 	}
 }
-void add(int a, int b, ostream &cout) { //要求编号较大的点是第一次连边 
-	if (a > b) swap(a, b);
-	setfa(b, getfa(a));
-	id[getfa(b)].push_back(b);
+int id[1000050];
+void add(int a, int b, ostream &cout) { 
 	if (rand() & 1) swap(a, b);
 	cout << a << sp << b << endl;
 }

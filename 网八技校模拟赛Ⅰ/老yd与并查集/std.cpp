@@ -44,6 +44,15 @@ struct _Main {
 	lld A, B, C, D;
 	lld f[MXN], fr[MXN], cp[MXN], dp[MXN], r[MXN];
 	lld q[MXN], mx;
+	/*
+	lld fastpower(lld base, lld pow) {
+		lld ret = 1;
+		while (pow) {
+			ret = (pow & 1) ? ret * base % MOD : ret;
+			base = (pow >>= 1) ? base * base % MOD : base;
+		}
+		return ret;
+	}*/
 	lld com(int n, int m) {
 		return f[n] * fr[m] % MOD * fr[n - m] % MOD; 
 	}
@@ -55,6 +64,7 @@ struct _Main {
 			r[i] = -MOD / i * r[MOD % i] % MOD + MOD;
 			f[i] = f[i - 1] * i % MOD;
 			fr[i] = fr[i - 1] * r[i] % MOD;
+//			fr[i] = fastpower(f[i], MOD - 2);
 			cp[i] = cp[i - 1] * C % MOD;
 			dp[i] = dp[i - 1] * D % MOD;
 		}
@@ -63,16 +73,17 @@ struct _Main {
 		read(A); read(B); read(C); read(D);
 		int Qn, n;
 		read(Qn);
-		for (int i = 1 <= Qn; i++) {
-			read(q[i]); mx = max(mx, q[i]);
+		for (int Q = 1; Q <= Qn; Q++) {
+			read(q[Q]); mx = max(mx, q[Q]);
 		}
 		init(mx);
 		for (int Q = 1; Q <= Qn; Q++) {
 			lld ans = 0;
 			n = q[Q];
-			ans += (n - B + 1) * C % MOD;
-			for (int i = 1; n - (i - 1) * e > B; i++) {
-				for (int j = max(ceil(n - i * e - B), 0); !(n - j - (i - 1) * e < B); j++) {
+			ans += cp[n - B + 1] % MOD;
+			for (int i = 1; !(n - (i - 1) * e < B); i++) {
+				for (int j = max(ceil(n - i * e - B), 0.0); !(n - j - (i - 1) * e < B); j++) {
+//					printf("i = %d, j = %d\n", i, j);
 					//end at f(n - i * e - j)
 					if (n - i * e - (j - 1) < B) {//最后一个必须-e
 						ans = (ans + com(i + j - 1, j) * cp[j] % MOD * dp[i]) % MOD;

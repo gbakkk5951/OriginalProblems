@@ -9,7 +9,6 @@ using namespace std;
 #include<algorithm>
 #include<fstream>
 #include <vector>
-#include <sys/time.h>
 //#include "splay.hpp"
 typedef long long lld;
 struct _Main{
@@ -17,20 +16,20 @@ struct _Main{
 string dataName = "data";
 string stdName = "std";
 string bruteName = "brute";
-bool make_data = 1;
+bool make_data = 0;
 bool run_ans = true;
 
 lld srand_seed = 0;
 
 int beg = 0
-,   end = 1
+,   end = 6
 ,   exbeg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
-bool loop_check = 1;
+bool loop_check = 0;
 bool loop_count = true;
 bool time_count = true;
 bool brute_time_count = true;
@@ -46,12 +45,7 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
-		}
-		*/
-		
+
 		EndFor1:
 		cout.close();
 	}
@@ -62,12 +56,7 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		/*
-		for (int i = 1; i <= 1000000; i++) {
-			id[i] = i;
-		}
-		*/
-		
+	
         
 		EndFor2:
 		cout.close();
@@ -87,61 +76,55 @@ const int
 
 void run(){
 	int I;
-    timeval a, b;
-	double delta_t;
-	int sysret;
+    float a, b;
 	for(I=beg;I<end;I++){
-		cmd= "./" + stdName + " > "+dataName+to_string(I)+".out < "+dataName+to_string(I)+".in";
+		cmd= stdName + ".exe > "+dataName+to_string(I)+".out < "+dataName+to_string(I)+".in";
 		cerr<<"Run: "<<cmd<<endl;
-		gettimeofday(&a, NULL);
-		sysret = system(cmd.c_str());
-		gettimeofday(&b, NULL);
-		delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
+		a = clock();
+		system(cmd.c_str());
+		b = clock();
 		if (time_count) {
-		    cerr<<stdName + " uses "<<delta_t<<"ms"<<endl;
+		    cerr<<stdName + " uses "<<b - a<<"ms"<<endl;
 		}
 		
 		if (check_brute) {
-    		cmd= "./" + bruteName + " > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
+    		cmd= bruteName + ".exe > brute"+to_string(I)+".out < "+dataName+to_string(I)+".in";
     		cerr<<"Run: "<<cmd<<endl;
-			gettimeofday(&a, NULL);
-			sysret = system(cmd.c_str());
-			gettimeofday(&b, NULL);
-			delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
+            a = clock();
+            system(cmd.c_str());
+    		b = clock();
     		if (brute_time_count) {
-    		    cerr<<bruteName + " uses "<<delta_t<<"ms"<<endl;
+    		    cerr<<bruteName + " uses "<<b - a<<"ms"<<endl;
     		}    		
-    		cmd="diff brute"+to_string(I)+".out "+dataName+to_string(I)+".out";
-    		if(sysret = system(cmd.c_str()) && check_out_pause){
-    			getchar();
+    		cmd="fc brute"+to_string(I)+".out "+dataName+to_string(I)+".out";
+    		if(system(cmd.c_str()) && check_out_pause){
+    			system("pause");
     		}
 	    }
 	}
 	
 	for(I=exbeg;I<exend;I++){
-		cmd= "./" + stdName + " > "+dataName+"_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
+		cmd= stdName + ".exe > "+dataName+"_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Run: "<<cmd<<endl;
-		gettimeofday(&a, NULL);
-		sysret = system(cmd.c_str());
-		gettimeofday(&b, NULL);
-		delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
+		a = clock();
+		system(cmd.c_str());
+		b = clock();
 		if (time_count) {
-		    cerr<<stdName + " uses "<< delta_t <<"ms"<<endl;
+		    cerr<<stdName + " uses "<<b - a<<"ms"<<endl<<endl;
 		}
 		
 		if (check_brute) {	
-    		cmd= "./" + bruteName + " > brute_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
+    		cmd= bruteName + ".exe > brute_ex"+to_string(I)+".out < "+dataName+"_ex"+to_string(I)+".in";
     		cerr<<"Run: "<<cmd<<endl;
-			gettimeofday(&a, NULL);
-			sysret = system(cmd.c_str());
-			gettimeofday(&b, NULL);
-			delta_t = (1e6 * (b.tv_sec - a.tv_sec) + b.tv_usec - a.tv_usec) / 1000.0;
+            a = clock();
+            system(cmd.c_str());
+    		b = clock();
     		if (brute_time_count) {
-    		    cerr<<bruteName + " uses "<< delta_t <<"ms"<<endl;
+    		    cerr<<bruteName + " uses "<<b - a<<"ms"<<endl;
     		}    
-    		cmd="diff brute_ex"+to_string(I)+".out "+dataName+"_ex"+to_string(I)+".out";
-    		if(sysret = system(cmd.c_str()) && check_out_pause){
-    			getchar();
+    		cmd="fc brute_ex"+to_string(I)+".out "+dataName+"_ex"+to_string(I)+".out";
+    		if(system(cmd.c_str()) && check_out_pause){
+    			system("pause");
     		}
 		}
 	}
@@ -237,7 +220,11 @@ void rand_edge(int l, int r, ostream &cout) {
 		add(i, lrand(1, i - 1), cout);
 	}
 }
-
+int id[1000050];
+void add(int a, int b, ostream &cout) { 
+	if (rand() & 1) swap(a, b);
+	cout << a << sp << b << endl;
+}
 
 int gap[500005];
 int fa[500005];
@@ -302,7 +289,7 @@ void getprime(){
 }
 	
 int lrand(){
-	return rand();
+	return (rand()<<16) | (rand()<<1) ^rand();	
 }
 long long llrand(){
 	return (long long)((long long)lrand()<<32)|((long long )lrand()<<1)^rand();
