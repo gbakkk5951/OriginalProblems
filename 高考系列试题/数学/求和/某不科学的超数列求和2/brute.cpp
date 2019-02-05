@@ -38,35 +38,20 @@ const int INF = 0x3f3f3f3f;
 const lld LINF = (lld)INF << 32 | INF;
 const int DST = 0, NXT = 1, VAL = 2, FLOW = 2, CST = 3;
 const lld MOD = 1e9 + 7;
-lld fastpower(lld base, lld pow) {
-	lld ret = 1;
-	do {
-		if (pow & 1) ret = ret * base % MOD;
-		if (pow >>= 1) base = base * base % MOD;
-	} while(pow);
-	return ret;
-}
 struct _Main {
-	lld calc(lld n) {
-		if (n == 1) {
-			return 2;
-		} else
-		if (!(n & 1)) {
-			lld pow = fastpower(2, n - 1);
-			return pow * ((pow << 1) + 1) % MOD;	
-		} else {
-			return fastpower(2, (n << 1) - 1);
-		}
-	}
 	_Main() {
-		int Qn, n;
-		lld ans = 0;
+		int Qn;
+		lld n, a, base, ans;
 		read(Qn);
 		for (int Q = 1; Q <= Qn; Q++) {
-			read(n);
-			ans ^= calc(n);
+			base = 1; ans = 0;
+			read(n); read(a);
+			for (int i = 1; i <= n << 1; i++) {
+				base = base * a % MOD;
+				ans = (ans + base * (min((int)n, i) - ((i + 1) >> 1) + 1)) % MOD;
+			}
+			printf("%lld\n", ans);
 		}
-		printf("%lld", ans);
 	}
 template <typename Type>
 	void read(Type &a) {

@@ -27,7 +27,7 @@ int beg = 0
 ,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 1;
 bool loop_count = true;
@@ -45,7 +45,16 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-
+		int Qn = 100000, l, r, a, b, c, d;
+		cout << Qn << endl;
+		for (int Q = 1; Q <= Qn; Q++) {
+			randRange(1, 1e9, l, r);
+			a = lrand(1, 1e9);
+			b = lrand(1, 1e9);
+			c = lrand(1, 1e9);
+			d = lrand(1, 1e9);
+			cout << l << sp << r << sp << a << sp << b << sp << c << sp << d << endl;
+		}
 		EndFor1:
 		cout.close();
 	}
@@ -56,7 +65,7 @@ void make(){
 		outfile=dataName+"_ex"+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-	
+		
         
 		EndFor2:
 		cout.close();

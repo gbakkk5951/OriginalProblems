@@ -33,6 +33,7 @@ typedef unsigned u;
 typedef unsigned char uc;
 typedef unsigned long long llu;
 typedef long double Lf;
+typedef complex<lf> com;
 const lf PI = acos(-1.0);
 const int INF = 0x3f3f3f3f;
 const lld LINF = (lld)INF << 32 | INF;

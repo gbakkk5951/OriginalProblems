@@ -234,6 +234,10 @@ int getfa(int a) {
 void setfa(int a, int b) {
 	fa[a] = b;
 }
+int getpair(int a) {
+	int t = getfa(a);
+	return id[t][lrand(0, id[t].size() - 1)];
+}
 void randforest(int beg, int end, int cnt, ostream &cout) {
 	memset(gap + beg, 0, (end - beg + 1) * sizeof(int));
 	for (int i = beg ; i < beg + cnt - 1; i++) {

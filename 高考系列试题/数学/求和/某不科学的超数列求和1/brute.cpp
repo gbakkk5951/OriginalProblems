@@ -38,35 +38,32 @@ const int INF = 0x3f3f3f3f;
 const lld LINF = (lld)INF << 32 | INF;
 const int DST = 0, NXT = 1, VAL = 2, FLOW = 2, CST = 3;
 const lld MOD = 1e9 + 7;
-lld fastpower(lld base, lld pow) {
-	lld ret = 1;
-	do {
-		if (pow & 1) ret = ret * base % MOD;
-		if (pow >>= 1) base = base * base % MOD;
-	} while(pow);
-	return ret;
-}
+const lld PHI = MOD - 1;
 struct _Main {
-	lld calc(lld n) {
-		if (n == 1) {
-			return 2;
-		} else
-		if (!(n & 1)) {
-			lld pow = fastpower(2, n - 1);
-			return pow * ((pow << 1) + 1) % MOD;	
-		} else {
-			return fastpower(2, (n << 1) - 1);
+	lld fp(lld b, lld p) {
+		lld r = 1;
+		while (p) {
+			if (p & 1) r = r * b % MOD;
+			if (p >>= 1) b = b * b % MOD;
 		}
+		return r;
+	}
+	lld calc(lld l, lld r, lld a, lld b, lld c, lld d) {
+		lld ret = 0;
+		for (lld i = l; i <= r; i++) {
+			ret += (a + i * b) % MOD * fp(c, (d + i * b) % PHI);
+			ret %= MOD;
+		}
+		return ret;
 	}
 	_Main() {
-		int Qn, n;
-		lld ans = 0;
+		int Qn;
+		lld l, r, a, b, c, d;
 		read(Qn);
 		for (int Q = 1; Q <= Qn; Q++) {
-			read(n);
-			ans ^= calc(n);
+			read(l); read(r); read(a); read(b); read(c); read(d);
+			printf("%lld\n", calc(l, r, a, b, c, d));
 		}
-		printf("%lld", ans);
 	}
 template <typename Type>
 	void read(Type &a) {
