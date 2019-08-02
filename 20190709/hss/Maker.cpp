@@ -14,7 +14,7 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
+string dataName = "hss";
 string stdName = "std";
 string bruteName = "brute";
 bool make_data = 1;
@@ -25,10 +25,10 @@ lld srand_seed = 0;
 int beg = 0
 ,   end = 20
 ,   exbeg = 0
-,   exend = 2
+,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 0;
 bool loop_count = true;
@@ -45,7 +45,51 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int n, m;
+		if (I < 4) {
+			n = 25, m = 0;
+			if (I == 0) n = 0;
+		} else 
+		if (I < 8) {
+			n = 5000, m = 0;
+		} else if (I < 14) {
+			n = lrand(3000, 5000);
+			m = lrand(3000, 5000);
+			if (I == 13) n = 0;
+		} else {
 		
+			n = lrand(1e6 -1e5, 1e6);
+			m = lrand(1e6 -1e5, 1e6);
+			if (I == 16) n = 0;
+		}
+		cout << n << sp << m << endl;
+		char alf [] = {'s', 'h', 'S'};
+		if (I != 17) {
+			for (int i = 1; i <= n; i++) {
+				cout << alf[lrand(0, 2)] << sp;
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i++) {
+				cout << lrand(1, 2) << sp << alf[lrand(0, 2)] << endl;
+			}
+		} else {
+			n = m = 1e6;
+			for (int i = 1; i <= n; i += 1000) {
+				int a = lrand(0, 2);
+				for (int j = 0; j < 1000; j++) {
+					cout << alf[a] << sp;
+				}
+			}
+			cout << endl;
+			for (int i = 1; i <= m; i += 1000) {
+				int a = lrand(0, 2);
+				int p = lrand(1, 2);
+				for (int j = 0; j < 1000; j++) {
+					cout << p << sp <<  alf[a] << endl;
+				}
+			}
+		}
+			
 		
 		EndFor1:
 		cout.close();

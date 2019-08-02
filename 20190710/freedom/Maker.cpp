@@ -14,7 +14,7 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
+string dataName = "freedom";
 string stdName = "std";
 string bruteName = "brute";
 bool make_data = 1;
@@ -25,10 +25,10 @@ lld srand_seed = 0;
 int beg = 0
 ,   end = 20
 ,   exbeg = 0
-,   exend = 2
+,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 0;
 bool loop_count = true;
@@ -46,6 +46,45 @@ void make(){
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
 		
+		int n;
+		if (I < 6) {
+			if (I == 0) n = 2;
+			n = I + 5;
+			cout << n << endl;
+			mtree(1, 2, n, cout);
+		} else
+		if (I < 12) {
+			n = 5000;
+			cout << n << endl;
+			if (I == 6) mtree(1, 2, n, cout);
+			if (I == 7) mflower(1, 2, n, cout);
+			if (I == 8) mchain(1, 2, n, cout);
+			if (I == 9) mworm(1, 2, n, cout);
+			if (I == 10) mbtree(1, 2, n, cout);
+			if (I == 11) {
+				mflower(1, 2, 1000, cout);
+				mworm(1, 1001, 2000, cout);
+				mbtree(1, 2001, 3000, cout);
+				mchain(2500, 3001, 4000, cout);
+				rand_edge(4001, 5000, cout);
+			}
+		} else if (I < 20) {
+			n = 1e6;
+			cout << n << endl;
+			if (I == 12) mtree(1, 2, n, cout);
+			if (I == 13) mflower(1, 2, n, cout);
+			if (I == 14) mchain(1, 2, n, cout);
+			if (I == 15) mworm(1, 2, n, cout);
+			if (I == 16) mbtree(1, 2, n, cout);
+			if (I >= 17) {
+				mflower(1, 2, 100000, cout);
+				mworm(1, 100001, 200000, cout);
+				mbtree(1, 200001, 300000, cout);
+				mchain(250000, 300001, 400000, cout);
+				rand_edge(400001, 1000000, cout);
+			}
+			
+		}
 		
 		EndFor1:
 		cout.close();

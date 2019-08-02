@@ -14,7 +14,7 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
+string dataName = "selfless";
 string stdName = "std";
 string bruteName = "brute";
 bool make_data = 1;
@@ -25,7 +25,7 @@ lld srand_seed = 0;
 int beg = 0
 ,   end = 20
 ,   exbeg = 0
-,   exend = 2
+,   exend = 0
 ;
 
 bool check_brute = 1;
@@ -38,14 +38,69 @@ bool brute_time_count = true;
 //////////////
 
 //Splay<400005>leaf, id, void_id;
+int I;
 void make(){
-	int I;
 	int i,j,k;
 	for(I=beg;I<end;I++){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int n, m;
+		if (I == 0) {
+			n = 6, m = 7;
+			cout << n << sp << m << endl;
+			add(1, 2, 3, cout);
+			add(3, 2, 3, cout);
+			add(3, 1, 3, cout);
+			add(1, 4, 1, cout);
+			add(4, 5, 6, cout);
+			add(5, 6, 6, cout);
+			add(4, 6, 10, cout);
+		} else if (I < 4) {
+			n = lrand(8, 10);
+			m = lrand(15, 20);
+			cout << n << sp << m << endl;
+			mtree(1, 2, n, cout);
+			m -= n - 1;
+			for (int i = 1; i <= m; i++) {
+				int a = lrand(1, n), b = lrand(1, n - 1);
+				b += b == a;
+				add(a, b, cout);
+			}
+		} else if (I < 10) {
+			n = 5000;
+			m = lrand(n, n * 2);
+			cout << n << sp << m << endl;
+			mchain(1, 2, 1000, cout);
+			mworm(1, 1001, 2000, cout);
+			mflower(1, 2001, 3000, cout);
+			mtree(1000, 3001, 4000, cout);
+			mbtree(3000, 4001, 5000, cout);
+			m -= n - 1;
+			for (int i = 1; i <= m; i++) {
+				int a = lrand(1, n), b = lrand(1, n - 1);
+				b += b == a;
+				add(a, b, cout);
+			}
+		} else if (I < 20) {
+			n = 100000;
+			m = lrand(n, n * 2);
+			if (I > 17) m = n * 2;
+			cout << n << sp << m << endl;
+			mchain(1, 2, 10000, cout);
+			mworm(1, 10001, 20000, cout);
+			mflower(1, 20001, 30000, cout);
+			mtree(10000, 30001, 40000, cout);
+			mbtree(30000, 40001, 50000, cout);
+			rand_edge(50001, n, cout);
+			m -= n - 1;
+			for (int i = 1; i <= m; i++) {
+				int a = lrand(1, n), b = lrand(1, n - 1);
+				b += b == a;
+				add(a, b, cout);
+			}
 		
+		}
 		
 		EndFor1:
 		cout.close();
@@ -238,7 +293,11 @@ void add(int a, int b, ostream &cout) { //要求编号较大的点是第一次连边
 //	setfa(b, getfa(a));
 //	id[getfa(b)].push_back(b);
 	if (rand() & 1) swap(a, b);
-	cout << a << sp << b << endl;
+	cout << a << sp << b << sp << (I >= 16 ? (lrand(1, 5000 / 17) * 17 ): lrand(1, 5000))<< endl;
+}
+void add(int a, int b, int c, ostream &cout) {
+	if (rand() & 1) swap(a, b);
+	cout << a << sp << b << sp << c << endl;
 }
 
 int gap[500005];

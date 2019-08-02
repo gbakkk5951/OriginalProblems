@@ -14,9 +14,9 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
+string dataName = "sugar";
 string stdName = "std";
-string bruteName = "brute";
+string bruteName = "sugar";
 bool make_data = 1;
 bool run_ans = 1;
 
@@ -25,7 +25,7 @@ lld srand_seed = 0;
 int beg = 0
 ,   end = 20
 ,   exbeg = 0
-,   exend = 2
+,   exend = 0
 ;
 
 bool check_brute = 1;
@@ -45,7 +45,78 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
+		int n = 100, len = 1000;
+		int p = I >> 1;
+		if (p == 0) {
+			n = 700;
+			cout << n << endl;
+			for (int i = 0; i < len; i++) cout << (rand() % 2);
+			cout << endl;
+			for (int i = 0; i < n; i++) {
+				len = rand() % 10 + 4;
+				for (int j = 0; j < len; j++) {
+					cout << rand() % 2;
+				}
+				cout << endl;
+			}
 		
+		
+		} else if (p < 3) {
+			cout << n << endl;
+			for (int i = 0; i < len; i++) cout << (rand() % 2);
+			cout << endl;
+			for (int i = 0; i < n; i++) {
+				len = rand() % 5 + 10;
+				for (int j = 0; j < len; j++) {
+					cout << rand() % 2;
+				}
+				cout << endl;
+			}
+		
+		} else if (p < 5) {
+			n = 500;
+			len = 100000;
+			cout << n << endl;
+			for (int i = 0; i < len; i++) cout << (rand() % 2);
+			cout << endl;
+			for (int i = 0; i < n; i++) {
+				len = 6 + rand() % 13;
+				for (int j = 0; j < len; j++) {
+					cout << rand() % 2;
+				}
+				cout << endl;
+			}
+		
+		} else if (p < 7) {
+			n = 200000;
+			len = 5e6;
+			cout << n << endl;
+			for (int i = 0; i < len; i++) cout << (rand() % 2);
+			cout << endl;
+			len = 20 + rand() % 5;
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < len; j++) {
+					cout << rand() % 2;
+				}
+				cout << endl;
+			}
+		
+		} else if (p < 10) {
+			n = 200000;
+			len = 5e6;
+			cout << n << endl;
+			for (int i = 0; i < len; i++) cout << (rand() % 2);
+			cout << endl;
+			for (int i = 0; i < n; i++) {
+				len = 20 + rand() % 5;
+				for (int j = 0; j < len; j++) {
+					cout << rand() % 2;
+				}
+				cout << endl;
+			}
+			
+		}
+	
 		
 		EndFor1:
 		cout.close();

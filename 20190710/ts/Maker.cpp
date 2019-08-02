@@ -14,7 +14,7 @@ using namespace std;
 typedef long long lld;
 struct _Main{
 //////////////
-string dataName = "data";
+string dataName = "ts";
 string stdName = "std";
 string bruteName = "brute";
 bool make_data = 1;
@@ -25,10 +25,10 @@ lld srand_seed = 0;
 int beg = 0
 ,   end = 20
 ,   exbeg = 0
-,   exend = 2
+,   exend = 0
 ;
 
-bool check_brute = 1;
+bool check_brute = 0;
 bool check_out_pause = true;
 bool loop_check = 0;
 bool loop_count = true;
@@ -45,7 +45,45 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		
+		int n, m;
+		if (I < 6) {
+			n = lrand(7, 15);
+			m = 15;
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= m; i++) {
+				cout << lrand(1, n) << sp << lrand(1, n) << endl;
+			}
+		} else
+		if (I < 12) {
+			n = lrand(500, 5000);
+			if(I == 11) n = 5000;
+			m = 5000;
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= m / 2; i++) {
+				cout << 5 << sp << lrand(1, n) << endl;
+			}
+			for (int i = m / 2 + 1; i <= m; i++) {
+				cout << lrand(1, n) << sp << lrand(1, n) << endl;
+			}
+			
+		} else {
+			n = lrand(30000, 500000);
+			if (I == 19) n = 5e5;
+			if (I == 18) n = 30000;
+			m = 5e5;
+			cout << n << sp << m << endl;
+			for (int i = 1; i <= 98; i++) {
+				for (int j = 1; j <= 100; j++) {
+					cout << i << sp << i * 100 + j << endl;
+				}
+			}
+			for (int i = 1; i <= 10000; i++) {
+				cout << 1 << sp << 10000 + i << endl;
+			}
+			for (int i = 98 * 100 + 1; i <= m; i++) {
+				cout << lrand(1, n) << sp << lrand(1, n) << endl;
+			}
+		}
 		
 		EndFor1:
 		cout.close();
