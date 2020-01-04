@@ -25,7 +25,7 @@ lld srand_seed = 0;
 int beg = 0
 ,   end = 20
 ,   exbeg = 0
-,   exend = 2
+,   exend = 0
 ;
 
 bool check_brute = 1;
@@ -324,7 +324,6 @@ int randsym(){
 	return (rand()&1)?-1:1;
 }
 
-string arr[100010];
 void shuffleedge(Edge *beg,int n,int m,bool directed = false){
 	int i;
 	for(i=1;i<=n;i++){

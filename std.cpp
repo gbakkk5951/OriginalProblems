@@ -17,6 +17,9 @@ int main() {}
 #include <complex>
 #include <cassert>
 namespace OI {
+inline int lb(int a) {
+	return a & (-a);
+}
 struct LS {
 	int inline operator [] (int a) {
 		return a << 1;
