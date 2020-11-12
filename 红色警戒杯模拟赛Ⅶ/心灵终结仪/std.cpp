@@ -306,6 +306,7 @@ struct _Main {
 		}
 		ret = max(ret, tree.mx(nid[son[a]]));
 		ret = max(ret, tree.mx(nid[f[b]]));
+		return ret;
 	}
 	lld wormsum(int a, int b) {
 		lld ret = 0;
@@ -331,6 +332,7 @@ struct _Main {
 		}
 		ret += tree.sum(nid[son[a]]);
 		ret += tree.sum(nid[f[b]]);
+		return ret;
 	}
 	
 	
