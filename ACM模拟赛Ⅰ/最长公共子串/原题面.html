@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>火狐截图编辑</title>
+        <script src="%E5%8E%9F%E9%A2%98%E9%9D%A2_files/script.js"></script>
+        <script src="%E5%8E%9F%E9%A2%98%E9%9D%A2_files/script_002.js"></script>
+        <link href="%E5%8E%9F%E9%A2%98%E9%9D%A2_files/style_002.css" rel="stylesheet" type="text/css">
+        <link href="%E5%8E%9F%E9%A2%98%E9%9D%A2_files/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <ul id="toolbar">
+            <li id="button-crop" title="裁剪 (X)">
+            </li><li id="button-rectangle" title="添加矩形 (R)">
+            </li><li id="button-circle" title="添加椭圆 (E)">
+            </li><li id="button-line" title="添加直线 (D)">
+            </li><li id="button-pencil" title="铅笔 (F)">
+            </li><li id="button-text" title="添加文字 (T)">
+            </li><li id="button-blur" title="模糊 (B)">
+            </li><li id="button-undo" disabled="true" title="撤销 (Z)">
+            </li><li id="button-local" title="保存到本地 (S)">
+            </li><li id="button-copy" title="复制到剪贴板 (C)">
+            </li><li id="button-cancel" title="关闭 (Q)"></li>
+        </ul>
+        <ul id="floatbar">
+            <li id="button-lineWidth" class="container" title="线条粗细">
+                <ul><li value="3"></li><li class="current" value="6"></li><li value="9"></li></ul>
+            </li><li id="button-fontSize" title="文字大小">18 px<ul id="fontselect">
+            <li>10
+            </li><li>11
+            </li><li>12
+            </li><li>13
+            </li><li>14
+            </li><li>18
+            </li><li>24
+            </li><li>36
+            </li><li>48
+            </li><li>64
+            </li><li>72
+            </li><li>96
+        </li></ul></li><li id="button-color" title="选择填充颜色"><div id="color" style="background-color: rgb(255, 0, 0);"></div><ul id="colorpicker">
+            <li data-color="#ffffff" style="background-color: rgb(255, 255, 255);">
+            </li><li data-color="#ffcccc" style="background-color: rgb(255, 204, 204);">
+            </li><li data-color="#ffcc99" style="background-color: rgb(255, 204, 153);">
+            </li><li data-color="#ffff99" style="background-color: rgb(255, 255, 153);">
+            </li><li data-color="#ffffcc" style="background-color: rgb(255, 255, 204);">
+            </li><li data-color="#99ff99" style="background-color: rgb(153, 255, 153);">
+            </li><li data-color="#99ffff" style="background-color: rgb(153, 255, 255);">
+            </li><li data-color="#ccffff" style="background-color: rgb(204, 255, 255);">
+            </li><li data-color="#ccccff" style="background-color: rgb(204, 204, 255);">
+            </li><li data-color="#ffccff" style="background-color: rgb(255, 204, 255);">
+            </li><li data-color="#cccccc" style="background-color: rgb(204, 204, 204);">
+            </li><li data-color="#ff6666" style="background-color: rgb(255, 102, 102);">
+            </li><li data-color="#ff9966" style="background-color: rgb(255, 153, 102);">
+            </li><li data-color="#ffff66" style="background-color: rgb(255, 255, 102);">
+            </li><li data-color="#ffff33" style="background-color: rgb(255, 255, 51);">
+            </li><li data-color="#66ff99" style="background-color: rgb(102, 255, 153);">
+            </li><li data-color="#33ffff" style="background-color: rgb(51, 255, 255);">
+            </li><li data-color="#66ffff" style="background-color: rgb(102, 255, 255);">
+            </li><li data-color="#9999ff" style="background-color: rgb(153, 153, 255);">
+            </li><li data-color="#ff99ff" style="background-color: rgb(255, 153, 255);">
+            </li><li data-color="#c0c0c0" style="background-color: rgb(192, 192, 192);">
+            </li><li data-color="#ff0000" style="background-color: rgb(255, 0, 0);">
+            </li><li data-color="#ff9900" style="background-color: rgb(255, 153, 0);">
+            </li><li data-color="#ffcc66" style="background-color: rgb(255, 204, 102);">
+            </li><li data-color="#ffff00" style="background-color: rgb(255, 255, 0);">
+            </li><li data-color="#33ff33" style="background-color: rgb(51, 255, 51);">
+            </li><li data-color="#66cccc" style="background-color: rgb(102, 204, 204);">
+            </li><li data-color="#33ccff" style="background-color: rgb(51, 204, 255);">
+            </li><li data-color="#6666cc" style="background-color: rgb(102, 102, 204);">
+            </li><li data-color="#cc66cc" style="background-color: rgb(204, 102, 204);">
+            </li><li data-color="#999999" style="background-color: rgb(153, 153, 153);">
+            </li><li data-color="#cc0000" style="background-color: rgb(204, 0, 0);">
+            </li><li data-color="#ff6600" style="background-color: rgb(255, 102, 0);">
+            </li><li data-color="#ffcc33" style="background-color: rgb(255, 204, 51);">
+            </li><li data-color="#ffcc00" style="background-color: rgb(255, 204, 0);">
+            </li><li data-color="#33cc00" style="background-color: rgb(51, 204, 0);">
+            </li><li data-color="#00cccc" style="background-color: rgb(0, 204, 204);">
+            </li><li data-color="#3366ff" style="background-color: rgb(51, 102, 255);">
+            </li><li data-color="#6633ff" style="background-color: rgb(102, 51, 255);">
+            </li><li data-color="#cc33cc" style="background-color: rgb(204, 51, 204);">
+            </li><li data-color="#666666" style="background-color: rgb(102, 102, 102);">
+            </li><li data-color="#990000" style="background-color: rgb(153, 0, 0);">
+            </li><li data-color="#cc6600" style="background-color: rgb(204, 102, 0);">
+            </li><li data-color="#cc9933" style="background-color: rgb(204, 153, 51);">
+            </li><li data-color="#999900" style="background-color: rgb(153, 153, 0);">
+            </li><li data-color="#009900" style="background-color: rgb(0, 153, 0);">
+            </li><li data-color="#339999" style="background-color: rgb(51, 153, 153);">
+            </li><li data-color="#3333ff" style="background-color: rgb(51, 51, 255);">
+            </li><li data-color="#6600cc" style="background-color: rgb(102, 0, 204);">
+            </li><li data-color="#993399" style="background-color: rgb(153, 51, 153);">
+            </li><li data-color="#333333" style="background-color: rgb(51, 51, 51);">
+            </li><li data-color="#660000" style="background-color: rgb(102, 0, 0);">
+            </li><li data-color="#993300" style="background-color: rgb(153, 51, 0);">
+            </li><li data-color="#996633" style="background-color: rgb(153, 102, 51);">
+            </li><li data-color="#666600" style="background-color: rgb(102, 102, 0);">
+            </li><li data-color="#006600" style="background-color: rgb(0, 102, 0);">
+            </li><li data-color="#336666" style="background-color: rgb(51, 102, 102);">
+            </li><li data-color="#000099" style="background-color: rgb(0, 0, 153);">
+            </li><li data-color="#333399" style="background-color: rgb(51, 51, 153);">
+            </li><li data-color="#663366" style="background-color: rgb(102, 51, 102);">
+            </li><li data-color="#000000" style="background-color: rgb(0, 0, 0);">
+            </li><li data-color="#330000" style="background-color: rgb(51, 0, 0);">
+            </li><li data-color="#663300" style="background-color: rgb(102, 51, 0);">
+            </li><li data-color="#663333" style="background-color: rgb(102, 51, 51);">
+            </li><li data-color="#333300" style="background-color: rgb(51, 51, 0);">
+            </li><li data-color="#003300" style="background-color: rgb(0, 51, 0);">
+            </li><li data-color="#003333" style="background-color: rgb(0, 51, 51);">
+            </li><li data-color="#000066" style="background-color: rgb(0, 0, 102);">
+            </li><li data-color="#330099" style="background-color: rgb(51, 0, 153);">
+            </li><li data-color="#330033" style="background-color: rgb(51, 0, 51);">
+        </li></ul></li>
+        </ul>
+        
+        
+        <canvas id="display" width="1836" height="2088"></canvas>
+        <textarea id="textinput" style="display: none;" wrap="off"></textarea>
+    
+
+<div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-overlay" title="拖动开始，双击完成" style="display: none;"><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-top"></div><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-left"></div><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-right"></div><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-bottom"></div><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-target"><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-ctrlnw"></div><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-ctrlne"></div><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-ctrlse"></div><div id="mococn-f66c9282-504b-41df-9fb7-4d9903e10ee7-crop-ctrlsw"></div></div></div></body></html>

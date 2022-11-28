@@ -1,0 +1,15 @@
+请在程序结束前(关闭输出文件后)调用函数 _TimeWatcher_(); 
+请不要定义 
+
+_TimeWatcherArray_
+_TimeWatcherCount_
+_TimeWatcherType_
+_TimeWatcher_
+
+作为变量、数组、函数、对象、namespace、typename、class、struct、typedef、define 等。编译运行输出的cpp后,在TimeCounter控制台输入print，输出结果。
+仅统计带大括号的函数、if、while、for、switch 中的case等，不会统计例如 a=(Type){15,16}; 之类的非函数调用。 
+本程序包括以下文件，请避免冲突
+TimeWatchar.cpp
+TimeWatchar.exe
+codeconst.cpp
+RunningResult.res

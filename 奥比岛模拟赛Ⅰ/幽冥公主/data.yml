@@ -1,0 +1,6 @@
+subtasks:
+  - score: 100              # 这个子任务的分数（注意，所有子任务的总分必须为 100）
+    type: sum              # 子任务类型，可选的值有 sum、min 和 mul.
+    cases: [1]       # 测试点编号可为数字
+outputFile: 'princess#.ans'
+userOutput: 'princess#.out'

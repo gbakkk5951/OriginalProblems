@@ -1,0 +1,81 @@
+
+### 1. 考察知识：
+
+首先m=0,那就直接输出k
+
+除此之外
+
+因为 m >= n / 5
+
+故随机选择一个数，有超过1 / 5的概率在答案对应的集合中
+
+注意，在随机选择数的选择阶段，不要对数去重
+
+否则出现多次的数的权重和其他数一样，导致概率有问题
+
+那么我们随机选择X个，有至少1个数在答案对应的集合中的概率为1 - (4/5)^X
+
+当X=20时，成功的概率约为0.988
+
+而成为某个集合的公因数的必要条件是他是其中一个元素的因数
+
+所以我们对每个随机到的数分解因数（包括它本身和1），如果其小于等于k且有至少m个数是它的倍数
+
+那么这个因数就是一个被选的答案
+
+
+
+
+### 2. 优秀代码
+**一**
+作者：张浩宇
+
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+const int maxn = 1000 + 5;
+const int tries = 50;
+int n, m, limit; 
+int a[maxn];
+int ans = 1;
+void test(int factor) {
+	if (factor <= ans || factor > limit) return;
+	int count = 0;
+	for (int i = 1; ; ++i) {
+		if (a[i] % factor == 0) {
+			if (++count == m) {
+				ans = factor;
+				return;
+			}
+		} else
+		if (n - i + count < m) {
+			return;
+		}
+	}
+}
+int main() {
+	srand(time(0));
+	cin >> n >> m >> limit;
+	if (m == 0) {
+		cout << limit;
+		return 0;
+	}
+	for (int i = 1; i <= n; ++i) {//直接random_shuffle 取前几个，可以避免一个位置被取多次
+		cin >> a[i];
+		swap(a[i], a[rand() % i + 1]);
+	}
+	for (int i = 1; i <= tries && i <= (n - m + 1) && ans < limit; ++i) {
+		int mx = min((int)sqrt(a[i] + 0.5), limit); // + 0.5是为了防止精度不够
+		for (int j = 1; j <= mx; ++j) {//从1开始 
+			if (a[i] % j == 0)  {
+				test(j);
+				test(a[i] / j);
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
+
+```
