@@ -15,17 +15,6 @@ using namespace __gnu_pbds;
 //#include "splay.hpp"
 typedef long long lld;
 
-enum EGraphType
-{
-	Random = 0,
-	Chain,
-	ComeAndBack,
-	Size
-};
-struct FEdge
-{
-	int u, v, c;	
-};
 
 struct _Main{
 //////////////
@@ -38,7 +27,7 @@ bool run_ans = 1;
 lld srand_seed = 0;
 
 int beg = 0
-,   end = EGraphType::Size << 2;
+,   end = 20
 ,   exbeg = 0
 ,   exend = 0
 ;
@@ -54,7 +43,7 @@ bool brute_time_count = true;
 
 //Splay<400005>leaf, id, void_id;
 
-
+char Type[(int)1e6 + 5];
 void make(){
 	int I;
 	int i,j,k;
@@ -65,89 +54,55 @@ void make(){
 		outfile=dataName+to_string(I)+".in";
 		cerr<<"Make "<<outfile<<endl;
 		ofstream cout(outfile.c_str());
-		int MaxDist = 1e4;
-		int n, m;
+		int V, E;
+		int Sn, Tn;
+		if (I < 8)
+		{
+			V = lrand(300, 500);
+			E = bit_rand(300, 5e5);
+		}
+		else
+		{
+			E = 5e5;
+			V = lrand(1e5, 5e5);
+		}
+		memset(type, 2, sizeof(type));
+		if (I < 12)
+		{
+			type[lrand(1, V)] = 1;
+			type[lrand(1, V)] = 0;
+		}
+		else
+		{
+			Sn = bit_rand(2, 300);
+			Tn = bit_rand(2, 300);
+			if (i % 3 == 0)
+			{
+				Sn = bit_rand(1000, V / 5);
+				Tn = bit_rand(1000, V / 5);
+			}
+			
+			for (int i = 1; i <= Sn; ++i)
+			{
+				type[lrand(1, V)] = 0;
+			}
+			for (int i = 1; i <= Sn; ++i)
+			{
+				type[lrand(1, V)] = 1;
+			}
+		}
+		cout << V << sp << E << endl;
+		for (int i = 1; i <= V; ++i)
+		{
+			cout << (int)type[i] << sp;
+		}
+		cout << endl;
+		for (int i = 1; i <= E; ++i)
+		{
+			cout << lrand(1, V) << sp << lrand(1, V) << sp << (lrand() % 50000 ? lrand(0, 1e9) : bit_rand(0, 1e9)) << endl;
+		}
 		
-		Edges.clear();
-		n = 1e5;
-		Name.resize(n + 1);
-		for (int i = 1; i <= n; ++i)
-		{
-			Name[i] = i;
-		}
-		bool bNeedShuffleEdge = (I >> 1) & 1;
-		bool bNeedShuffleVertex = I & 1;
-		int GraphType = I >> 2;
 		
-		
-		
-		switch (GraphType)
-		{
-			case EGraphType::Random :
-			{
-				m = 2 * n;
-				for (int i = 2; i <= n; ++i)
-				{
-					Edges.push_back((FEdge) {i, lrand(1, i - 1), lrand(0, MaxDist)});
-				}
-				while (Edges.size() < m)
-				{
-					Edges.push_back((FEdge) {lrand(1, n), lrand(1, n), lrand(0, MaxDist)});
-				}
-				break;
-			}
-			case EGraphType::Chain :
-			{
-				m = n - 1;
-				for (int i = 2; i <= n; ++i)
-				{
-					Edges.push_back((FEdge) {i, i - 1, lrand(0, MaxDist)});
-				}		
-				break;
-			}
-			case EGraphType::ComeAndBack :
-			{
-				m = n - 1;
-				int Half = n / 2;
-				for (int i = 2; i <= Half; ++i)
-				{
-					Edges.push_back((FEdge) {i, i - 1, 0});
-				}								
-				for (int i = Half + 1; i <= n; ++i)
-				{
-					Edges.push_back((FEdge) {i, 1 + lrand(0, 1) * (Half - 1), lrand(0, MaxDist)});
-				}				
-				break;
-			}
-			default :
-			{
-				throw "this should not happen, wrong GraphType"
-				break;
-			}						
-		}
-
-		if (bNeedShuffleEdge)
-		{
-			random_shuffle(Edges.begin(), Edges.end());
-		}
-		if (bNeedShuffleVertex)
-		{
-			random_shuffle(Name.begin() + 1, Name.end());
-			for (auto &Edge : Edges)
-			{
-				Edge.u = Name[Edge.u];
-				Edge.v = Name[Edge.v];
-			}
-		}
-		printf("%d %d\n", n, m);
-		for (int i = 0; i < Edges.size(); ++i)
-		{
-			if(rand() & 1)
-			{
-				swap(Edges[i].u, Edges[i].v);
-			}
-			printf("%d %d %d\n", Edges[i].u, Edges[i].v, Edges[i].c);
-		}
 		EndFor1:
 		cout.close();
 	}
