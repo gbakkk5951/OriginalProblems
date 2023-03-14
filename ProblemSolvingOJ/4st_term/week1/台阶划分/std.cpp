@@ -55,7 +55,7 @@ int main()
 			break;
 		}
 	}
-	if (Unit == 0 && n != 0)
+	if (Unit == 0)
 	{
 		printf("2");
 		return 0;
